@@ -1,0 +1,53 @@
+# CITATION.cff — Citation File Format
+#
+# This file tells GitHub (and academic tools like Zenodo, Figshare,
+# and Google Scholar) how to properly cite this portfolio/project.
+#
+# GitHub will automatically render a "Cite this repository" button
+# in the right sidebar of the repo — no extra work needed.
+#
+# TODO: Register for a free ORCID iD at https://orcid.org
+#       Replace 'YOUR-ORCID-HERE' below with your actual iD.
+#       Format: 0000-0000-0000-0000
+
+cff-version: 1.2.0
+message: "If you reference this portfolio or its projects, please cite it as below."
+
+title: "Archit Konde — Machine Learning Engineer Portfolio"
+version: "1.0.0"
+date-released: "2026-02-24"
+
+authors:
+  - family-names: Konde
+    given-names: Archit
+    alias: Archit-Konde
+    email: architkonde19@gmail.com
+    orcid: "https://orcid.org/YOUR-ORCID-HERE"
+
+url: "https://archit-konde.github.io/"
+repository-code: "https://github.com/Archit-Konde/Archit-Konde.github.io"
+
+abstract: >
+  Personal portfolio of Archit Konde, a Machine Learning Engineer
+  focused on AI/ML research and contributing to the development of
+  artificial general intelligence (AGI). Features published research,
+  technical projects, and professional experience.
+
+keywords:
+  - machine-learning
+  - artificial-intelligence
+  - deep-learning
+  - neural-networks
+  - portfolio
+  - AGI
+
+license: MIT
+
+references:
+  - type: article
+    title: "Fundamentals of Neural Networks"
+    authors:
+      - family-names: Konde
+        given-names: Archit
+    journal: "International Journal for Research in Applied Science and Engineering Technology (IJRASET)"
+    url: "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=njXhCdwAAAAJ&citation_for_view=njXhCdwAAAAJ:u5HHmVD_uO8C"

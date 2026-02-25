@@ -215,7 +215,27 @@ document.addEventListener('keydown', (e) => {
 });
 
 
-/* ── 5. SCROLL FADE-IN ANIMATION ─────────────────────────────
+/* ── 5. SERVICE WORKER REGISTRATION ──────────────────────────
+   Registers sw.js so the browser installs the service worker.
+   We check 'serviceWorker' in navigator first because older
+   browsers don't support it — this keeps the site working for
+   everyone, with offline support only where it's available.
+
+   Why inside DOMContentLoaded? The SW registration is non-blocking,
+   but waiting for DOM parse means the page renders first and the
+   SW setup happens quietly in the background.
+──────────────────────────────────────────────────────────────── */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then(reg => console.log('%c  ✓ Service Worker registered', 'color:#28c840; font-family:monospace;'))
+      .catch(err => console.warn('Service Worker registration failed:', err));
+  });
+}
+
+
+/* ── 6. SCROLL FADE-IN ANIMATION ─────────────────────────────
    Each .section-body fades up into view as it enters the screen.
    This uses a second IntersectionObserver.
 
