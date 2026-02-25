@@ -1,0 +1,25 @@
+/* TEAM */
+  Name:     Archit Konde
+  Role:     Machine Learning Engineer
+  Location: Waterloo, ON, Canada
+  Contact:  architkonde19 [at] gmail [dot] com
+  GitHub:   github.com/Archit-Konde
+
+/* THANKS */
+  JetBrains Mono — the font that makes everything look like code
+  Andrej Karpathy — for making AI fundamentals accessible
+  GitHub Pages    — for free hosting that just works
+
+/* SITE */
+  Last update:  2026/02/24
+  Language:     English
+  Standards:    HTML5, CSS3, ES6+
+  Components:   Vanilla JS (no frameworks, no build step)
+  Hosted on:    GitHub Pages
+
+/* PHILOSOPHY */
+  No frameworks. No dependencies. No node_modules.
+  Just files a browser can read directly.
+  Fast by default.
+
+# humanstxt.org — an old web tradition worth keeping alive

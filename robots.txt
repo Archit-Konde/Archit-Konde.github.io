@@ -1,0 +1,11 @@
+# robots.txt — Archit Konde Portfolio
+# Tells search engine crawlers which pages they can index.
+# For a portfolio, we want everything public and indexed.
+#
+# Docs: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
+User-agent: *
+Allow: /
+Disallow: /assets/
+
+Sitemap: https://archit-konde.github.io/sitemap.xml

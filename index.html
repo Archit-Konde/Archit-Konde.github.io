@@ -3,14 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Archit Konde — Machine Learning Engineer. Building intelligent systems, solving the intelligence problem one step at a time." />
-  <meta name="author" content="Archit Konde" />
 
-  <!-- Open Graph (controls how the link looks when shared on LinkedIn, Twitter, etc.) -->
-  <meta property="og:title"       content="Archit Konde — Machine Learning Engineer" />
-  <meta property="og:description" content="Solving intelligence, one step at a time." />
+  <!-- ═══ SEO — Primary Meta Tags ════════════════════════════════
+       These are the core tags search engines read first.
+       description: shown in Google search results under your link.
+       keywords:    less important for Google now, still used by others.
+       author:      identifies you as the content creator.
+       robots:      "index, follow" tells crawlers to index & follow links.
+       theme-color: colors the browser chrome bar on Android/mobile.
+  ════════════════════════════════════════════════════════════════ -->
+  <meta name="description"  content="Archit Konde — Machine Learning Engineer based in Waterloo, Canada. Focused on AI/ML, neural networks, and contributing to AGI research. Open to opportunities." />
+  <meta name="keywords"     content="Archit Konde, Machine Learning Engineer, AI Engineer, ML Engineer, artificial intelligence, neural networks, PyTorch, deep learning, AGI, Waterloo, Canada" />
+  <meta name="author"       content="Archit Konde" />
+  <meta name="robots"       content="index, follow" />
+  <meta name="theme-color"  content="#1e1e1e" />
+
+  <!-- ═══ SEO — Open Graph (LinkedIn, Facebook, Discord previews) ═
+       When you share your URL on LinkedIn or Discord, these tags
+       control what the preview card looks like — title, description,
+       and eventually an image thumbnail.
+  ════════════════════════════════════════════════════════════════ -->
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://archit-konde.github.io/" />
+  <meta property="og:title"       content="Archit Konde — Machine Learning Engineer" />
+  <meta property="og:description" content="Building intelligent systems, solving the intelligence problem one step at a time." />
+  <meta property="og:locale"      content="en_CA" />
+
+  <!-- ═══ SEO — Twitter / X Card ═════════════════════════════════
+       Controls how your link looks when shared on Twitter/X.
+       summary_large_image: big card with image (add og:image later).
+  ════════════════════════════════════════════════════════════════ -->
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:site"        content="@architkonde" />
+  <meta name="twitter:creator"     content="@architkonde" />
+  <meta name="twitter:title"       content="Archit Konde — Machine Learning Engineer" />
+  <meta name="twitter:description" content="Building intelligent systems, solving the intelligence problem one step at a time." />
+
+  <!-- ═══ SEO — Canonical URL ═════════════════════════════════════
+       Tells search engines "this is the one true URL for this page".
+       Prevents duplicate-content penalties if the site is ever
+       accessible via multiple URLs (http vs https, www vs no-www).
+  ════════════════════════════════════════════════════════════════ -->
+  <link rel="canonical" href="https://archit-konde.github.io/" />
 
   <title>Archit Konde</title>
 
@@ -23,8 +57,61 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
+
+  <!-- ═══ SEO — JSON-LD Structured Data ══════════════════════════
+       This is machine-readable data embedded in the page that tells
+       Google exactly who you are. It can produce "rich results" in
+       search — like your name, job title, and links appearing in a
+       knowledge panel next to your search result.
+       Schema.org/Person is the standard vocabulary for people pages.
+  ════════════════════════════════════════════════════════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Archit Konde",
+    "jobTitle": "Machine Learning Engineer",
+    "url": "https://archit-konde.github.io/",
+    "email": "architkonde19@gmail.com",
+    "description": "Machine Learning Engineer focused on AI/ML, neural networks, and contributing to AGI research.",
+    "alumniOf": [
+      {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Windsor",
+        "address": { "@type": "PostalAddress", "addressCountry": "CA" }
+      },
+      {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Mumbai",
+        "address": { "@type": "PostalAddress", "addressCountry": "IN" }
+      }
+    ],
+    "sameAs": [
+      "https://github.com/Archit-Konde",
+      "https://www.linkedin.com/in/architkonde/",
+      "https://x.com/architkonde",
+      "https://scholar.google.com/citations?hl=en&user=njXhCdwAAAAJ"
+    ],
+    "knowsAbout": ["Machine Learning", "Deep Learning", "PyTorch", "TensorFlow", "Neural Networks", "Artificial Intelligence", "Python"]
+  }
+  </script>
 </head>
 <body>
+
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║   Hey, you found the source.  Respect. 👋                   ║
+  ║                                                              ║
+  ║   Built by: Archit Konde                                     ║
+  ║   Stack:    HTML + CSS + Vanilla JS  (no framework)          ║
+  ║   Font:     JetBrains Mono (Google Fonts)                    ║
+  ║   Hosted:   GitHub Pages                                     ║
+  ║   Repo:     github.com/Archit-Konde/Archit-Konde.github.io  ║
+  ║                                                              ║
+  ║   If you're hiring ML/AI engineers — let's talk.            ║
+  ║   architkonde19@gmail.com                                    ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
 
   <!-- ═══════════════════════════════════════════════════════════
        NAVIGATION
@@ -121,9 +208,9 @@
           </div>
         </div>
 
-        <div class="scroll-hint">
+        <a href="#about" class="scroll-hint" aria-label="Scroll to about section">
           <span class="accent">↓</span>&nbsp; scroll to explore
-        </div>
+        </a>
 
       </div>
     </section>

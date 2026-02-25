@@ -8,12 +8,46 @@
      4. MOBILE MENU — hamburger toggle open/close
      5. FADE-IN     — reveals section-bodies as they enter viewport
      6. FOOTER YEAR — inserts the current year automatically
+   7. CONSOLE MSG  — easter egg for developers who open DevTools
 
    Learning note:
      All of this is plain JavaScript — no frameworks, no libraries.
      We use the DOM API (document.querySelector, etc.) to select
      HTML elements and modify them at runtime.
 ═══════════════════════════════════════════════════════════════ */
+
+
+/* ── 0. DEVELOPER CONSOLE EASTER EGG ─────────────────────────
+   When another developer opens DevTools on this site, they'll
+   see styled terminal-like messages in the console.
+
+   %c in console.log() lets you pass CSS as the second argument,
+   styling the text that follows it — like coloring terminal output.
+──────────────────────────────────────────────────────────────── */
+
+(function devConsole() {
+  const gold   = 'color:#C9A84C; font-family:monospace; font-weight:bold;';
+  const grey   = 'color:#858585; font-family:monospace;';
+  const white  = 'color:#d4d4d4; font-family:monospace;';
+  const green  = 'color:#28c840; font-family:monospace; font-weight:bold;';
+  const divider = 'color:#3e3e42; font-family:monospace;';
+
+  console.log('%c> archit@portfolio:~$', gold);
+  console.log('%c─────────────────────────────────────────────────', divider);
+  console.log('%c  Hey fellow dev 👋  You found the console.', white);
+  console.log('%c  Respect for looking under the hood.', grey);
+  console.log('%c─────────────────────────────────────────────────', divider);
+  console.log('%c  Stack  →  HTML + CSS + Vanilla JS', grey);
+  console.log('%c  Font   →  JetBrains Mono (Google Fonts)', grey);
+  console.log('%c  Host   →  GitHub Pages (zero cost, full control)', grey);
+  console.log('%c  Repo   →  github.com/Archit-Konde/Archit-Konde.github.io', gold);
+  console.log('%c─────────────────────────────────────────────────', divider);
+  console.log('%c  ● Open to ML/AI roles — architkonde19@gmail.com', green);
+  console.log('%c─────────────────────────────────────────────────', divider);
+})();
+// The (function(){ ... })() pattern is an IIFE — Immediately Invoked Function
+// Expression. It runs once immediately and keeps variables scoped inside it,
+// so they don't pollute the global window object.
 
 
 /* ── 1. TYPEWRITER EFFECT ─────────────────────────────────────

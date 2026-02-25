@@ -1,13 +1,13 @@
 /* ═══════════════════════════════════════════════════════════════
    ARCHIT KONDE — PORTFOLIO  |  style.css
    ───────────────────────────────────────────────────────────────
-   COLOR PALETTE
-     --bg        #393646   deep purple-grey  → main background
-     --surface   #4F4557   lifted panels     → cards, terminal body
-     --border    #6D5D6E   dividers/muted    → borders, dim text
-     --text      #F4EEE0   warm cream        → primary readable text
-     --muted     #9C8FA0   secondary text    → labels, placeholders
-     --accent    #C9A84C   amber gold        → links, highlights, cursor
+   COLOR PALETTE  (VS Code Dark+ inspired — neutral, no purple)
+     --bg        #1e1e1e   VS Code editor background
+     --surface   #252526   VS Code sidebar / panel background
+     --border    #3e3e42   VS Code border / divider
+     --text      #d4d4d4   VS Code default text
+     --muted     #858585   VS Code dimmed / comment text
+     --accent    #C9A84C   amber gold → links, highlights, cursor
 
    FONT
      JetBrains Mono — Google Fonts (loaded in <head>)
@@ -20,11 +20,11 @@
    Changing one value here updates every element that uses it.
 ──────────────────────────────────────────────────────────────── */
 :root {
-  --bg:       #393646;
-  --surface:  #4F4557;
-  --border:   #6D5D6E;
-  --text:     #F4EEE0;
-  --muted:    #9C8FA0;
+  --bg:       #1e1e1e;
+  --surface:  #252526;
+  --border:   #3e3e42;
+  --text:     #d4d4d4;
+  --muted:    #858585;
   --accent:   #C9A84C;
 
   --font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
@@ -120,10 +120,10 @@ ul { list-style: none; }
   align-items: center;
   gap: var(--s3);
   padding: 0 var(--s4);
-  background: rgba(57, 54, 70, 0.88);   /* slightly transparent --bg */
+  background: rgba(30, 30, 30, 0.88);   /* slightly transparent --bg */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(109, 93, 110, 0.4);
+  border-bottom: 1px solid rgba(62, 62, 66, 0.4);
   transition: border-color var(--ease);
 }
 
@@ -273,7 +273,7 @@ ul { list-style: none; }
 ──────────────────────────────────────────────────────────────── */
 .section {
   padding: var(--s5) 0;
-  border-bottom: 1px solid rgba(109, 93, 110, 0.25);
+  border-bottom: 1px solid rgba(62, 62, 66, 0.35);
 }
 
 /* Section header: "$ cat about.txt" line */
@@ -297,7 +297,7 @@ ul { list-style: none; }
 /* Content area with left accent bar */
 .section-body {
   padding-left: var(--s3);
-  border-left: 2px solid rgba(109, 93, 110, 0.5);
+  border-left: 2px solid rgba(62, 62, 66, 0.7);
 }
 
 
@@ -327,7 +327,7 @@ ul { list-style: none; }
   align-items: center;
   gap: var(--s2);
   padding: var(--s2) var(--s3);
-  background: rgba(109, 93, 110, 0.25);
+  background: rgba(62, 62, 66, 0.25);
   border-bottom: 1px solid var(--border);
 }
 
@@ -440,10 +440,18 @@ ul { list-style: none; }
 
 /* ─ Scroll hint arrow below the terminal ── */
 .scroll-hint {
+  display: inline-block;
   margin-top: var(--s4);
   font-size: 0.78rem;
   color: var(--muted);
+  text-decoration: none;
+  cursor: pointer;
   animation: float 2.5s ease-in-out infinite;
+  transition: color var(--ease);
+}
+
+.scroll-hint:hover {
+  color: var(--accent);
 }
 
 
@@ -514,7 +522,7 @@ ul { list-style: none; }
   gap: var(--s3);
   padding-bottom: var(--s4);
   margin-bottom: var(--s4);
-  border-bottom: 1px dashed rgba(109, 93, 110, 0.4);
+  border-bottom: 1px dashed rgba(62, 62, 66, 0.6);
 }
 
 .exp-item:last-child {
@@ -624,7 +632,7 @@ ul { list-style: none; }
 /* Thin separator between education entries */
 .edu-divider {
   height: 1px;
-  background: rgba(109, 93, 110, 0.35);
+  background: rgba(62, 62, 66, 0.5);
   margin: 0;
 }
 
@@ -656,7 +664,7 @@ ul { list-style: none; }
 
 /* Individual skill pill */
 .tag {
-  background: rgba(79, 69, 87, 0.6);    /* --surface with transparency */
+  background: rgba(37, 37, 38, 0.8);    /* --surface with transparency */
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 0.72rem;
@@ -801,7 +809,7 @@ ul { list-style: none; }
 }
 
 .contact-row:hover {
-  border-color: rgba(109, 93, 110, 0.4);
+  border-color: rgba(62, 62, 66, 0.6);
 }
 
 .contact-row:hover .c-val { color: var(--accent); }
