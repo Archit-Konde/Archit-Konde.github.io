@@ -1,0 +1,15 @@
+# Claude Code local config — never commit
+.claude/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories
+.vscode/
+.idea/
+
+# Node (in case a build step is ever added)
+node_modules/
+npm-debug.log*
