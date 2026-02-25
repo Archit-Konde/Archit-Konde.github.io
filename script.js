@@ -108,18 +108,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ── 2. NAVBAR SCROLL EFFECT ──────────────────────────────────
-   When the user scrolls more than 50px, add the class .scrolled
-   to the navbar. The CSS uses this to darken its border slightly.
+/* ── 2. NAVBAR SCROLL + BACK-TO-TOP ──────────────────────────
+   One scroll listener handles both behaviours to avoid firing
+   two separate event handlers on every scroll tick.
+
+   navbar:      adds .scrolled after 50px  → CSS darkens the border
+   backToTop:   adds .visible after 400px  → CSS fades the button in
 ──────────────────────────────────────────────────────────────── */
 
-const navbar = document.getElementById('navbar');
+const navbar    = document.getElementById('navbar');
+const backToTop = document.getElementById('back-to-top');
 
 window.addEventListener('scroll', () => {
-  if (!navbar) return;
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-  // .toggle(class, condition) adds class if condition is true,
-  // removes it if false — cleaner than if/else
+  const y = window.scrollY;
+  if (navbar)    navbar.classList.toggle('scrolled', y > 50);
+  if (backToTop) backToTop.classList.toggle('visible', y > 400);
+});
+
+/* Clicking the button smoothly scrolls to the very top.
+   { behavior: 'smooth' } is the same smooth-scroll as CSS
+   scroll-behavior: smooth, but triggered from JS.            */
+backToTop?.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 
