@@ -1,0 +1,942 @@
+/* ═══════════════════════════════════════════════════════════════
+   ARCHIT KONDE — PORTFOLIO  |  style.css
+   ───────────────────────────────────────────────────────────────
+   COLOR PALETTE
+     --bg        #393646   deep purple-grey  → main background
+     --surface   #4F4557   lifted panels     → cards, terminal body
+     --border    #6D5D6E   dividers/muted    → borders, dim text
+     --text      #F4EEE0   warm cream        → primary readable text
+     --muted     #9C8FA0   secondary text    → labels, placeholders
+     --accent    #C9A84C   amber gold        → links, highlights, cursor
+
+   FONT
+     JetBrains Mono — Google Fonts (loaded in <head>)
+     Fallback chain: Fira Code → Cascadia Code → Courier New → monospace
+═══════════════════════════════════════════════════════════════ */
+
+
+/* ── 0. CSS Custom Properties (variables) ─────────────────────
+   Think of these like Python constants defined at the top.
+   Changing one value here updates every element that uses it.
+──────────────────────────────────────────────────────────────── */
+:root {
+  --bg:       #393646;
+  --surface:  #4F4557;
+  --border:   #6D5D6E;
+  --text:     #F4EEE0;
+  --muted:    #9C8FA0;
+  --accent:   #C9A84C;
+
+  --font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+
+  /* Spacing scale — multiples of 0.4rem for visual consistency */
+  --s1: 0.4rem;   /*  ~6px  */
+  --s2: 0.8rem;   /* ~12px  */
+  --s3: 1.6rem;   /* ~24px  */
+  --s4: 3.2rem;   /* ~48px  */
+  --s5: 6.4rem;   /* ~96px  */
+
+  --nav-h: 60px;            /* Height of the fixed navbar              */
+  --ease:  0.2s ease;       /* Default transition duration + easing    */
+  --max-w: 880px;           /* Max content width                       */
+}
+
+
+/* ── 1. Reset ─────────────────────────────────────────────────
+   Removes browser default margins/paddings and enforces
+   border-box sizing (width includes padding, not just content).
+──────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth anchor scrolling (clicking nav links glides, not jumps) */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Text highlight when user selects text */
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Links without a class — used inside body text */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Remove list bullet points globally (re-added where needed) */
+ul { list-style: none; }
+
+
+/* ── 2. Scrollbar ─────────────────────────────────────────────
+   Custom scrollbar so it matches the dark theme.
+──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar              { width: 5px; }
+::-webkit-scrollbar-track        { background: var(--bg); }
+::-webkit-scrollbar-thumb        { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover  { background: var(--accent); }
+
+
+/* ── 3. Utility Classes ───────────────────────────────────────
+   Small reusable helpers applied directly in HTML.
+──────────────────────────────────────────────────────────────── */
+.accent    { color: var(--accent); }
+.muted     { color: var(--muted); }
+
+/* .container: centers content and adds horizontal padding */
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--s3);
+}
+
+
+/* ── 4. Navigation ────────────────────────────────────────────
+   Fixed bar at top. Uses backdrop-filter for a frosted-glass
+   blur effect over the scrolled content beneath it.
+──────────────────────────────────────────────────────────────── */
+#navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: 0 var(--s4);
+  background: rgba(57, 54, 70, 0.88);   /* slightly transparent --bg */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(109, 93, 110, 0.4);
+  transition: border-color var(--ease);
+}
+
+/* Stronger border once user scrolls (class added by script.js) */
+#navbar.scrolled {
+  border-bottom-color: var(--border);
+}
+
+/* Brand / logo — the "archit@portfolio:~$" text on the left */
+.nav-brand {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  margin-right: auto;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+/* Navigation link list */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.nav-links a {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color var(--ease);
+  letter-spacing: 0.02em;
+}
+
+.nav-links a:hover,
+.nav-links a.nav-active {
+  color: var(--accent);
+}
+
+/* The "./" prefix on each nav item */
+.nav-slash {
+  color: var(--border);
+  transition: color var(--ease);
+}
+
+.nav-links a:hover .nav-slash,
+.nav-links a.nav-active .nav-slash {
+  color: var(--accent);
+}
+
+/* Resume button — outlined style */
+.resume-btn {
+  font-size: 0.75rem;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: var(--s1) var(--s2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--ease), color var(--ease);
+}
+
+.resume-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ─ Hamburger button (mobile only, hidden on desktop) ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--s1);
+  margin-left: var(--s2);
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  transition: all var(--ease);
+}
+
+/* Animate hamburger into an ✕ when menu is open */
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ─ Mobile menu full-screen overlay ── */
+.mobile-menu {
+  display: none;                /* hidden by default */
+  position: fixed;
+  inset: 0;                     /* shorthand for top/right/bottom/left: 0 */
+  z-index: 99;
+  background: var(--bg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s4);
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-menu ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+  text-align: center;
+}
+
+.mobile-menu a {
+  font-size: 1.1rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: color var(--ease);
+}
+
+.mobile-menu a:hover {
+  color: var(--accent);
+}
+
+.mobile-menu-close {
+  position: absolute;
+  top: var(--s3);
+  right: var(--s3);
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: color var(--ease);
+}
+
+.mobile-menu-close:hover { color: var(--accent); }
+
+
+/* ── 5. Section Layout ────────────────────────────────────────
+   All <section> elements share these base styles.
+   The left-bordered .section-body gives the "terminal pane" look.
+──────────────────────────────────────────────────────────────── */
+.section {
+  padding: var(--s5) 0;
+  border-bottom: 1px solid rgba(109, 93, 110, 0.25);
+}
+
+/* Section header: "$ cat about.txt" line */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin-bottom: var(--s4);
+  font-size: 0.82rem;
+}
+
+.s-dollar {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.s-cmd {
+  color: var(--muted);
+}
+
+/* Content area with left accent bar */
+.section-body {
+  padding-left: var(--s3);
+  border-left: 2px solid rgba(109, 93, 110, 0.5);
+}
+
+
+/* ── 6. Hero Section ──────────────────────────────────────────
+   Full viewport height. Centers the terminal window vertically.
+──────────────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-h);    /* prevent overlap with fixed navbar */
+}
+
+/* ─ Terminal window widget ── */
+.term-window {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+  max-width: 640px;
+  width: 100%;
+}
+
+/* The top bar with colored dots */
+.term-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  background: rgba(109, 93, 110, 0.25);
+  border-bottom: 1px solid var(--border);
+}
+
+/* macOS-style traffic light dots */
+.term-dots { display: flex; gap: 7px; }
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: #28c840; }
+
+/* The "archit@portfolio: ~" title in the topbar */
+.term-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  /* Push to center: auto on both sides minus the dots width */
+  margin: 0 auto;
+  padding-right: 48px;    /* optical correction to account for dots width */
+}
+
+/* Terminal body — the black part where text appears */
+.term-body {
+  padding: var(--s3) var(--s4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+/* A single line of terminal text (prompt + command) */
+.term-line {
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.t-prompt {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.t-cmd { color: var(--text); }
+
+/* ─ The output block after "whoami" command ── */
+.hero-output {
+  padding: var(--s2) 0 var(--s2) var(--s3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.hero-name {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.hero-role {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* Tagline line — contains the typewriter animated text */
+.hero-tagline {
+  font-size: 0.95rem;
+  color: var(--accent);
+  font-style: italic;
+  min-height: 1.5rem;    /* reserve space so layout doesn't jump as text types */
+}
+
+/* The blinking █ cursor after the typewriter text */
+.tw-cursor {
+  display: none;           /* hidden until typewriter finishes (script.js shows it) */
+  color: var(--accent);
+  font-style: normal;
+  animation: blink 1s step-end infinite;
+}
+
+/* Live status dot + text */
+.hero-status {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #28c840;
+  animation: pulse-dot 2s ease infinite;
+}
+
+/* Idle line at bottom of terminal */
+.idle-line { color: var(--muted); }
+
+/* Blinking cursor on the idle line */
+.idle-cursor {
+  color: var(--text);
+  animation: blink 1s step-end infinite;
+}
+
+/* ─ Scroll hint arrow below the terminal ── */
+.scroll-hint {
+  margin-top: var(--s4);
+  font-size: 0.78rem;
+  color: var(--muted);
+  animation: float 2.5s ease-in-out infinite;
+}
+
+
+/* ── 7. About Section ─────────────────────────────────────────
+   Two-column layout: bio text on the left, metadata on the right.
+──────────────────────────────────────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 3fr 1.4fr;
+  gap: var(--s5);
+  align-items: start;
+}
+
+.about-text p {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.85;
+  margin-bottom: var(--s3);
+}
+
+.about-text p:last-child { margin-bottom: 0; }
+
+/* Metadata sidebar (status, focus, learning) */
+.about-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+.meta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.meta-key {
+  font-size: 0.7rem;
+  color: var(--border);
+  letter-spacing: 0.03em;
+}
+
+.meta-val {
+  font-size: 0.80rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Green "● open to work" */
+.status-open { color: #28c840; }
+
+/* Inline links within body text */
+.inline-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+  transition: border-color var(--ease);
+}
+
+.inline-link:hover { border-color: var(--accent); }
+
+
+/* ── 8. Experience Section ────────────────────────────────────
+   Two-column grid: tag on the left, content on the right.
+──────────────────────────────────────────────────────────────── */
+.exp-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: var(--s3);
+  padding-bottom: var(--s4);
+  margin-bottom: var(--s4);
+  border-bottom: 1px dashed rgba(109, 93, 110, 0.4);
+}
+
+.exp-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Amber outlined badge: "publication" / "volunteer" */
+.exp-tag {
+  font-size: 0.68rem;
+  color: var(--accent);
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  padding: 2px 6px;
+  height: fit-content;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+.exp-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.exp-org {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: var(--s2);
+}
+
+.exp-org-short {
+  font-size: 0.72rem;
+  color: var(--border);
+}
+
+/* Bullet list with → prefix */
+.exp-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+.exp-bullets li {
+  font-size: 0.83rem;
+  color: var(--text);
+  padding-left: var(--s3);
+  position: relative;
+  line-height: 1.6;
+}
+
+.exp-bullets li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* Links row below bullets */
+.exp-links { margin-top: var(--s2); }
+
+.exp-link {
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--ease);
+}
+
+.exp-link:hover { border-color: var(--accent); }
+
+
+/* ── 9. Education Section ─────────────────────────────────────
+──────────────────────────────────────────────────────────────── */
+.edu-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+}
+
+/* Degree abbreviation badge (MEng, B.E) */
+.edu-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  padding: 2px 8px;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+.edu-field {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.edu-inst {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Thin separator between education entries */
+.edu-divider {
+  height: 1px;
+  background: rgba(109, 93, 110, 0.35);
+  margin: 0;
+}
+
+
+/* ── 10. Skills Section ───────────────────────────────────────
+   Styled to look like JSON output in a terminal.
+──────────────────────────────────────────────────────────────── */
+.skills-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+}
+
+.skill-group { font-size: 0.83rem; }
+
+/* JSON key color — amber like a variable name */
+.sk-key   { color: var(--accent); }
+/* JSON syntax characters */
+.sk-colon { color: var(--muted); }
+.sk-close { color: var(--muted); }
+
+/* Tag row inside each group */
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  margin: var(--s1) 0 var(--s1) var(--s3);
+}
+
+/* Individual skill pill */
+.tag {
+  background: rgba(79, 69, 87, 0.6);    /* --surface with transparency */
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.72rem;
+  padding: 2px 9px;
+  border-radius: 2px;
+  transition: border-color var(--ease), color var(--ease);
+  font-family: var(--font);
+}
+
+.tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* "currently learning" tags — dimmed + italic to show WIP */
+.tag-wip {
+  border-color: rgba(201, 168, 76, 0.3);
+  color: var(--muted);
+  font-style: italic;
+}
+
+.tag-wip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+/* ── 11. Projects Section ─────────────────────────────────────
+──────────────────────────────────────────────────────────────── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--s3);
+  margin-bottom: var(--s3);
+}
+
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: var(--s3);
+  transition: border-color var(--ease), transform var(--ease);
+  cursor: default;
+}
+
+.project-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+
+/* Dimmed + dashed border for placeholder cards */
+.project-card.placeholder {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--s2);
+}
+
+.card-num {
+  font-size: 0.68rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.card-status {
+  font-size: 0.65rem;
+  color: var(--border);
+}
+
+.card-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--s1);
+}
+
+.card-desc {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: var(--s2);
+  min-height: 2.5em;
+  line-height: 1.5;
+}
+
+.card-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+}
+
+.projects-note {
+  font-size: 0.80rem;
+  color: var(--muted);
+  padding-top: var(--s1);
+}
+
+.projects-note a { color: var(--accent); }
+.projects-note a:hover { text-decoration: underline; }
+
+
+/* ── 12. Blog Placeholder ─────────────────────────────────────
+──────────────────────────────────────────────────────────────── */
+.wip-block {
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding: var(--s3);
+  border: 1px dashed var(--border);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+
+/* ── 13. Contact Section ──────────────────────────────────────
+──────────────────────────────────────────────────────────────── */
+.contact-intro {
+  font-size: 0.88rem;
+  color: var(--text);
+  margin-bottom: var(--s4);
+  line-height: 1.7;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+/* Each contact row: key → value */
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  text-decoration: none;
+  padding: var(--s1) 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--ease);
+  font-size: 0.83rem;
+}
+
+.contact-row:hover {
+  border-color: rgba(109, 93, 110, 0.4);
+}
+
+.contact-row:hover .c-val { color: var(--accent); }
+
+.c-key {
+  color: var(--muted);
+  min-width: 110px;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.c-arrow { font-size: 0.8rem; }
+
+.c-val {
+  color: var(--text);
+  transition: color var(--ease);
+}
+
+
+/* ── 14. Footer ───────────────────────────────────────────────
+──────────────────────────────────────────────────────────────── */
+#footer {
+  padding: var(--s4) 0;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+}
+
+.f-prompt { color: var(--accent); }
+.f-cmd    { color: var(--text); }
+.f-note   { margin-left: auto; color: var(--border); }
+
+
+/* ── 15. Animations ───────────────────────────────────────────
+──────────────────────────────────────────────────────────────── */
+
+/* Blinking cursor — step-end means instant on/off, not a fade */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Pulsing glow on the green status dot */
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(40, 200, 64, 0.4); }
+  50%       { box-shadow: 0 0 0 5px rgba(40, 200, 64, 0); }
+}
+
+/* Gentle floating for the scroll hint arrow */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+
+/* Fade-in used on section bodies when they scroll into view */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  animation: fadeUp 0.45s ease forwards;
+}
+
+
+/* ── 16. Responsive (Mobile-first breakpoints) ────────────────
+   The site is designed for desktop first, then adapted down.
+   Breakpoints: 768px (tablet), 480px (phone)
+──────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  :root { font-size: 15px; }
+
+  /* Collapse navbar links, show hamburger */
+  #navbar {
+    padding: 0 var(--s3);
+  }
+
+  .nav-links  { display: none; }
+  .resume-btn { display: none; }
+  .hamburger  { display: flex; }
+
+  /* Hero adjustments */
+  .hero { padding-top: var(--nav-h); }
+
+  .term-body {
+    padding: var(--s3);
+  }
+
+  .hero-name { font-size: 2rem; }
+
+  .hero-output {
+    padding-left: var(--s2);
+  }
+
+  /* Stack about grid to single column */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: var(--s4);
+  }
+
+  /* Stack experience grid to single column */
+  .exp-item {
+    grid-template-columns: 1fr;
+    gap: var(--s2);
+  }
+
+  /* Projects: single column */
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .c-key { min-width: 80px; }
+
+  .f-note {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-name { font-size: 1.7rem; }
+  .section   { padding: var(--s4) 0; }
+}
+
+/* Respect user's preference for reduced motion (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}

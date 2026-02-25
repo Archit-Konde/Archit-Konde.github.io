@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Archit Konde — Machine Learning Engineer. Building intelligent systems, solving the intelligence problem one step at a time." />
+  <meta name="author" content="Archit Konde" />
+
+  <!-- Open Graph (controls how the link looks when shared on LinkedIn, Twitter, etc.) -->
+  <meta property="og:title"       content="Archit Konde — Machine Learning Engineer" />
+  <meta property="og:description" content="Solving intelligence, one step at a time." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://archit-konde.github.io/" />
+
+  <title>Archit Konde</title>
+
+  <!-- Terminal favicon: amber '>' on dark background, no extra file needed -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23393646'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+
+  <!-- JetBrains Mono — the terminal/code font we use throughout the site -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       NAVIGATION
+       Fixed at the top. Brand reads like a terminal prompt.
+       Links use "./section" path convention.
+       On mobile, nav collapses into a full-screen hamburger menu.
+  ═══════════════════════════════════════════════════════════════ -->
+  <nav id="navbar">
+    <a href="#home" class="nav-brand">
+      archit<span class="accent">@</span>portfolio<span class="accent">:~$</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#about"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="#experience"><span class="nav-slash">./</span>experience</a></li>
+      <li><a href="#skills"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="#projects"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="#contact"><span class="nav-slash">./</span>contact</a></li>
+    </ul>
+
+    <a href="assets/resume.pdf" class="resume-btn" target="_blank" rel="noopener noreferrer">
+      resume <span class="accent">↗</span>
+    </a>
+
+    <!-- Hamburger button — only visible on mobile -->
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Full-screen mobile menu overlay -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <button class="mobile-menu-close" id="mobileClose" aria-label="Close menu">✕</button>
+    <ul>
+      <li><a href="#about"      class="mob-link"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="#experience" class="mob-link"><span class="nav-slash">./</span>experience</a></li>
+      <li><a href="#skills"     class="mob-link"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="#projects"   class="mob-link"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="#contact"    class="mob-link"><span class="nav-slash">./</span>contact</a></li>
+      <li><a href="assets/resume.pdf" class="mob-link" target="_blank" rel="noopener">resume ↗</a></li>
+    </ul>
+  </div>
+
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         HERO / LANDING
+         Designed as a macOS-style terminal window.
+         Contains: name, role, animated tagline, open-to-work status.
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="home" class="hero">
+      <div class="container">
+
+        <div class="term-window">
+          <!-- Terminal chrome bar (the colored dots at the top) -->
+          <div class="term-topbar">
+            <div class="term-dots">
+              <span class="dot dot-r" title="close"></span>
+              <span class="dot dot-y" title="minimize"></span>
+              <span class="dot dot-g" title="fullscreen"></span>
+            </div>
+            <span class="term-label">archit@portfolio: ~</span>
+          </div>
+
+          <!-- Terminal body -->
+          <div class="term-body">
+            <!-- Command typed into the terminal -->
+            <p class="term-line">
+              <span class="t-prompt">archit@portfolio:~$</span><span class="t-cmd"> whoami</span>
+            </p>
+
+            <!-- "Output" of the whoami command -->
+            <div class="hero-output">
+              <h1 class="hero-name">Archit Konde</h1>
+              <p class="hero-role">Machine Learning Engineer</p>
+              <!-- Tagline: animated by the typewriter in script.js -->
+              <p class="hero-tagline">
+                <span id="tw-text"></span><span class="tw-cursor" id="tw-cursor">█</span>
+              </p>
+              <!-- Live green dot: "open to opportunities" -->
+              <p class="hero-status">
+                <span class="status-dot"></span>
+                <span>open to opportunities</span>
+              </p>
+            </div>
+
+            <!-- Idle prompt line at the bottom (blink cursor effect) -->
+            <p class="term-line idle-line">
+              <span class="t-prompt">archit@portfolio:~$</span><span class="idle-cursor"> █</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="scroll-hint">
+          <span class="accent">↓</span>&nbsp; scroll to explore
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ABOUT
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="about" class="section">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="s-dollar">$</span>
+          <span class="s-cmd">cat <span class="accent">about.txt</span></span>
+        </div>
+
+        <div class="section-body">
+          <div class="about-grid">
+
+            <div class="about-text">
+              <p>
+                I'm a Machine Learning Engineer with a background in Electrical &amp; Computer
+                Engineering. My focus is on one of the most consequential problems of our time —
+                <em class="accent">the intelligence problem</em>. I want to build AI systems
+                that help people tackle complex, high-impact challenges.
+              </p>
+              <p>
+                My work sits at the intersection of research and engineering — from understanding
+                the mathematical foundations of neural networks to building systems that push
+                the boundaries of what AI can do. Long-term, I'm working toward meaningful
+                contributions to AGI/ASI research and development.
+              </p>
+              <p>
+                Currently based in <em class="accent">Waterloo, ON</em> — the heart of
+                Canada's AI and tech ecosystem.
+              </p>
+            </div>
+
+            <aside class="about-meta">
+              <div class="meta-block">
+                <span class="meta-key">// status</span>
+                <span class="meta-val status-open">● open to work</span>
+              </div>
+              <div class="meta-block">
+                <span class="meta-key">// focus</span>
+                <span class="meta-val">AI / ML · AGI Research</span>
+              </div>
+              <div class="meta-block">
+                <span class="meta-key">// currently</span>
+                <span class="meta-val">
+                  studying transformers via<br />
+                  <a href="https://github.com/karpathy/micrograd" target="_blank" rel="noopener" class="inline-link">karpathy/microGPT ↗</a>
+                </span>
+              </div>
+              <div class="meta-block">
+                <span class="meta-key">// interests</span>
+                <span class="meta-val">LLMs · Neural Scaling · RL</span>
+              </div>
+            </aside>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         EXPERIENCE
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="experience" class="section">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="s-dollar">$</span>
+          <span class="s-cmd">cat <span class="accent">experience.log</span></span>
+        </div>
+
+        <div class="section-body">
+
+          <!-- ── Publication ─────────────────────────────────── -->
+          <div class="exp-item">
+            <div class="exp-tag">publication</div>
+            <div class="exp-content">
+              <h3 class="exp-title">Fundamentals of Neural Networks</h3>
+              <p class="exp-org">
+                International Journal for Research in Applied Science &amp; Engineering Technology
+                <span class="exp-org-short">(IJRASET)</span>
+              </p>
+              <ul class="exp-bullets">
+                <li>Authored a research paper examining the architectural and mathematical foundations of neural networks</li>
+                <li>Covered activation functions, backpropagation, gradient descent, and network topologies</li>
+              </ul>
+              <div class="exp-links">
+                <a
+                  href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=njXhCdwAAAAJ&citation_for_view=njXhCdwAAAAJ:u5HHmVD_uO8C"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="exp-link"
+                >Google Scholar ↗</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Volunteer ───────────────────────────────────── -->
+          <div class="exp-item">
+            <div class="exp-tag">volunteer</div>
+            <div class="exp-content">
+              <h3 class="exp-title">Data Analyst</h3>
+              <p class="exp-org">City of Windsor — Affordable Transit Program</p>
+              <ul class="exp-bullets">
+                <li>Cleaned and preprocessed transit ridership datasets to ensure data quality and consistency</li>
+                <li>Built dashboards to visualize usage patterns and surface actionable insights for program planning</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         EDUCATION
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="education" class="section">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="s-dollar">$</span>
+          <span class="s-cmd">cat <span class="accent">education.txt</span></span>
+        </div>
+
+        <div class="section-body">
+
+          <div class="edu-item">
+            <span class="edu-badge">MEng</span>
+            <div class="edu-details">
+              <p class="edu-field">Electrical &amp; Computer Engineering</p>
+              <p class="edu-inst">University of Windsor &mdash; Canada</p>
+            </div>
+          </div>
+
+          <div class="edu-divider"></div>
+
+          <div class="edu-item">
+            <span class="edu-badge">B.E</span>
+            <div class="edu-details">
+              <p class="edu-field">Computer Engineering</p>
+              <p class="edu-inst">University of Mumbai &mdash; India</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SKILLS
+         Styled as a JSON object so it reads like code output.
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="skills" class="section">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="s-dollar">$</span>
+          <span class="s-cmd">cat <span class="accent">skills.json</span></span>
+        </div>
+
+        <div class="section-body">
+          <div class="skills-block">
+
+            <div class="skill-group">
+              <span class="sk-key">"languages"</span><span class="sk-colon">: [</span>
+              <div class="skill-tags">
+                <span class="tag">Python</span>
+                <span class="tag">C</span>
+                <span class="tag">C++</span>
+                <span class="tag">Java</span>
+                <span class="tag">MATLAB</span>
+              </div>
+              <span class="sk-close">],</span>
+            </div>
+
+            <div class="skill-group">
+              <span class="sk-key">"ai_ml"</span><span class="sk-colon">: [</span>
+              <div class="skill-tags">
+                <span class="tag">PyTorch</span>
+                <span class="tag">TensorFlow</span>
+                <span class="tag">scikit-learn</span>
+                <span class="tag">NumPy</span>
+                <span class="tag">Pandas</span>
+              </div>
+              <span class="sk-close">],</span>
+            </div>
+
+            <div class="skill-group">
+              <span class="sk-key">"tools_and_cloud"</span><span class="sk-colon">: [</span>
+              <div class="skill-tags">
+                <span class="tag">AWS</span>
+                <span class="tag">Git</span>
+                <span class="tag">GitHub</span>
+                <span class="tag">Jupyter</span>
+              </div>
+              <span class="sk-close">],</span>
+            </div>
+
+            <div class="skill-group">
+              <span class="sk-key">"currently_learning"</span><span class="sk-colon">: [</span>
+              <div class="skill-tags">
+                <span class="tag tag-wip">Transformers</span>
+                <span class="tag tag-wip">LLM internals</span>
+                <span class="tag tag-wip">microGPT → nanoGPT</span>
+              </div>
+              <span class="sk-close">]</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PROJECTS
+         Placeholder cards for now. Real projects will replace these.
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="projects" class="section">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="s-dollar">$</span>
+          <span class="s-cmd">ls <span class="accent">./projects/</span></span>
+        </div>
+
+        <div class="section-body">
+
+          <div class="projects-grid">
+
+            <div class="project-card placeholder">
+              <div class="card-top">
+                <span class="card-num">01</span>
+                <span class="card-status">// initializing</span>
+              </div>
+              <p class="card-name">project_name.py</p>
+              <p class="card-desc">Description loading&hellip;</p>
+              <div class="card-tech">
+                <span class="tag">python</span>
+                <span class="tag">pytorch</span>
+              </div>
+            </div>
+
+            <div class="project-card placeholder">
+              <div class="card-top">
+                <span class="card-num">02</span>
+                <span class="card-status">// initializing</span>
+              </div>
+              <p class="card-name">project_name.py</p>
+              <p class="card-desc">Description loading&hellip;</p>
+              <div class="card-tech">
+                <span class="tag">python</span>
+                <span class="tag">tensorflow</span>
+              </div>
+            </div>
+
+            <div class="project-card placeholder">
+              <div class="card-top">
+                <span class="card-num">03</span>
+                <span class="card-status">// initializing</span>
+              </div>
+              <p class="card-name">project_name.py</p>
+              <p class="card-desc">Description loading&hellip;</p>
+              <div class="card-tech">
+                <span class="tag">python</span>
+                <span class="tag">scikit-learn</span>
+              </div>
+            </div>
+
+          </div>
+
+          <p class="projects-note">
+            <span class="accent">→</span> projects are actively being built.
+            follow along on
+            <a href="https://github.com/Archit-Konde" target="_blank" rel="noopener" class="inline-link">GitHub ↗</a>
+          </p>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         BLOG / WRITING  (placeholder)
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="blog" class="section">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="s-dollar">$</span>
+          <span class="s-cmd">ls <span class="accent">./blog/</span></span>
+        </div>
+
+        <div class="section-body">
+          <div class="wip-block">
+            <span class="accent">// </span>writing in progress &mdash;
+            thoughts on AI, research, and building things that matter.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CONTACT
+    ═══════════════════════════════════════════════════════════════ -->
+    <section id="contact" class="section">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="s-dollar">$</span>
+          <span class="s-cmd">cat <span class="accent">contact.txt</span></span>
+        </div>
+
+        <div class="section-body">
+
+          <p class="contact-intro">
+            I'm actively looking for opportunities in AI/ML engineering and research.
+            If you're working on something interesting — let's talk.
+          </p>
+
+          <div class="contact-links">
+
+            <a href="mailto:architkonde19@gmail.com" class="contact-row">
+              <span class="c-key">email</span>
+              <span class="c-arrow accent">→</span>
+              <span class="c-val">architkonde19@gmail.com</span>
+            </a>
+
+            <a href="https://github.com/Archit-Konde" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <span class="c-key">github</span>
+              <span class="c-arrow accent">→</span>
+              <span class="c-val">Archit-Konde ↗</span>
+            </a>
+
+            <a href="https://www.linkedin.com/in/architkonde/" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <span class="c-key">linkedin</span>
+              <span class="c-arrow accent">→</span>
+              <span class="c-val">architkonde ↗</span>
+            </a>
+
+            <a href="https://x.com/architkonde" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <span class="c-key">twitter / x</span>
+              <span class="c-arrow accent">→</span>
+              <span class="c-val">@architkonde ↗</span>
+            </a>
+
+            <a href="https://scholar.google.com/citations?hl=en&user=njXhCdwAAAAJ" target="_blank" rel="noopener noreferrer" class="contact-row">
+              <span class="c-key">google scholar</span>
+              <span class="c-arrow accent">→</span>
+              <span class="c-val">Archit Konde — IJRASET ↗</span>
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════════════ -->
+  <footer id="footer">
+    <div class="container footer-inner">
+      <span class="f-prompt">archit@portfolio:~$</span>
+      <span class="f-cmd">&nbsp;<span class="accent">exit 0</span></span>
+      <span class="f-note">// Archit Konde &copy; <span id="year"></span></span>
+    </div>
+  </footer>
+
+
+  <script src="script.js"></script>
+</body>
+</html>

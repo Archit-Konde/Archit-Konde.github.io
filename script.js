@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════════════════════
+   ARCHIT KONDE — PORTFOLIO  |  script.js
+
+   What this file does (in order):
+     1. TYPEWRITER  — animates the tagline character by character
+     2. NAVBAR      — adds .scrolled class when user scrolls down
+     3. ACTIVE NAV  — highlights the current section's nav link
+     4. MOBILE MENU — hamburger toggle open/close
+     5. FADE-IN     — reveals section-bodies as they enter viewport
+     6. FOOTER YEAR — inserts the current year automatically
+
+   Learning note:
+     All of this is plain JavaScript — no frameworks, no libraries.
+     We use the DOM API (document.querySelector, etc.) to select
+     HTML elements and modify them at runtime.
+═══════════════════════════════════════════════════════════════ */
+
+
+/* ── 1. TYPEWRITER EFFECT ─────────────────────────────────────
+   How it works:
+     - We store the full tagline string.
+     - setInterval fires a callback every TYPE_SPEED milliseconds.
+     - Each call appends one more character to the element.
+     - When done, we show the blinking block cursor (█).
+
+   Flow diagram:
+     page load
+        │
+        └─ wait 700ms (feels like terminal "booting")
+              │
+              └─ typeWriter() starts
+                    │
+                    ├─ every 45ms: add one character
+                    │
+                    └─ when complete: show █ cursor
+──────────────────────────────────────────────────────────────── */
+
+const TAGLINE    = 'solving intelligence, one step at a time.';
+const TWEl       = document.getElementById('tw-text');      // the text span
+const TWCursor   = document.getElementById('tw-cursor');    // the █ cursor span
+const TYPE_SPEED = 45;  // milliseconds between each character
+
+function typeWriter(text, el, speed, onDone) {
+  let i = 0;
+
+  // Hide the block cursor while typing is in progress
+  if (TWCursor) TWCursor.style.display = 'none';
+
+  const interval = setInterval(() => {
+    if (i < text.length) {
+      el.textContent += text[i];  // append next character
+      i++;
+    } else {
+      clearInterval(interval);           // stop the timer
+      if (TWCursor) TWCursor.style.display = 'inline'; // show cursor
+      if (onDone) onDone();              // optional callback
+    }
+  }, speed);
+}
+
+// DOMContentLoaded fires when the HTML is fully parsed
+// (safer than window.onload which waits for images too)
+document.addEventListener('DOMContentLoaded', () => {
+  if (TWEl) {
+    setTimeout(() => {
+      typeWriter(TAGLINE, TWEl, TYPE_SPEED);
+    }, 700);  // 700ms boot delay
+  }
+
+  // ── Also set the footer copyright year automatically ──
+  // This way you never have to manually update it each year.
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+});
+
+
+/* ── 2. NAVBAR SCROLL EFFECT ──────────────────────────────────
+   When the user scrolls more than 50px, add the class .scrolled
+   to the navbar. The CSS uses this to darken its border slightly.
+──────────────────────────────────────────────────────────────── */
+
+const navbar = document.getElementById('navbar');
+
+window.addEventListener('scroll', () => {
+  if (!navbar) return;
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+  // .toggle(class, condition) adds class if condition is true,
+  // removes it if false — cleaner than if/else
+});
+
+
+/* ── 3. ACTIVE NAV LINK (Intersection Observer) ───────────────
+   We want the nav link to light up in amber when its section
+   is currently visible on screen.
+
+   IntersectionObserver watches multiple elements and fires a
+   callback whenever one enters or leaves the viewport.
+
+   Flow:
+     user scrolls
+        │
+        └─ observer detects section entering viewport
+              │
+              └─ removes .nav-active from all links
+                    │
+                    └─ adds .nav-active to matching link
+──────────────────────────────────────────────────────────────── */
+
+const allSections = document.querySelectorAll('section[id]');
+const navLinks    = document.querySelectorAll('.nav-links a');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Remove active class from every nav link
+      navLinks.forEach(link => link.classList.remove('nav-active'));
+
+      // Find the nav link whose href matches the section's id
+      const id = entry.target.id;
+      const matchingLink = document.querySelector(`.nav-links a[href="#${id}"]`);
+      if (matchingLink) matchingLink.classList.add('nav-active');
+    }
+  });
+}, {
+  threshold: 0.35,              // section must be 35% visible to trigger
+  rootMargin: '-60px 0px 0px 0px'  // offset for the fixed navbar height
+});
+
+allSections.forEach(section => sectionObserver.observe(section));
+
+
+/* ── 4. MOBILE MENU TOGGLE ────────────────────────────────────
+   The hamburger button toggles the full-screen menu overlay.
+   Clicking any link inside the menu closes it.
+   We also toggle aria-expanded / aria-hidden for accessibility.
+──────────────────────────────────────────────────────────────── */
+
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
+const mobileLinks = document.querySelectorAll('.mob-link');
+
+function openMenu() {
+  mobileMenu.classList.add('open');
+  hamburger.classList.add('open');
+  hamburger.setAttribute('aria-expanded', 'true');
+  mobileMenu.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';  // prevent background scroll
+}
+
+function closeMenu() {
+  mobileMenu.classList.remove('open');
+  hamburger.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
+  mobileMenu.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+hamburger?.addEventListener('click', () => {
+  mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+});
+
+mobileClose?.addEventListener('click', closeMenu);
+
+// Close menu when any nav link is clicked
+mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+// Close menu if user presses Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMenu();
+});
+
+
+/* ── 5. SCROLL FADE-IN ANIMATION ─────────────────────────────
+   Each .section-body fades up into view as it enters the screen.
+   This uses a second IntersectionObserver.
+
+   When a section-body enters the viewport:
+     1. Add the .fade-up CSS class (triggers the animation)
+     2. Stop observing that element (we only animate it once)
+──────────────────────────────────────────────────────────────── */
+
+const fadeEls = document.querySelectorAll('.section-body');
+
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('fade-up');
+      fadeObserver.unobserve(entry.target);  // animate only once
+    }
+  });
+}, { threshold: 0.1 });  // trigger when just 10% of element is visible
+
+fadeEls.forEach(el => fadeObserver.observe(el));
