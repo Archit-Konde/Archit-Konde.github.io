@@ -48,6 +48,8 @@
 
   <!-- PWA manifest — tells the browser this is installable as an app -->
   <link rel="manifest" href="manifest.json" />
+  <!-- Apple Touch Icon — iOS uses this for "Add to Home Screen" (ignores manifest.json) -->
+  <link rel="apple-touch-icon" href="icon-192.svg" />
 
   <title>Archit Konde</title>
 
@@ -135,9 +137,11 @@
       <li><a href="#contact"><span class="nav-slash">./</span>contact</a></li>
     </ul>
 
+    <!-- resume button: re-enable once assets/resume.pdf is added
     <a href="assets/resume.pdf" class="resume-btn" target="_blank" rel="noopener noreferrer">
       resume <span class="accent">↗</span>
     </a>
+    -->
 
     <!-- Hamburger button — only visible on mobile -->
     <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
@@ -156,7 +160,9 @@
       <li><a href="#skills"     class="mob-link"><span class="nav-slash">./</span>skills</a></li>
       <li><a href="#projects"   class="mob-link"><span class="nav-slash">./</span>projects</a></li>
       <li><a href="#contact"    class="mob-link"><span class="nav-slash">./</span>contact</a></li>
-      <li><a href="assets/resume.pdf" class="mob-link" target="_blank" rel="noopener">resume ↗</a></li>
+      <!-- resume link: re-enable once assets/resume.pdf is added
+      <li><a href="assets/resume.pdf" class="mob-link" target="_blank" rel="noopener noreferrer">resume ↗</a></li>
+      -->
     </ul>
   </div>
 
@@ -265,7 +271,7 @@
                 <span class="meta-key">// currently</span>
                 <span class="meta-val">
                   studying transformers via<br />
-                  <a href="https://github.com/karpathy/micrograd" target="_blank" rel="noopener" class="inline-link">karpathy/microGPT ↗</a>
+                  <a href="https://github.com/karpathy/micrograd" target="_blank" rel="noopener noreferrer" class="inline-link">karpathy/micrograd ↗</a>
                 </span>
               </div>
               <div class="meta-block">
@@ -499,7 +505,7 @@
           <p class="projects-note">
             <span class="accent">→</span> projects are actively being built.
             follow along on
-            <a href="https://github.com/Archit-Konde" target="_blank" rel="noopener" class="inline-link">GitHub ↗</a>
+            <a href="https://github.com/Archit-Konde" target="_blank" rel="noopener noreferrer" class="inline-link">GitHub ↗</a>
           </p>
 
         </div>
