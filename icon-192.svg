@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- Background with rounded corners -->
+  <rect width="192" height="192" rx="28" fill="#1e1e1e"/>
+  <!-- Terminal prompt > symbol — centered -->
+  <text
+    x="96"
+    y="130"
+    font-family="'Courier New', Courier, monospace"
+    font-size="108"
+    font-weight="700"
+    fill="#C9A84C"
+    text-anchor="middle"
+    dominant-baseline="auto"
+  >&gt;</text>
+</svg>
