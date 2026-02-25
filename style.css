@@ -99,6 +99,26 @@ ul { list-style: none; }
 .accent    { color: var(--accent); }
 .muted     { color: var(--muted); }
 
+/* Prevent accidental text selection on interactive UI elements.
+   Applied to navigation, buttons, tags, and clickable rows —
+   NOT to body text or inline content links, which stay selectable.
+   -webkit- prefix covers iOS Safari and older Chrome/Edge.        */
+.nav-brand,
+.nav-links a,
+.resume-btn,
+.hamburger,
+.mobile-menu a,
+.mobile-menu-close,
+.scroll-hint,
+#back-to-top,
+.tag,
+.contact-row,
+.exp-link,
+.term-dots {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 /* .container: centers content and adds horizontal padding */
 .container {
   max-width: var(--max-w);

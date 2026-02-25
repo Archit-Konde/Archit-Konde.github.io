@@ -256,3 +256,77 @@ const fadeObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });  // trigger when just 10% of element is visible
 
 fadeEls.forEach(el => fadeObserver.observe(el));
+
+
+/* ── 7. GHOST COMMANDS ANIMATION ─────────────────────────────
+   Cycles through fake terminal commands on the idle prompt line,
+   typing each one out then erasing it — giving the terminal a
+   "live" feel rather than a static blinking cursor.
+
+   Flow:
+     wait for typewriter to finish (≈ 3.2s from page load)
+       │
+       └─ pick next command from GHOST_CMDS
+             │
+             ├─ type it char by char (65ms per char)
+             │
+             ├─ pause at full command (1400ms)
+             │
+             ├─ erase char by char (28ms per char — faster than typing)
+             │
+             └─ pause (600ms), then loop with next command
+
+   Skipped entirely if the visitor prefers reduced motion.
+──────────────────────────────────────────────────────────────── */
+
+const ghostEl = document.getElementById('ghost-text');
+
+const GHOST_CMDS = [
+  ' ls -la models/',
+  ' git log --oneline',
+  ' python train.py --epochs ∞',
+  ' nvidia-smi',
+  ' python -c "import torch"',
+  ' cat README.md',
+  ' git diff HEAD~1 --stat',
+  ' python -c "import torch; torch.cuda.is_available()"',
+];
+
+let ghostIdx = 0;
+
+function ghostLoop() {
+  if (!ghostEl) return;
+
+  const cmd = GHOST_CMDS[ghostIdx % GHOST_CMDS.length];
+  ghostIdx++;
+
+  let i = 0;
+
+  // Type the command character by character
+  const typer = setInterval(() => {
+    if (i < cmd.length) {
+      ghostEl.textContent += cmd[i++];
+    } else {
+      clearInterval(typer);
+      // Hold at full command, then erase
+      setTimeout(() => {
+        const eraser = setInterval(() => {
+          const t = ghostEl.textContent;
+          if (t.length > 0) {
+            ghostEl.textContent = t.slice(0, -1);  // remove last char
+          } else {
+            clearInterval(eraser);
+            setTimeout(ghostLoop, 600);             // pause, then next command
+          }
+        }, 28);   // erase faster than typing for snappy feel
+      }, 1400);   // pause at full command before erasing
+    }
+  }, 65);         // ms per character while typing
+}
+
+// Start after the typewriter finishes (700ms boot delay + ~45ms × 41 chars ≈ 2550ms total)
+// We wait 3200ms to give a comfortable gap.
+// Guard: skip if user has prefers-reduced-motion set.
+if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  setTimeout(ghostLoop, 3200);
+}

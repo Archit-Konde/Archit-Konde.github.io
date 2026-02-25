@@ -1,21 +1,19 @@
 # CITATION.cff — Citation File Format
 #
-# This file tells GitHub (and academic tools like Zenodo, Figshare,
-# and Google Scholar) how to properly cite this portfolio/project.
+# GitHub renders a "Cite this repository" button in the right sidebar
+# using this file. Academic tools like Zenodo and Software Heritage
+# also use it for archival and discovery.
 #
-# GitHub will automatically render a "Cite this repository" button
-# in the right sidebar of the repo — no extra work needed.
-#
-# TODO: Register for a free ORCID iD at https://orcid.org
-#       Replace 'YOUR-ORCID-HERE' below with your actual iD.
-#       Format: 0000-0000-0000-0000
+# preferred-citation: the paper to cite when referencing Archit's work
+# (distinct from citing the portfolio repo itself)
 
 cff-version: 1.2.0
-message: "If you reference this portfolio or its projects, please cite it as below."
+message: "If you reference this work, please cite the paper below."
 
 title: "Archit Konde — Machine Learning Engineer Portfolio"
 version: "1.0.0"
 date-released: "2026-02-24"
+license: MIT
 
 authors:
   - family-names: Konde
@@ -41,13 +39,14 @@ keywords:
   - portfolio
   - AGI
 
-license: MIT
-
-references:
-  - type: article
-    title: "Fundamentals of Neural Networks"
-    authors:
-      - family-names: Konde
-        given-names: Archit
-    journal: "International Journal for Research in Applied Science and Engineering Technology (IJRASET)"
-    url: "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=njXhCdwAAAAJ&citation_for_view=njXhCdwAAAAJ:u5HHmVD_uO8C"
+# preferred-citation tells GitHub and academic tools to use this paper
+# (rather than the portfolio repo itself) when someone cites the work.
+preferred-citation:
+  type: article
+  title: "Fundamentals of Neural Networks"
+  authors:
+    - family-names: Konde
+      given-names: Archit
+      orcid: "https://orcid.org/0000-0002-2422-117X"
+  journal: "International Journal for Research in Applied Science and Engineering Technology (IJRASET)"
+  url: "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=njXhCdwAAAAJ&citation_for_view=njXhCdwAAAAJ:u5HHmVD_uO8C"
