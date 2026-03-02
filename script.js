@@ -8,7 +8,8 @@
      4. MOBILE MENU — hamburger toggle open/close
      5. FADE-IN     — reveals section-bodies as they enter viewport
      6. FOOTER YEAR — inserts the current year automatically
-   7. CONSOLE MSG  — easter egg for developers who open DevTools
+     7. CONSOLE MSG — easter egg for developers who open DevTools
+     8. CMD PALETTE — VS Code-style Ctrl+K quick navigation
 
    Learning note:
      All of this is plain JavaScript — no frameworks, no libraries.
@@ -332,7 +333,130 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 }
 
 
-/* ── 8. CLICKABLE CARD OVERLAYS ──────────────────────────────
+/* ── 8. COMMAND PALETTE ──────────────────────────────────────
+   VS Code-style Ctrl+K / Cmd+K overlay for quick navigation.
+   Same pattern as the landing page command palette.
+──────────────────────────────────────────────────────────────── */
+
+(function commandPalette() {
+  const COMMANDS = [
+    { icon: '→', label: 'Go to About',       hint: '#about',       action() { scrollTo('#about'); } },
+    { icon: '→', label: 'Go to Experience',   hint: '#experience',  action() { scrollTo('#experience'); } },
+    { icon: '→', label: 'Go to Skills',       hint: '#skills',      action() { scrollTo('#skills'); } },
+    { icon: '→', label: 'Go to Projects',     hint: '#projects',    action() { scrollTo('#projects'); } },
+    { icon: '→', label: 'Go to Blog',         hint: '#blog',        action() { scrollTo('#blog'); } },
+    { icon: '→', label: 'Go to Contact',      hint: '#contact',     action() { scrollTo('#contact'); } },
+    { icon: '↗', label: 'View SupportOps Demo', hint: 'HuggingFace', action() { window.open('https://architechs-supportops-ai-monitor.hf.space', '_blank'); } },
+    { icon: './', label: 'View GitHub',       hint: 'github.com',   action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
+    { icon: 'in', label: 'View LinkedIn',     hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
+  ];
+
+  function scrollTo(sel) {
+    const el = document.querySelector(sel);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const palette = document.getElementById('cmd-palette');
+  const input   = document.getElementById('cmd-input');
+  const list    = document.getElementById('cmd-list');
+  if (!palette || !input || !list) return;
+
+  let activeIdx = 0;
+  let filtered  = COMMANDS.slice();
+
+  function render() {
+    list.innerHTML = '';
+    filtered.forEach((cmd, i) => {
+      const li = document.createElement('li');
+      li.className = 'cmd-item' + (i === activeIdx ? ' active' : '');
+      li.setAttribute('role', 'option');
+      li.innerHTML =
+        `<span class="cmd-item-icon">${cmd.icon}</span>` +
+        `<span class="cmd-item-label">${cmd.label}</span>` +
+        `<span class="cmd-item-hint">${cmd.hint}</span>`;
+      li.addEventListener('click', () => { cmd.action(); close(); });
+      li.addEventListener('mouseenter', () => { activeIdx = i; render(); });
+      list.appendChild(li);
+    });
+  }
+
+  function open() {
+    palette.hidden = false;
+    input.value = '';
+    filtered = COMMANDS.slice();
+    activeIdx = 0;
+    render();
+    requestAnimationFrame(() => input.focus());
+  }
+
+  function close() {
+    palette.hidden = true;
+    input.value = '';
+  }
+
+  function fuzzyMatch(query, text) {
+    const q = query.toLowerCase();
+    const t = text.toLowerCase();
+    let qi = 0;
+    for (let ti = 0; ti < t.length && qi < q.length; ti++) {
+      if (t[ti] === q[qi]) qi++;
+    }
+    return qi === q.length;
+  }
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+
+    /* Easter egg: sudo */
+    if (q.toLowerCase() === 'sudo') {
+      filtered = [{ icon: '🔒', label: 'Nice try. Permission denied.', hint: 'you are not root', action() {} }];
+      activeIdx = 0;
+      render();
+      return;
+    }
+
+    filtered = q
+      ? COMMANDS.filter(c => fuzzyMatch(q, c.label) || fuzzyMatch(q, c.hint))
+      : COMMANDS.slice();
+    activeIdx = 0;
+    render();
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIdx = (activeIdx + 1) % Math.max(filtered.length, 1);
+      render();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIdx = (activeIdx - 1 + filtered.length) % Math.max(filtered.length, 1);
+      render();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (filtered[activeIdx]) { filtered[activeIdx].action(); close(); }
+    } else if (e.key === 'Escape') {
+      close();
+    }
+  });
+
+  /* Ctrl+K / Cmd+K toggle */
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      palette.hidden ? open() : close();
+    }
+  });
+
+  /* Backdrop click to close */
+  palette.querySelector('.cmd-backdrop').addEventListener('click', close);
+
+  /* Nav bar kbd trigger */
+  const kbdBtn = document.getElementById('nav-kbd-trigger');
+  if (kbdBtn) kbdBtn.addEventListener('click', open);
+})();
+
+
+/* ── 9. CLICKABLE CARD OVERLAYS ──────────────────────────────
    Each .project-card that contains a .card-overlay-link is made
    fully clickable. The overlay anchor handles right-click context
    menus (CSS: position:absolute; inset:0; display:block).
