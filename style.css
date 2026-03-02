@@ -727,6 +727,28 @@ ul { list-style: none; }
   padding: var(--s3);
   transition: border-color var(--ease), transform var(--ease);
   cursor: default;
+  position: relative;   /* needed for .card-overlay-link to position inside */
+}
+
+/* Full-card clickable overlay — invisible anchor stretched over the entire card.
+   z-index: 0 keeps it below inner links (.inline-link, .card-tech) which sit at z-index: 1.
+   tabindex="-1" removes it from keyboard tab order (the inner link handles focus). */
+.card-overlay-link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* When a card has an overlay, swap cursor to pointer */
+.project-card:has(.card-overlay-link) {
+  cursor: pointer;
+}
+
+/* Ensure inner interactive elements stay above the overlay */
+.project-card .inline-link,
+.project-card .card-tech {
+  position: relative;
+  z-index: 1;
 }
 
 .project-card:hover {
@@ -798,6 +820,28 @@ ul { list-style: none; }
   border: 1px dashed var(--border);
   font-style: italic;
   line-height: 1.6;
+}
+
+
+/* Blog post card scroll container — horizontal flex row with snap.
+   When a single card exists it renders normally (no scroll).
+   When multiple cards are added they flow horizontally and snap. */
+.blog-scroll {
+  display: flex;
+  gap: var(--s3);
+  overflow-x: auto;
+  padding-bottom: var(--s2);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.blog-scroll .project-card {
+  min-width: 300px;
+  max-width: 360px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
 }
 
 
