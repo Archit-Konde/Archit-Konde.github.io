@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="description"  content="Building SupportOps AI Monitor — architecture decisions, pandas applymap() bug, SQLite deployment challenges, and Streamlit limitations. A learning writeup by Archit Konde." />
+  <meta name="description"  content="Building SupportOps AI Monitor — architecture decisions, pandas applymap() bug, SQLite deployment challenges on ephemeral containers. A learning writeup by Archit Konde." />
   <meta name="author"       content="Archit Konde" />
   <meta name="robots"       content="index, follow" />
   <meta name="theme-color"  content="#1e1e1e" />
@@ -70,6 +70,7 @@
       color: var(--accent);
       margin: var(--s4) 0 var(--s2);
       letter-spacing: -0.01em;
+      scroll-margin-top: calc(var(--nav-h) + 1.6rem); /* offset anchor jumps below fixed nav */
     }
 
     .post-body h3 {
@@ -186,6 +187,35 @@
       margin: var(--s3) 0;
     }
 
+    /* Table of contents */
+    .post-toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+    }
+    .toc-label {
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: var(--s1);
+    }
+    .post-toc ul {
+      padding-left: var(--s3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s1);
+    }
+    .post-toc a {
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-bottom: none;
+      transition: color 0.2s;
+    }
+    .post-toc a:hover { color: var(--accent); }
+    .post-toc .accent { margin-right: 0.3rem; }
+
     /* Back link */
     .post-back {
       display: inline-block;
@@ -212,6 +242,7 @@
       <li><a href="../index.html#experience"><span class="nav-slash">./</span>experience</a></li>
       <li><a href="../index.html#skills"><span class="nav-slash">./</span>skills</a></li>
       <li><a href="../index.html#projects"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="../index.html#blog"><span class="nav-slash">./</span>blog</a></li>
       <li><a href="../index.html#contact"><span class="nav-slash">./</span>contact</a></li>
     </ul>
   </nav>
@@ -231,11 +262,22 @@
 
     <div class="post-body">
 
+      <nav class="post-toc" aria-label="Table of contents">
+        <p class="toc-label">$ jump to:</p>
+        <ul>
+          <li><a href="#what-it-does"><span class="accent">→</span> what the project does</a></li>
+          <li><a href="#architecture"><span class="accent">→</span> architecture decisions</a></li>
+          <li><a href="#what-i-learned"><span class="accent">→</span> what i learned building it</a></li>
+          <li><a href="#differently"><span class="accent">→</span> what i'd do differently</a></li>
+          <li><a href="#deployment"><span class="accent">→</span> deployment challenges</a></li>
+        </ul>
+      </nav>
+
       <p>I wanted to understand what enterprise AI platform support actually looks like from an operational standpoint. Not the ML side — the infrastructure and workflow side. What kinds of tickets does a company like OpenAI or Anthropic deal with at scale? How does a team triage hundreds of requests a day? What does API reliability monitoring actually look like when it's hooked up to a real dashboard?</p>
 
       <p>The honest answer: I didn't know. So I built something to find out.</p>
 
-      <h2>// what the project does</h2>
+      <h2 id="what-it-does">// what the project does</h2>
 
       <p>SupportOps AI Monitor simulates a complete support operations workflow for an AI platform. Four modules, one-way pipeline:</p>
 
@@ -250,7 +292,7 @@
 
       <p><code>app.py</code> only orchestrates and renders — no business logic, no SQL. <code>database.py</code> owns all persistence. <code>ai_triage.py</code> owns all inference. The whole thing runs in simulation mode with no API key — Gaussian latency (mean 820ms, σ 200ms), 10% failure rate across 429/500/408 status codes.</p>
 
-      <h2>// architecture decisions (and why)</h2>
+      <h2 id="architecture">// architecture decisions (and why)</h2>
 
       <h3>SQLite, not PostgreSQL</h3>
 
@@ -262,7 +304,7 @@
 
       <p>The most useful architectural decision I made was treating simulation as the primary mode, not a fallback. Gaussian latency, real error class proportions (429/500/408), specific error type labels — the dashboard looks live even when nothing has touched the OpenAI API. This matters for demos, for development, and it forced me to think clearly about what the observability data <em>should</em> look like before writing any real triage logic.</p>
 
-      <h2>// what i learned building it</h2>
+      <h2 id="what-i-learned">// what i learned building it</h2>
 
       <table>
         <thead>
@@ -334,7 +376,7 @@ def load_all_tickets(_version):   # _ prefix = not hashed
 st.session_state.data_version += 1
 tickets = load_all_tickets(st.session_state.data_version)</code></pre>
 
-      <h2>// what i'd do differently</h2>
+      <h2 id="differently">// what i'd do differently</h2>
 
       <p><strong>Service layer abstraction.</strong> Right now <code>app.py</code> calls <code>database.py</code> and <code>ai_triage.py</code> directly. A thin service layer — <code>TicketService.generate_and_triage(n)</code> — would make the business logic testable without Streamlit. There are no unit tests because everything is tangled with the UI.</p>
 
@@ -342,7 +384,7 @@ tickets = load_all_tickets(st.session_state.data_version)</code></pre>
 
       <p><strong>Async triage.</strong> Triaging 100 tickets sequentially takes several minutes. An <code>asyncio</code> + <code>ThreadPoolExecutor</code> pattern would let 10–20 calls run in parallel — meaningful UX improvement for large batches.</p>
 
-      <h2>// deployment challenges</h2>
+      <h2 id="deployment">// deployment challenges</h2>
 
       <h3>SQLite + ephemeral containers</h3>
 
@@ -384,33 +426,6 @@ tickets = load_all_tickets(st.session_state.data_version)</code></pre>
           </tr>
         </tbody>
       </table>
-
-      <h3>Streamlit and the <code>&lt;head&gt;</code> tag</h3>
-
-      <p>I wanted to add PWA support (manifest, service worker, meta tags) directly to the Streamlit app. Streamlit doesn't allow this — there's no Python API to inject into the HTML <code>&lt;head&gt;</code>. The correct solution for a Streamlit project that needs SEO or PWA is a separate static landing page (GitHub Pages, Netlify) that links to the live app. This is a framework limitation worth knowing before you start, not after.</p>
-
-      <h2>// what amey asked</h2>
-
-      <p>A friend who works in ML infrastructure reviewed the project and asked questions I didn't have immediate answers to.</p>
-
-      <div class="callout">
-        <strong>"Why SQLite and not a proper database?"</strong><br>
-        At the time I said "simplicity." The real answer: I hadn't thought through the deployment path yet. SQLite is correct for local demo use and costs nothing. It becomes a problem the moment you want a persistent URL to share.
-      </div>
-
-      <div class="callout">
-        <strong>"Why is the git history so flat?"</strong><br>
-        Fair point. The repo was initialised after the project was already working. Going forward: every meaningful change gets its own commit with a specific message. The history grows from here, and that's authentic.
-      </div>
-
-      <div class="callout">
-        <strong>"How would you test the triage logic?"</strong><br>
-        You'd need to extract it from the Streamlit context first. The triage function is testable in isolation — <code>triage_ticket(ticket_dict)</code> can be called directly. The blocker is there are no tests yet. A <code>pytest</code> suite calling <code>_simulate_triage()</code> with known inputs would be the right first step.
-      </div>
-
-      <h2>// what's next</h2>
-
-      <p>Persistent deployment via HuggingFace Spaces (near-term) and Supabase + Streamlit Cloud (longer term). A <code>pytest</code> suite around the generator schema, DB CRUD, and triage output contract. A model quality panel showing ground-truth category vs AI-assigned category side-by-side — that would turn this from a monitoring dashboard into a model evaluation tool.</p>
 
       <hr class="post-divider" />
 

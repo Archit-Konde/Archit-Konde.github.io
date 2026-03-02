@@ -74,7 +74,7 @@ const TWEl       = document.getElementById('tw-text');      // the text span
 const TWCursor   = document.getElementById('tw-cursor');    // the █ cursor span
 const TYPE_SPEED = 45;  // milliseconds between each character
 
-function typeWriter(text, el, speed, onDone) {
+function typeWriter(text, el, speed) {
   let i = 0;
 
   // Hide the block cursor while typing is in progress
@@ -82,12 +82,10 @@ function typeWriter(text, el, speed, onDone) {
 
   const interval = setInterval(() => {
     if (i < text.length) {
-      el.textContent += text[i];  // append next character
-      i++;
+      el.textContent += text[i++];  // append next character
     } else {
       clearInterval(interval);           // stop the timer
       if (TWCursor) TWCursor.style.display = 'inline'; // show cursor
-      if (onDone) onDone();              // optional callback
     }
   }, speed);
 }
@@ -156,13 +154,15 @@ const navLinks    = document.querySelectorAll('.nav-links a');
 const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      // Remove active class from every nav link
-      navLinks.forEach(link => link.classList.remove('nav-active'));
-
-      // Find the nav link whose href matches the section's id
       const id = entry.target.id;
       const matchingLink = document.querySelector(`.nav-links a[href="#${id}"]`);
-      if (matchingLink) matchingLink.classList.add('nav-active');
+      // Only update active state when the section has a nav link.
+      // Sections like #education have no nav entry — skip them
+      // so the previously-active link stays highlighted.
+      if (matchingLink) {
+        navLinks.forEach(link => link.classList.remove('nav-active'));
+        matchingLink.classList.add('nav-active');
+      }
     }
   });
 }, {
@@ -330,3 +330,30 @@ function ghostLoop() {
 if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   setTimeout(ghostLoop, 3200);
 }
+
+
+/* ── 8. CLICKABLE CARD OVERLAYS ──────────────────────────────
+   Each .project-card that contains a .card-overlay-link is made
+   fully clickable. The overlay anchor handles right-click context
+   menus (CSS: position:absolute; inset:0; display:block).
+   Left-clicks are forwarded here via JS for cross-browser reliability —
+   some browsers don't treat an empty positioned <a> as a hit target.
+
+   Clicks on real nested <a> or <button> elements bubble naturally
+   to their own handlers and are NOT intercepted.
+──────────────────────────────────────────────────────────────── */
+document.querySelectorAll('.project-card').forEach(card => {
+  const overlay = card.querySelector('.card-overlay-link');
+  if (!overlay) return;
+
+  card.addEventListener('click', e => {
+    // Let real nested links and buttons handle their own clicks
+    if (e.target.closest('a, button')) return;
+    // Open the overlay destination
+    if (overlay.target === '_blank' || e.ctrlKey || e.metaKey) {
+      window.open(overlay.href, '_blank', 'noopener,noreferrer');
+    } else {
+      window.location.href = overlay.href;
+    }
+  });
+});

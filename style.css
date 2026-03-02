@@ -731,11 +731,14 @@ ul { list-style: none; }
 }
 
 /* Full-card clickable overlay — invisible anchor stretched over the entire card.
-   z-index: 0 keeps it below inner links (.inline-link, .card-tech) which sit at z-index: 1.
-   tabindex="-1" removes it from keyboard tab order (the inner link handles focus). */
+   display: block is required: <a> defaults to inline, which can prevent hit-testing
+   even with position:absolute + inset:0 in some browsers.
+   Left-clicks are also forwarded via JS (script.js §8) for cross-browser reliability.
+   Right-click → "Open link in new tab" works via the overlay once display:block is set. */
 .card-overlay-link {
   position: absolute;
   inset: 0;
+  display: block;
   z-index: 0;
 }
 
