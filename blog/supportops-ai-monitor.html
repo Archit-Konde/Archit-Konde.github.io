@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description"  content="Building SupportOps AI Monitor — architecture decisions, pandas applymap() bug, SQLite deployment challenges, and Streamlit limitations. A learning writeup by Archit Konde." />
+  <meta name="author"       content="Archit Konde" />
+  <meta name="robots"       content="index, follow" />
+  <meta name="theme-color"  content="#1e1e1e" />
+
+  <meta property="og:type"        content="article" />
+  <meta property="og:url"         content="https://archit-konde.github.io/blog/supportops-ai-monitor.html" />
+  <meta property="og:title"       content="Building SupportOps AI Monitor — What I Learned" />
+  <meta property="og:description" content="Architecture decisions, bugs found, deployment challenges, and honest answers to questions I couldn't answer at first." />
+  <meta property="og:locale"      content="en_CA" />
+
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:creator"     content="@architkonde" />
+  <meta name="twitter:title"       content="Building SupportOps AI Monitor — What I Learned" />
+  <meta name="twitter:description" content="Architecture decisions, bugs found, deployment challenges, and honest answers." />
+
+  <link rel="canonical" href="https://archit-konde.github.io/blog/supportops-ai-monitor.html" />
+
+  <title>Building SupportOps AI Monitor — Archit Konde</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../style.css" />
+
+  <style>
+    /* ── Blog post layout ──────────────────────────────────────── */
+    .blog-post {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + var(--s5)) var(--s4) var(--s7);
+    }
+
+    .post-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: var(--s4);
+      letter-spacing: 0.04em;
+    }
+
+    .post-meta .accent { margin-right: 0.4rem; }
+
+    .post-title {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: var(--s3);
+    }
+
+    .post-body h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: var(--s5) 0 var(--s2);
+      letter-spacing: -0.01em;
+    }
+
+    .post-body h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: var(--s4) 0 var(--s1);
+    }
+
+    .post-body p {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: var(--s3);
+    }
+
+    .post-body a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+      transition: border-color 0.2s;
+    }
+
+    .post-body a:hover { border-color: var(--accent); }
+
+    .post-body code {
+      font-family: var(--font);
+      font-size: 0.80rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1em 0.35em;
+      color: var(--text);
+    }
+
+    .post-body pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .post-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    /* Architecture diagram */
+    .arch-diagram {
+      font-family: var(--font);
+      font-size: 0.72rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      color: var(--muted);
+      white-space: pre;
+      margin: var(--s3) 0 var(--s4);
+      line-height: 1.5;
+    }
+
+    .arch-diagram .hl { color: var(--accent); }
+    .arch-diagram .dim { color: var(--border); }
+
+    /* Data tables */
+    .post-body table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .post-body th {
+      text-align: left;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 0.6rem;
+      font-weight: 600;
+    }
+
+    .post-body td {
+      color: var(--muted);
+      border-bottom: 1px solid rgba(62, 62, 66, 0.5);
+      padding: 0.4rem 0.6rem;
+      vertical-align: top;
+    }
+
+    .post-body tr:last-child td { border-bottom: none; }
+
+    .post-body td code { font-size: 0.75rem; }
+
+    /* Callout block */
+    .callout {
+      background: var(--surface);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Divider */
+    .post-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: var(--s5) 0;
+    }
+
+    /* Back link */
+    .post-back {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      margin-bottom: var(--s4);
+      transition: border-color 0.2s;
+    }
+
+    .post-back:hover { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation (mirrors main site) -->
+  <nav id="navbar">
+    <a href="../index.html" class="nav-brand">
+      archit<span class="accent">@</span>portfolio<span class="accent">:~$</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="../index.html#experience"><span class="nav-slash">./</span>experience</a></li>
+      <li><a href="../index.html#skills"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="../index.html#projects"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="../index.html#contact"><span class="nav-slash">./</span>contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="blog-post">
+
+    <a href="../index.html#blog" class="post-back">← back to blog</a>
+
+    <div class="post-meta">
+      <span class="accent">$</span> cat ./blog/supportops-ai-monitor.md
+      &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; ~10 min read
+    </div>
+
+    <h1 class="post-title">Building SupportOps AI Monitor<br>— What I Learned</h1>
+
+    <hr class="post-divider" />
+
+    <div class="post-body">
+
+      <p>I wanted to understand what enterprise AI platform support actually looks like from an operational standpoint. Not the ML side — the infrastructure and workflow side. What kinds of tickets does a company like OpenAI or Anthropic deal with at scale? How does a team triage hundreds of requests a day? What does API reliability monitoring actually look like when it's hooked up to a real dashboard?</p>
+
+      <p>The honest answer: I didn't know. So I built something to find out.</p>
+
+      <h2>// what the project does</h2>
+
+      <p>SupportOps AI Monitor simulates a complete support operations workflow for an AI platform. Four modules, one-way pipeline:</p>
+
+<div class="arch-diagram"><span class="hl">ticket_generator.py</span>  <span class="dim">──►</span>  <span class="hl">database.py</span>  <span class="dim">──►</span>  <span class="hl">ai_triage.py</span>  <span class="dim">──►</span>  <span class="hl">database.py</span>
+      <span class="dim">│</span>                            <span class="dim">│</span>                   <span class="dim">│</span>
+  Faker templates               tickets             category · sentiment
+  5 categories                  table               summary · api_logs
+      <span class="dim">│                            │</span>
+      <span class="dim">└────────────────────────────┘</span>
+                           <span class="dim">▼</span>
+                     <span class="hl">app.py</span>  <span class="dim">(Streamlit dashboard)</span></div>
+
+      <p><code>app.py</code> only orchestrates and renders — no business logic, no SQL. <code>database.py</code> owns all persistence. <code>ai_triage.py</code> owns all inference. The whole thing runs in simulation mode with no API key — Gaussian latency (mean 820ms, σ 200ms), 10% failure rate across 429/500/408 status codes.</p>
+
+      <h2>// architecture decisions (and why)</h2>
+
+      <h3>SQLite, not PostgreSQL</h3>
+
+      <p>SQLite was the right call for a portfolio project with no deployment target defined. Zero-configuration, inspectable with any SQLite browser, schema readable without tooling.</p>
+
+      <p>The tradeoff: SQLite makes cloud deployment awkward. Containerised platforms have ephemeral filesystems — the database resets on every restart. If I were building this for production, I'd start with Supabase (free tier) and <code>psycopg2</code>. The schema queries are standard enough that the swap would be ~50 lines.</p>
+
+      <h3>Simulation mode as first-class citizen</h3>
+
+      <p>The most useful architectural decision I made was treating simulation as the primary mode, not a fallback. Gaussian latency, real error class proportions (429/500/408), specific error type labels — the dashboard looks live even when nothing has touched the OpenAI API. This matters for demos, for development, and it forced me to think clearly about what the observability data <em>should</em> look like before writing any real triage logic.</p>
+
+      <h2>// what i learned building it</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>Root cause</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>applymap()</code> crash at runtime</td>
+            <td>pandas ≥ 2.2 removed it from Styler API</td>
+            <td><code>.map()</code> — one word change</td>
+          </tr>
+          <tr>
+            <td><code>pip install</code> fails on Python 3.14</td>
+            <td>Exact pins (<code>==</code>), no pre-built wheels</td>
+            <td>Minimum-version pins (<code>>=</code>)</td>
+          </tr>
+          <tr>
+            <td>Stale dashboard after writes</td>
+            <td><code>@st.cache_data</code> with no invalidation</td>
+            <td><code>data_version</code> counter in session state</td>
+          </tr>
+          <tr>
+            <td>SQLite connection leaks on exceptions</td>
+            <td><code>conn.close()</code> only on success path</td>
+            <td><code>try/finally</code> wrapping every DB function</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>The <code>applymap()</code> bug</h3>
+
+      <p>The original code used <code>df.style.applymap(...)</code> to colour-code the ticket queue table. This is a guaranteed crash on <code>pandas >= 2.2.0</code> — <code>.applymap()</code> was removed and replaced with <code>.map()</code>. One-word fix, but the lesson was about dependency pinning: exact pins (<code>pandas==2.2.1</code>) felt safe. On Python 3.14, no pre-built wheels existed and pip tried to compile pandas from source. Switching to minimum-version pins (<code>>=</code>) let pip pull the latest compatible wheels. The real lesson: exact pins ≠ reproducible builds. For reproducibility you need a lockfile (Poetry, pip-compile, uv).</p>
+
+      <h3>Connection lifecycle and try/finally</h3>
+
+      <p>The original <code>database.py</code> closed connections only on the success path:</p>
+
+<pre><code># Before — connection leak on any exception
+def insert_ticket(ticket):
+    conn = get_connection()
+    conn.execute(INSERT_SQL, ticket)
+    conn.commit()
+    conn.close()  # never reached if execute() throws
+
+# After — always closes
+def insert_ticket(ticket):
+    conn = get_connection()
+    try:
+        conn.execute(INSERT_SQL, ticket)
+        conn.commit()
+    finally:
+        conn.close()</code></pre>
+
+      <p>Every single database function needed this. SQLite is forgiving at low volume, but connection leaks cause mysterious failures under load. It's also just correct Python.</p>
+
+      <h3>Cache busting in Streamlit</h3>
+
+      <p><code>@st.cache_data</code> caches based on function arguments. With no arguments, it caches forever. After generating new tickets, the dashboard would show stale data. Fix: a <code>data_version</code> integer in session state, incremented after every write, passed as a parameter with an underscore prefix (Streamlit skips hashing it but still busts the cache when the value changes):</p>
+
+<pre><code>@st.cache_data(ttl=60)
+def load_all_tickets(_version):   # _ prefix = not hashed
+    return db.get_all_tickets()
+
+# After any write:
+st.session_state.data_version += 1
+tickets = load_all_tickets(st.session_state.data_version)</code></pre>
+
+      <h2>// what i'd do differently</h2>
+
+      <p><strong>Service layer abstraction.</strong> Right now <code>app.py</code> calls <code>database.py</code> and <code>ai_triage.py</code> directly. A thin service layer — <code>TicketService.generate_and_triage(n)</code> — would make the business logic testable without Streamlit. There are no unit tests because everything is tangled with the UI.</p>
+
+      <p><strong>PostgreSQL from the start.</strong> Every cloud deployment path hits the ephemeral filesystem problem. Starting with Supabase and <code>psycopg2</code> would have made deployment a non-issue.</p>
+
+      <p><strong>Async triage.</strong> Triaging 100 tickets sequentially takes several minutes. An <code>asyncio</code> + <code>ThreadPoolExecutor</code> pattern would let 10–20 calls run in parallel — meaningful UX improvement for large batches.</p>
+
+      <h2>// deployment challenges</h2>
+
+      <h3>SQLite + ephemeral containers</h3>
+
+      <p>Streamlit Community Cloud, Heroku, and Render all run containers where the filesystem resets on restart. The <code>db/supportops.db</code> file disappears. Every demo starts empty.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>Persistence</th>
+            <th>Effort</th>
+            <th>Best for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HuggingFace Spaces</td>
+            <td><code>/data</code> dir persists</td>
+            <td>Change <code>DB_PATH</code> env var</td>
+            <td>Fast live demo</td>
+          </tr>
+          <tr>
+            <td>Supabase + Streamlit Cloud</td>
+            <td>PostgreSQL, always-on</td>
+            <td>Swap <code>database.py</code> (~50 lines)</td>
+            <td>Production</td>
+          </tr>
+          <tr>
+            <td>Railway / Render + volume</td>
+            <td>Docker volume mount</td>
+            <td>Docker config change</td>
+            <td>Full control</td>
+          </tr>
+          <tr>
+            <td>Streamlit Community Cloud</td>
+            <td>❌ Ephemeral</td>
+            <td>N/A</td>
+            <td>Not viable with SQLite</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Streamlit and the <code>&lt;head&gt;</code> tag</h3>
+
+      <p>I wanted to add PWA support (manifest, service worker, meta tags) directly to the Streamlit app. Streamlit doesn't allow this — there's no Python API to inject into the HTML <code>&lt;head&gt;</code>. The correct solution for a Streamlit project that needs SEO or PWA is a separate static landing page (GitHub Pages, Netlify) that links to the live app. This is a framework limitation worth knowing before you start, not after.</p>
+
+      <h2>// what amey asked</h2>
+
+      <p>A friend who works in ML infrastructure reviewed the project and asked questions I didn't have immediate answers to.</p>
+
+      <div class="callout">
+        <strong>"Why SQLite and not a proper database?"</strong><br>
+        At the time I said "simplicity." The real answer: I hadn't thought through the deployment path yet. SQLite is correct for local demo use and costs nothing. It becomes a problem the moment you want a persistent URL to share.
+      </div>
+
+      <div class="callout">
+        <strong>"Why is the git history so flat?"</strong><br>
+        Fair point. The repo was initialised after the project was already working. Going forward: every meaningful change gets its own commit with a specific message. The history grows from here, and that's authentic.
+      </div>
+
+      <div class="callout">
+        <strong>"How would you test the triage logic?"</strong><br>
+        You'd need to extract it from the Streamlit context first. The triage function is testable in isolation — <code>triage_ticket(ticket_dict)</code> can be called directly. The blocker is there are no tests yet. A <code>pytest</code> suite calling <code>_simulate_triage()</code> with known inputs would be the right first step.
+      </div>
+
+      <h2>// what's next</h2>
+
+      <p>Persistent deployment via HuggingFace Spaces (near-term) and Supabase + Streamlit Cloud (longer term). A <code>pytest</code> suite around the generator schema, DB CRUD, and triage output contract. A model quality panel showing ground-truth category vs AI-assigned category side-by-side — that would turn this from a monitoring dashboard into a model evaluation tool.</p>
+
+      <hr class="post-divider" />
+
+      <p style="font-size: 0.75rem;">
+        <a href="https://github.com/Archit-Konde/supportops-ai-monitor" target="_blank" rel="noopener noreferrer">Repository ↗</a>
+        &nbsp;·&nbsp;
+        <a href="../index.html#blog">← more writing</a>
+      </p>
+
+    </div><!-- /.post-body -->
+
+  </main>
+
+</body>
+</html>
