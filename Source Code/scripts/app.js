@@ -517,36 +517,54 @@ document.querySelectorAll('.project-card').forEach(card => {
 
 /* ── 10. CONTENT PROTECTION (Right-click / Selection / Inspector) ── */
 (function protectContent() {
-  // Disable right-click context menu
-  document.addEventListener('contextmenu', e => {
-    if (e.target.closest('input, textarea, code, pre')) return;
+  const isDevAllowed = (el) => el && el.closest && el.closest('input, textarea, code, pre, .selectable');
+
+  // Multi-layer right-click blocking (Capture phase)
+  window.addEventListener('contextmenu', (e) => {
+    if (isDevAllowed(e.target)) return;
     e.preventDefault();
-  });
+    e.stopImmediatePropagation();
+  }, true);
 
-  // Disable common developer inspection shortcuts
-  document.addEventListener('keydown', e => {
+  // Comprehensive shortcut blocking (Win/Linux/Mac)
+  window.addEventListener('keydown', (e) => {
+    const { key, keyCode, ctrlKey, shiftKey, metaKey, altKey } = e;
+    const isMod = ctrlKey || metaKey; // Ctrl on Win, Cmd on Mac
+
     // F12
-    if (e.keyCode === 123) {
+    if (key === 'F12' || keyCode === 123) {
       e.preventDefault();
+      e.stopImmediatePropagation();
     }
-    // Ctrl+Shift+I (Inspector), Ctrl+Shift+J (Console), Ctrl+Shift+C (Element selector)
-    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
-      e.preventDefault();
-    }
-    // Ctrl+U (View Source)
-    if (e.ctrlKey && e.keyCode === 85) {
-      e.preventDefault();
-    }
-    // Ctrl+S (Save Page)
-    if (e.ctrlKey && e.keyCode === 83) {
-      e.preventDefault();
-    }
-  });
 
-  // Periodic check if dev tools are open (rudimentary detection)
-  let devtools = function () { };
-  devtools.toString = function () {
-    console.log("%cSecurity Violation: Unauthorized inspection detected.", "color: red; font-size: 20px; font-weight: bold;");
-    return '';
-  };
+    // Mod + U (View Source)
+    if (isMod && (key === 'u' || keyCode === 85)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+
+    // Mod + Shift + I  OR  Mod + Alt + I (Inspector)
+    if (isMod && (key === 'i' || key === 'I' || keyCode === 73) && (shiftKey || altKey)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+
+    // Mod + Shift + J  OR  Mod + Alt + J (Console)
+    if (isMod && (key === 'j' || key === 'J' || keyCode === 74) && (shiftKey || altKey)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+
+    // Mod + Shift + C  OR  Mod + Alt + C (Picker)
+    if (isMod && (key === 'c' || key === 'C' || keyCode === 67) && (shiftKey || altKey)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+
+    // Mod + S (Save Page)
+    if (isMod && (key === 's' || keyCode === 83)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  }, true);
 })();
