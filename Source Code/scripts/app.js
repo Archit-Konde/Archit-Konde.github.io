@@ -344,23 +344,23 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const isHome = !isBlog && !is404;
 
   const baseCommands = [
-    { icon: '🏠', label: 'Go to Home', hint: '/', action() { window.location.href = isHome ? '#' : '/index.html'; } },
+    { icon: '🏠', label: 'Go to Home', hint: '[H]', action() { window.location.href = isHome ? '#' : '/index.html'; } },
     { icon: '↗', label: 'View SupportOps Demo', hint: 'HuggingFace', action() { window.open('https://architechs-supportops-ai-monitor.hf.space', '_blank'); } },
     { icon: './', label: 'View GitHub', hint: 'github.com', action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
     { icon: 'in', label: 'View LinkedIn', hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
   ];
 
   const homeCommands = [
-    { icon: '→', label: 'Jump to About', hint: '#about', action() { scrollTo('#about'); } },
-    { icon: '→', label: 'Jump to Experience', hint: '#experience', action() { scrollTo('#experience'); } },
-    { icon: '→', label: 'Jump to Skills', hint: '#skills', action() { scrollTo('#skills'); } },
-    { icon: '→', label: 'Jump to Projects', hint: '#projects', action() { scrollTo('#projects'); } },
-    { icon: '→', label: 'Jump to Blog', hint: '#blog', action() { scrollTo('#blog'); } },
-    { icon: '→', label: 'Jump to Contact', hint: '#contact', action() { scrollTo('#contact'); } },
+    { icon: '→', label: 'Jump to About', hint: '[A]', action() { scrollTo('#about'); } },
+    { icon: '→', label: 'Jump to Experience', hint: '[E]', action() { scrollTo('#experience'); } },
+    { icon: '→', label: 'Jump to Skills', hint: '[S]', action() { scrollTo('#skills'); } },
+    { icon: '→', label: 'Jump to Projects', hint: '[P]', action() { scrollTo('#projects'); } },
+    { icon: '→', label: 'Jump to Blog', hint: '[B]', action() { scrollTo('#blog'); } },
+    { icon: '→', label: 'Jump to Contact', hint: '[C]', action() { scrollTo('#contact'); } },
   ];
 
   const blogCommands = [
-    { icon: '📝', label: 'Read: SupportOps AI Monitor', hint: 'Blog Post', action() { window.location.href = isBlog ? 'supportops-ai-monitor.html' : '/pages/blog/supportops-ai-monitor.html'; } },
+    { icon: '📝', label: 'Read: SupportOps AI Monitor', hint: '[B] Post', action() { window.location.href = isBlog ? 'supportops-ai-monitor.html' : '/pages/blog/supportops-ai-monitor.html'; } },
     { icon: '←', label: 'Back to Blog List', hint: 'Home #blog', action() { window.location.href = '/index.html#blog'; } },
   ];
 
@@ -423,6 +423,32 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     palette.hidden = true;
     input.value = '';
   }
+
+  // Handle global shortcuts
+  document.addEventListener('keydown', (e) => {
+    // Don't trigger if user is typing in an input or textarea
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    const key = e.key.toLowerCase();
+
+    // Mapping of keys to actions
+    const shortcuts = {
+      'h': () => window.location.href = isHome ? '#' : '/index.html',
+      'a': () => scrollTo('#about'),
+      'e': () => scrollTo('#experience'),
+      's': () => scrollTo('#skills'),
+      'p': () => scrollTo('#projects'),
+      'b': () => isHome ? scrollTo('#blog') : window.location.href = '/index.html#blog',
+      'c': () => scrollTo('#contact'),
+      'r': () => window.open('/docs/resume.pdf', '_blank'),
+      't': () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      ' ': (event) => { event.preventDefault(); palette.hidden ? open() : close(); }
+    };
+
+    if (shortcuts[key]) {
+      shortcuts[key](e);
+    }
+  });
 
   function fuzzyMatch(query, text) {
     const q = query.toLowerCase();
