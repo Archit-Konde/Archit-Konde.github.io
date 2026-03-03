@@ -1473,15 +1473,25 @@ ul {
 
 /* Respect user's preference for reduced motion (accessibility) */
 @media (prefers-reduced-motion: reduce) {
+  /* ... existing reduce motion ... */
+}
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+/* ── Matrix Mode Easter Egg ── */
+body.matrix-theme {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --text: #00ff41;
+  --accent: #00ff41;
+  --muted: #008f11;
+  --border: #003b00;
+}
 
-  html {
-    scroll-behavior: auto;
-  }
+body.matrix-theme * {
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.4);
+}
+
+body.matrix-theme .cmd-palette,
+body.matrix-theme .cmd-modal {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
 }

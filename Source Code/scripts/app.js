@@ -463,8 +463,59 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   input.addEventListener('input', () => {
     const q = input.value.trim();
 
-    if (q.toLowerCase() === 'sudo') {
+    /* ── Easter Eggs ── */
+    const qLower = q.toLowerCase();
+
+    if (qLower === 'sudo') {
       filtered = [{ icon: '🔒', label: 'Nice try. Permission denied.', hint: 'you are not root', action() { } }];
+      activeIdx = 0;
+      render();
+      return;
+    }
+
+    if (qLower === 'help') {
+      filtered = [
+        { icon: '❓', label: 'SYSTEM CMD: List Shortcuts', hint: 'show-key-map', action() { alert('Shortcuts:\nH: Home, A: About, E: Exp, S: Skills, P: Proj, B: Blog, C: Contact, R: Resume, T: Top, Space: Menu'); } },
+        { icon: '💾', label: 'SYSTEM CMD: Clear Cache', hint: 'sw-reset', action() { navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())); window.location.reload(); } },
+        { icon: '🕶️', label: 'SYSTEM CMD: Toggle Matrix Mode', hint: 'theme-override', action() { document.body.classList.toggle('matrix-theme'); } },
+      ];
+      activeIdx = 0;
+      render();
+      return;
+    }
+
+    if (qLower === 'archit') {
+      filtered = [{
+        icon: '👑',
+        label: 'Lead ML Engineer / Researcher',
+        hint: 'creator',
+        action() {
+          console.log(`%c
+   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄ ▄▄▄▄▄▄▄ 
+  █       █       █       █   █       █
+  █   ▄   █   ▄▄▄▄█       █   █▄     ▄█
+  █  █▄█  █  █▄▄▄▄█     ▄▄█   █ █   █  
+  █       █    ▄▄▄█    █  █   █ █   █  
+  █   ▄   █   █▄▄▄█    █▄▄█   █ █   █  
+  █▄▄█ █▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄█ █▄▄▄█  
+  `, "color: #C9A84C; font-weight: bold;");
+          alert('Built with focus and precision. - Archit');
+        }
+      }];
+      activeIdx = 0;
+      render();
+      return;
+    }
+
+    if (qLower === 'matrix') {
+      filtered = [{ icon: '💊', label: 'Follow the white rabbit...', hint: 'toggle-theme', action() { document.body.classList.toggle('matrix-theme'); close(); } }];
+      activeIdx = 0;
+      render();
+      return;
+    }
+
+    if (qLower === 'boom') {
+      filtered = [{ icon: '💥', label: 'Self destruct in 3... 2... 1...', hint: 'rm -rf /', action() { document.body.style.filter = 'invert(1) blur(10px)'; setTimeout(() => window.location.reload(), 1000); } }];
       activeIdx = 0;
       render();
       return;
