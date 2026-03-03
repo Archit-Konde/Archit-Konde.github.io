@@ -439,13 +439,14 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }
   });
 
-  /* Ctrl+K / Cmd+K toggle */
+  /* Ctrl+K / Cmd+K toggle — capture phase to intercept before Chrome */
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
       e.preventDefault();
+      e.stopImmediatePropagation();
       palette.hidden ? open() : close();
     }
-  });
+  }, { capture: true });
 
   /* Backdrop click to close */
   palette.querySelector('.cmd-backdrop').addEventListener('click', close);
