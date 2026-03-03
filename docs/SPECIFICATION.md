@@ -49,6 +49,10 @@ graph TD
 - **Automation**: Continuous Deployment executed via **GitHub Actions**, synchronizing the `Source Code` directory to the production environment on every legitimate push.
 - **Integrity**: Each release is tracked through the main branch, maintaining a definitive scholarly record of the site's evolution.
 
+### 6. Technical Maintenance and Versioning
+- **Maintenance Protocols**: All repository updates follow strictly defined naming conventions to ensure a clear scholarly history.
+- **Collaborative Integrity**: Joint author attribution is utilized for cross-functional updates to preserve the intellectual lineage of the codebase.
+
 ---
 
-*Technical Specification | Static Architecture | Version 1.1*
+*Technical Specification | Static Architecture | Version 1.2*
