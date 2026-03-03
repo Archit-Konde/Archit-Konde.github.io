@@ -10,11 +10,17 @@
      6. FOOTER YEAR — inserts the current year automatically
      7. CONSOLE MSG — easter egg for developers who open DevTools
      8. CMD PALETTE — VS Code-style Ctrl+K quick navigation
+     9. ACCESSIBILITY — keyboard focus management and ARIA updates
 
    Learning note:
      All of this is plain JavaScript — no frameworks, no libraries.
      We use the DOM API (document.querySelector, etc.) to select
      HTML elements and modify them at runtime.
+
+   ARCHITECTURAL NOTES:
+     - Event Delegation: Performance optimized via single listener patterns where applicable.
+     - Intersection Observer: Utilized for lazy-triggering animations to minimize CPU idle impact.
+     - Memory Management: IIFEs used to encapsulate logic and prevent global namespace pollution.
 ═══════════════════════════════════════════════════════════════ */
 
 
@@ -27,10 +33,10 @@
 ──────────────────────────────────────────────────────────────── */
 
 (function devConsole() {
-  const gold   = 'color:#C9A84C; font-family:monospace; font-weight:bold;';
-  const grey   = 'color:#858585; font-family:monospace;';
-  const white  = 'color:#d4d4d4; font-family:monospace;';
-  const green  = 'color:#28c840; font-family:monospace; font-weight:bold;';
+  const gold = 'color:#C9A84C; font-family:monospace; font-weight:bold;';
+  const grey = 'color:#858585; font-family:monospace;';
+  const white = 'color:#d4d4d4; font-family:monospace;';
+  const green = 'color:#28c840; font-family:monospace; font-weight:bold;';
   const divider = 'color:#3e3e42; font-family:monospace;';
 
   console.log('%c> archit@portfolio:~$', gold);
@@ -70,9 +76,9 @@
                     └─ when complete: show █ cursor
 ──────────────────────────────────────────────────────────────── */
 
-const TAGLINE    = 'solving intelligence, one step at a time.';
-const TWEl       = document.getElementById('tw-text');      // the text span
-const TWCursor   = document.getElementById('tw-cursor');    // the █ cursor span
+const TAGLINE = 'solving intelligence, one step at a time.';
+const TWEl = document.getElementById('tw-text');      // the text span
+const TWCursor = document.getElementById('tw-cursor');    // the █ cursor span
 const TYPE_SPEED = 45;  // milliseconds between each character
 
 function typeWriter(text, el, speed) {
@@ -115,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
    backToTop:   adds .visible after 400px  → CSS fades the button in
 ──────────────────────────────────────────────────────────────── */
 
-const navbar    = document.getElementById('navbar');
+const navbar = document.getElementById('navbar');
 const backToTop = document.getElementById('back-to-top');
 
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
-  if (navbar)    navbar.classList.toggle('scrolled', y > 50);
+  if (navbar) navbar.classList.toggle('scrolled', y > 50);
   if (backToTop) backToTop.classList.toggle('visible', y > 400);
 });
 
@@ -150,7 +156,7 @@ backToTop?.addEventListener('click', () => {
 ──────────────────────────────────────────────────────────────── */
 
 const allSections = document.querySelectorAll('section[id]');
-const navLinks    = document.querySelectorAll('.nav-links a');
+const navLinks = document.querySelectorAll('.nav-links a');
 
 const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -180,7 +186,7 @@ allSections.forEach(section => sectionObserver.observe(section));
    We also toggle aria-expanded / aria-hidden for accessibility.
 ──────────────────────────────────────────────────────────────── */
 
-const hamburger  = document.getElementById('hamburger');
+const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 const mobileClose = document.getElementById('mobileClose');
 const mobileLinks = document.querySelectorAll('.mob-link');
@@ -340,15 +346,15 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
 (function commandPalette() {
   const COMMANDS = [
-    { icon: '→', label: 'Go to About',       hint: '#about',       action() { scrollTo('#about'); } },
-    { icon: '→', label: 'Go to Experience',   hint: '#experience',  action() { scrollTo('#experience'); } },
-    { icon: '→', label: 'Go to Skills',       hint: '#skills',      action() { scrollTo('#skills'); } },
-    { icon: '→', label: 'Go to Projects',     hint: '#projects',    action() { scrollTo('#projects'); } },
-    { icon: '→', label: 'Go to Blog',         hint: '#blog',        action() { scrollTo('#blog'); } },
-    { icon: '→', label: 'Go to Contact',      hint: '#contact',     action() { scrollTo('#contact'); } },
+    { icon: '→', label: 'Go to About', hint: '#about', action() { scrollTo('#about'); } },
+    { icon: '→', label: 'Go to Experience', hint: '#experience', action() { scrollTo('#experience'); } },
+    { icon: '→', label: 'Go to Skills', hint: '#skills', action() { scrollTo('#skills'); } },
+    { icon: '→', label: 'Go to Projects', hint: '#projects', action() { scrollTo('#projects'); } },
+    { icon: '→', label: 'Go to Blog', hint: '#blog', action() { scrollTo('#blog'); } },
+    { icon: '→', label: 'Go to Contact', hint: '#contact', action() { scrollTo('#contact'); } },
     { icon: '↗', label: 'View SupportOps Demo', hint: 'HuggingFace', action() { window.open('https://architechs-supportops-ai-monitor.hf.space', '_blank'); } },
-    { icon: './', label: 'View GitHub',       hint: 'github.com',   action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
-    { icon: 'in', label: 'View LinkedIn',     hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
+    { icon: './', label: 'View GitHub', hint: 'github.com', action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
+    { icon: 'in', label: 'View LinkedIn', hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
   ];
 
   function scrollTo(sel) {
@@ -357,12 +363,12 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   }
 
   const palette = document.getElementById('cmd-palette');
-  const input   = document.getElementById('cmd-input');
-  const list    = document.getElementById('cmd-list');
+  const input = document.getElementById('cmd-input');
+  const list = document.getElementById('cmd-list');
   if (!palette || !input || !list) return;
 
   let activeIdx = 0;
-  let filtered  = COMMANDS.slice();
+  let filtered = COMMANDS.slice();
 
   function render() {
     list.innerHTML = '';
@@ -409,7 +415,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
     /* Easter egg: sudo */
     if (q.toLowerCase() === 'sudo') {
-      filtered = [{ icon: '🔒', label: 'Nice try. Permission denied.', hint: 'you are not root', action() {} }];
+      filtered = [{ icon: '🔒', label: 'Nice try. Permission denied.', hint: 'you are not root', action() { } }];
       activeIdx = 0;
       render();
       return;
