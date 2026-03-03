@@ -431,10 +431,14 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   let keyTimer = null;
 
   document.addEventListener('keydown', (e) => {
-    // Don't trigger if user is typing in an input or textarea
+    // 1. Exit if typing in input/textarea
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-    // Ignore modifier keys alone
+    // 2. Ignore if any modifier key (Ctrl, Cmd, Alt) is held
+    // This prevents conflicts with Ctrl+K or Ctrl+S
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    // 3. Ignore standalone modifier keys (Shift, etc.)
     if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return;
 
     const key = e.key.toLowerCase();
@@ -486,7 +490,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         };
         if (shortcuts[sequence]) shortcuts[sequence](e);
       }
-    }, 400); // 400ms buffer to recognize typing vs single-key
+    }, 200); // Reduced to 200ms for faster response
   });
 
   function fuzzyMatch(query, text) {
