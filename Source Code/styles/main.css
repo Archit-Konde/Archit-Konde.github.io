@@ -1195,6 +1195,69 @@ ul { list-style: none; }
 }
 
 .nav-kbd:hover { border-color: var(--accent); color: var(--accent); }
+ 
+/* ── Command Palette Float Button (Bottom-Left) ── */
+.cmd-pal-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 995;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 0.68rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--ease);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.cmd-pal-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.cmd-pal-btn kbd {
+  font-family: var(--font);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-size: 0.62rem;
+}
+
+/* Tooltip */
+.cmd-pal-btn::after {
+  content: 'Open Command Palette';
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.65rem;
+  border-radius: 2px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ease), transform var(--ease);
+  transform: translateY(4px);
+}
+
+.cmd-pal-btn:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
 /* ── Ctrl+K hint toast ── */
 .cmd-toast {
