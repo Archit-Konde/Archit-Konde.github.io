@@ -1,0 +1,59 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# ARCHIT KONDE — DEPLOYMENT AUTOMATION
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# This workflow automates the deployment of the portfolio to GitHub Pages.
+# It triggers on every push to the main branch, ensuring the live site
+# remains synchronized with the latest source code revisions.
+#
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: Deploy Portfolio
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Source Code/**'
+      - 'docs/**'
+      - 'SECURITY.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Ingest the repository source
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      # Step 2: Initialize GitHub Pages environment
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Step 3: Bundle and compress source for deployment
+      # We deploy the 'Source Code' directory as the web root.
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './Source Code'
+
+      # Step 4: Execute deployment to the live environment
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

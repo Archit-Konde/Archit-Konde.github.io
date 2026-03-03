@@ -55,8 +55,8 @@
    changes. The activate event deletes any caches with old names,
    forcing users to re-download the latest assets.
 ──────────────────────────────────────────────────────────────── */
-const CACHE_NAME    = 'archit-portfolio-v2';
-const OFFLINE_PAGE  = '/404.html';   // shown if navigation fails offline
+const CACHE_NAME = 'archit-portfolio-v2';
+const OFFLINE_PAGE = '/pages/404.html';   // shown if navigation fails offline
 
 /* ── Assets to pre-cache on install ─────────────────────────────
    These are downloaded and stored the moment the SW installs.
@@ -65,12 +65,12 @@ const OFFLINE_PAGE  = '/404.html';   // shown if navigation fails offline
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
-  '/style.css',
-  '/script.js',
-  '/404.html',
+  '/styles/main.css',
+  '/scripts/app.js',
+  '/pages/404.html',
   '/manifest.json',
-  '/icon-192.svg',
-  '/icon-512.svg'
+  '/assets/icons/icon-192.svg',
+  '/assets/icons/icon-512.svg'
 ];
 
 
