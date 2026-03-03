@@ -719,7 +719,9 @@ document.querySelectorAll('.project-card').forEach(card => {
 
   // 2. Yellow Dot (Minimize)
   dots.yellow?.addEventListener('click', () => {
-    windowEl.classList.toggle('is-minimized');
+    windowEl.classList.add('is-minimized');
+    heroEl?.classList.add('window-minimized');
+    console.log('%c[system] process moved to background: terminal.exe', 'color:#858585;');
   });
 
   // 3. Green Dot (Maximize/Fullscreen)
@@ -729,13 +731,14 @@ document.querySelectorAll('.project-card').forEach(card => {
     // If maximizing, ensure it's not minimized
     if (windowEl.classList.contains('is-maximized')) {
       windowEl.classList.remove('is-minimized');
+      heroEl?.classList.remove('window-minimized');
     }
   });
 
   // 4. Restore Logic
   restoreBtn?.addEventListener('click', () => {
     windowEl.classList.remove('is-closed', 'is-minimized', 'is-maximized');
-    heroEl?.classList.remove('window-gone');
+    heroEl?.classList.remove('window-gone', 'window-minimized');
 
     // Visual "re-boot" effect
     windowEl.style.opacity = '0';

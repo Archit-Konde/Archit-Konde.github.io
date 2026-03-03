@@ -423,15 +423,11 @@ ul {
 
 /* Yellow: Minimize -> Shrink to topbar only or "dock" */
 .term-window.is-minimized {
-  transform: translateY(100px) scale(0.8);
-  opacity: 0.5;
-  height: 40px;
-  /* Only show topbar */
+  transform: translateY(200px) scale(0.6);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.term-window.is-minimized .term-body {
-  display: none;
-}
 
 /* Green: Maximize -> Full width/height of container or viewport */
 .term-window.is-maximized {
@@ -450,25 +446,45 @@ ul {
 /* "System Alert" when window is closed/minimized */
 .hero-restore-btn {
   display: none;
-  background: transparent;
-  border: 1px dashed var(--muted);
-  color: var(--muted);
-  padding: var(--s2) var(--s3);
+  background: rgba(201, 168, 76, 0.05);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: var(--accent);
+  padding: 0.5rem 1rem;
   font-family: var(--font);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
+  border-radius: 4px;
   transition: all 0.2s ease;
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0% {
+    border-color: rgba(201, 168, 76, 0.3);
+  }
+
+  50% {
+    border-color: rgba(201, 168, 76, 0.8);
+  }
+
+  100% {
+    border-color: rgba(201, 168, 76, 0.3);
+  }
 }
 
 .hero-restore-btn:hover {
+  background: rgba(201, 168, 76, 0.1);
   border-color: var(--accent);
-  color: var(--accent);
 }
 
-.hero.window-gone .hero-restore-btn {
-  display: inline-block;
+.hero.window-gone .hero-restore-btn,
+.hero.window-minimized .hero-restore-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
+
 
 
 /* The top bar with colored dots */
@@ -484,7 +500,8 @@ ul {
 /* macOS-style traffic light dots */
 .term-dots {
   display: flex;
-  gap: 7px;
+  gap: 8px;
+  padding: 4px;
 }
 
 .dot {
@@ -492,41 +509,29 @@ ul {
   height: 12px;
   border-radius: 50%;
   cursor: pointer;
-  transition: transform 0.1s ease, filter 0.1s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  transition: filter 0.2s ease;
 }
 
-/* Show icons on dot hover like real macOS */
+.dot:hover {
+  filter: brightness(1.15);
+}
+
+/* Icons appear only when the dots container is hovered */
 .dot::after {
-  font-size: 8px;
-  font-weight: bold;
+  font-size: 7px;
+  font-family: sans-serif;
+  font-weight: 900;
   opacity: 0;
   transition: opacity 0.1s ease;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .term-dots:hover .dot::after {
   opacity: 1;
-}
-
-.dot-r::after {
-  content: '✕';
-}
-
-.dot-y::after {
-  content: '—';
-}
-
-.dot-g::after {
-  content: '↕';
-}
-
-.dot:hover {
-  transform: scale(1.1);
-  filter: brightness(1.1);
 }
 
 .dot-r {
@@ -540,6 +545,19 @@ ul {
 .dot-g {
   background: #28c840;
 }
+
+.dot-r::after {
+  content: '✕';
+}
+
+.dot-y::after {
+  content: '—';
+}
+
+.dot-g::after {
+  content: '+';
+}
+
 
 
 /* The "archit@portfolio: ~" title in the topbar */
