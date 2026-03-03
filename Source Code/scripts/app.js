@@ -490,7 +490,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         };
         if (shortcuts[sequence]) shortcuts[sequence](e);
       }
-    }, 200); // Reduced to 200ms for faster response
+    }, 500); // Increased to 500ms so you can actually type "archit"
   });
 
   function fuzzyMatch(query, text) {
