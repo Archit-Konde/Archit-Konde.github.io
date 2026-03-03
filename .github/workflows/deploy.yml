@@ -46,14 +46,20 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Step 3: Bundle and compress source for deployment
-      # We deploy the 'Source Code' directory as the web root.
+      # Step 3: Prepare the deployment bundle
+      # We copy the root 'docs' folder into 'Source Code' temporarily
+      # to ensure it is included in the Pages artifact.
+      - name: Prepare Site Bundle
+        run: |
+          cp -r docs "Source Code/"
+
+      # Step 4: Bundle and compress source for deployment
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './Source Code'
 
-      # Step 4: Execute deployment to the live environment
+      # Step 5: Execute deployment to the live environment
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
