@@ -666,9 +666,6 @@
   </div>
 
 
-  <!-- Back-to-top button — appears after scrolling down, fixed bottom-right -->
-  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
-
   <!-- ═══════════════════════════════════════════════════════════
        COMMAND PALETTE  (Ctrl+K / Cmd+K)
        VS Code-style quick action overlay.
@@ -690,6 +687,11 @@
       </div>
     </div>
   </div>
+
+  <!-- Command Palette floating toggle (bottom-left) -->
+  <button id="cmd-pal-btn" class="cmd-pal-btn" aria-label="Open command palette">
+    <span class="accent">></span>&nbsp;⌘K
+  </button>
 
   <!-- Floating Prompt / CD Tracker (bottom-right) -->
   <div id="floating-prompt" class="floating-prompt" aria-hidden="true">

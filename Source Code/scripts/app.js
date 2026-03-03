@@ -116,19 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
 ──────────────────────────────────────────────────────────────── */
 
 const navbar = document.getElementById('navbar');
-const backToTop = document.getElementById('back-to-top');
 
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
   if (navbar) navbar.classList.toggle('scrolled', y > 50);
-  if (backToTop) backToTop.classList.toggle('visible', y > 400);
-});
-
-/* Clicking the button smoothly scrolls to the very top.
-   { behavior: 'smooth' } is the same smooth-scroll as CSS
-   scroll-behavior: smooth, but triggered from JS.            */
-backToTop?.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 

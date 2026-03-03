@@ -1212,48 +1212,7 @@ ul {
 }
 
 
-/* ── 16. Back-to-Top Button ───────────────────────────────────
-   Fixed to the bottom-right corner. Hidden by default (opacity 0,
-   visibility hidden). script.js adds .visible when scrollY > 400.
-   visibility: hidden is used alongside opacity so the button is
-   fully removed from tab order when invisible.
-──────────────────────────────────────────────────────────────── */
-#back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 90;
-
-  width: 38px;
-  height: 38px;
-
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--accent);
-  font-family: var(--font);
-  font-size: 1rem;
-  cursor: pointer;
-
-  /* Hidden until .visible is added */
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity var(--ease), visibility var(--ease),
-    border-color var(--ease), background var(--ease),
-    color var(--ease), transform var(--ease);
-}
-
-#back-to-top.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-#back-to-top:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--bg);
-}
+/* ... back-to-top removed ... */
 
 
 /* ── 17. Responsive (Mobile-first breakpoints) ────────────────
@@ -1723,7 +1682,6 @@ body.matrix-theme .cmd-modal {
   #footer,
   #cmd-palette,
   #cmd-pal-btn,
-  #back-to-top,
   .hero-footer,
   .term-dots,
   .status-dot,
