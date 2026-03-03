@@ -479,7 +479,8 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           'c': () => scrollTo('#contact'),
           'r': () => window.open('/docs/resume.pdf', '_blank'),
           't': () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-          ' ': (event) => { if (event) event.preventDefault(); palette.hidden ? open() : close(); }
+          ' ': (event) => { if (event) event.preventDefault(); palette.hidden ? open() : close(); },
+          '?': () => window.toggleManPage(true)
         };
         if (shortcuts[sequence]) shortcuts[sequence](e);
       }
@@ -812,10 +813,10 @@ window.toggleManPage = (show) => {
   if (!manPage) return;
 
   if (show) {
-    manPage.hidden = false;
+    manPage.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
   } else {
-    manPage.hidden = true;
+    manPage.setAttribute('hidden', '');
     document.body.style.overflow = '';
   }
 };
