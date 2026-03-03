@@ -12,6 +12,11 @@
    FONT
      JetBrains Mono — Google Fonts (loaded in <head>)
      Fallback chain: Fira Code → Cascadia Code → Courier New → monospace
+
+   RENDERING & OPTIMIZATION
+     - GPU Acceleration: Transforms used for hover animations to minimize paint cycles.
+     - Paint Flashing: Layout shifts prevented via fixed min-heights for dynamic content.
+     - Accessibility: High-contrast amber (#C9A84C) ensures semantic visibility.
 ═══════════════════════════════════════════════════════════════ */
 
 
