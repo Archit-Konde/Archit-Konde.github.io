@@ -1,0 +1,38 @@
+# Archit Konde | Repository Attributes & Line Normalization
+# Standardized for Technical Integrity and Professional Scholarly Archiving
+
+# Handle line endings automatically for all files detected as text.
+# Enforce LF for consistent cross-platform record keeping.
+* text=auto eol=lf
+
+# Mark text files with explicit normalization.
+*.md text eol=lf diff=markdown linguist-documentation
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.svg text eol=lf
+*.cff text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Mark binary files to prevent corruption.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+
+# Repository Classification
+*.md linguist-documentation
+LICENSE* linguist-documentation
+SECURITY.md linguist-documentation
+CITATION.cff linguist-documentation

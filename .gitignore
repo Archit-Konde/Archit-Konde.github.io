@@ -1,15 +1,46 @@
-# Claude Code local config — never commit
-.claude/
+# Archit Konde | Repository Ignore Policy
 
-# OS junk
+# AI and External Logic Artifacts
+.clause/
+.codex/
+*.clause
+*.codex
+
+# Operating System Files
 .DS_Store
 Thumbs.db
-desktop.ini
+Desktop.ini
+~$*
+*.bak
+*.swp
+*.swo
+*.tmp
+*.log
 
-# Editor directories
+# IDE and Editor Configurations
 .vscode/
 .idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+.classpath
 
-# Node (in case a build step is ever added)
+# Python Logic Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Dependency and Package Registries
 node_modules/
-npm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Data and Temporary Artifacts
+*.tmp
+*.temp
+.cache/
