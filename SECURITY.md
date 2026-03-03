@@ -1,49 +1,37 @@
 # Security Policy
 
-## Overview
+## Maintenance & Evolution
 
-This repository is a static personal portfolio website hosted on GitHub Pages.
-It contains no backend servers, databases, user authentication, or sensitive data.
+This repository serves as the definitive digital space for **Archit Konde's** professional engineering work. It is actively maintained to ensure the highest standards of technical integrity and to document scholarly progress in Machine Learning research.
 
-## Scope
+## Supported Versions
 
-| Component | In Scope |
-|---|---|
-| Portfolio site (HTML/CSS/JS) | ✅ Yes |
-| Personal data exposure | ✅ Yes |
-| Third-party scripts / CDN links | ✅ Yes |
-| GitHub Actions workflows | ✅ Yes |
-| Backend servers | ❌ N/A — no backend |
-| User data / databases | ❌ N/A — no user data |
+In accordance with the current development cycle, only the version listed below is considered authoritative for security and maintenance support:
 
-## Reporting a Vulnerability
+| Version | Supported |
+| ------- | --------- |
+| 1.0.0   | Yes       |
 
-If you discover a security issue (e.g. sensitive data accidentally committed,
-a malicious third-party dependency, a dangerous link injected via content):
+## Dual-Licensing Framework
 
-**Please do not open a public GitHub Issue.**
+This project follows a precise licensing structure to differentiate between technical infrastructure and intellectual narrative:
 
-Instead, contact me directly:
+- **Source Code**: All web-based logic and custom styling are licensed under the **MIT License**.
+- **Intellectual Property**: All technical articles and research insights are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
 
-- **Email:** architkonde19@gmail.com
-- **Subject line:** `[SECURITY] Archit-Konde.github.io — <brief description>`
+## Vulnerability Reporting
 
-I will acknowledge your report within **72 hours** and aim to resolve confirmed
-issues within **7 days**.
+If you identify a potential security vulnerability or architectural flaw within this site, please report it through the official channels. Constructive engagement ensures the long-term reliability of this professional record.
 
-## What to Include in Your Report
+- **Developer**: [Archit Konde](https://github.com/Archit-Konde)
+- **Protocol**: Reports should be submitted via the [GitHub Issues](https://github.com/Archit-Konde/Archit-Konde.github.io/issues) interface to ensure formal tracking and resolution.
 
-- Description of the vulnerability
-- Steps to reproduce it
-- Potential impact
-- Any suggested fix (optional but appreciated)
+When submitting a report, please provide a clear technical description and steps to replicate the observation within a modern browser environment.
 
-## Out of Scope
+## Security Context: Static Architecture
 
-- Social engineering attacks
-- Theoretical vulnerabilities without a practical exploit
-- Issues in GitHub's own infrastructure
+As a static site hosted via **GitHub Pages**, the security model is centered on pre-rendered content integrity. All interactive elements execute exclusively within the client-side browser sandbox, which inherently minimizes the traditional server-side attack surface.
 
 ---
 
-Thank you for helping keep this project and its visitors safe.
+*This document defines the security posture of Archit Konde's Portfolio.*
