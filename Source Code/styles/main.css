@@ -416,17 +416,20 @@ ul {
 
 /* Red: Close -> Fade out and scale down */
 .term-window.is-closed {
-  opacity: 0;
+  opacity: 0 !important;
+  visibility: hidden;
   transform: scale(0.9) translateY(20px);
-  pointer-events: none;
+  pointer-events: none !important;
 }
 
-/* Yellow: Minimize -> Shrink to topbar only or "dock" */
+/* Yellow: Minimize -> Shrink and hide */
 .term-window.is-minimized {
   transform: translateY(200px) scale(0.6);
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none !important;
 }
+
 
 
 /* Green: Maximize -> Full width/height of container or viewport */
@@ -444,46 +447,37 @@ ul {
 }
 
 /* "System Alert" when window is closed/minimized */
-.hero-restore-btn {
-  display: none;
-  background: rgba(201, 168, 76, 0.05);
-  border: 1px solid rgba(201, 168, 76, 0.3);
-  color: var(--accent);
-  padding: 0.5rem 1rem;
-  font-family: var(--font);
-  font-size: 0.75rem;
-  cursor: pointer;
-  margin-top: 1.5rem;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  animation: pulse-border 2s infinite;
+.hero-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s3);
+  margin-top: var(--s4);
 }
 
-@keyframes pulse-border {
-  0% {
-    border-color: rgba(201, 168, 76, 0.3);
-  }
-
-  50% {
-    border-color: rgba(201, 168, 76, 0.8);
-  }
-
-  100% {
-    border-color: rgba(201, 168, 76, 0.3);
-  }
+.hero-restore-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: color var(--ease);
+  animation: float 2.5s ease-in-out infinite;
+  animation-delay: 0.2s;
+  /* offset for symmetry */
 }
 
 .hero-restore-btn:hover {
-  background: rgba(201, 168, 76, 0.1);
-  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .hero.window-gone .hero-restore-btn,
 .hero.window-minimized .hero-restore-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  display: inline-block;
 }
+
 
 
 
@@ -664,7 +658,6 @@ ul {
 /* ─ Scroll hint arrow below the terminal ── */
 .scroll-hint {
   display: inline-block;
-  margin-top: var(--s4);
   font-size: 0.78rem;
   color: var(--muted);
   text-decoration: none;
@@ -672,6 +665,7 @@ ul {
   animation: float 2.5s ease-in-out infinite;
   transition: color var(--ease);
 }
+
 
 .scroll-hint:hover {
   color: var(--accent);

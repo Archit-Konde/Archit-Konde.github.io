@@ -708,17 +708,22 @@ document.querySelectorAll('.project-card').forEach(card => {
 
   if (!windowEl) return;
 
+  function clearStates() {
+    windowEl.classList.remove('is-closed', 'is-minimized', 'is-maximized');
+    heroEl?.classList.remove('window-gone', 'window-minimized');
+  }
+
   // 1. Red Dot (Close)
   dots.red?.addEventListener('click', () => {
+    clearStates();
     windowEl.classList.add('is-closed');
     heroEl?.classList.add('window-gone');
-
-    // Log system event
     console.log('%c[system] process terminated: terminal.exe exited with code 0', 'color:#858585; font-style:italic;');
   });
 
   // 2. Yellow Dot (Minimize)
   dots.yellow?.addEventListener('click', () => {
+    clearStates();
     windowEl.classList.add('is-minimized');
     heroEl?.classList.add('window-minimized');
     console.log('%c[system] process moved to background: terminal.exe', 'color:#858585;');
@@ -726,26 +731,26 @@ document.querySelectorAll('.project-card').forEach(card => {
 
   // 3. Green Dot (Maximize/Fullscreen)
   dots.green?.addEventListener('click', () => {
-    windowEl.classList.toggle('is-maximized');
-
-    // If maximizing, ensure it's not minimized
-    if (windowEl.classList.contains('is-maximized')) {
-      windowEl.classList.remove('is-minimized');
-      heroEl?.classList.remove('window-minimized');
+    const wasMaximized = windowEl.classList.contains('is-maximized');
+    clearStates();
+    if (!wasMaximized) {
+      windowEl.classList.add('is-maximized');
     }
   });
 
   // 4. Restore Logic
   restoreBtn?.addEventListener('click', () => {
-    windowEl.classList.remove('is-closed', 'is-minimized', 'is-maximized');
-    heroEl?.classList.remove('window-gone', 'window-minimized');
+    clearStates();
 
-    // Visual "re-boot" effect
+    // Visual "re-boot" effect: reset inline styles so CSS classes work again
     windowEl.style.opacity = '0';
+    windowEl.style.transform = 'scale(0.98)';
+
     setTimeout(() => {
-      windowEl.style.opacity = '1';
+      windowEl.style.opacity = '';
+      windowEl.style.transform = '';
       console.log('%c[system] process initiated: terminal.exe', 'color:#28c840; font-weight:bold;');
-    }, 50);
+    }, 150);
   });
 
   // Close with Esc if maximized
