@@ -424,30 +424,64 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     input.value = '';
   }
 
-  // Handle global shortcuts
+  // Handle global shortcuts with a sequence buffer
+  let keyBuffer = '';
+  let keyTimer = null;
+
   document.addEventListener('keydown', (e) => {
     // Don't trigger if user is typing in an input or textarea
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
+    // Ignore modifier keys alone
+    if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return;
+
     const key = e.key.toLowerCase();
+    keyBuffer += key;
 
-    // Mapping of keys to actions
-    const shortcuts = {
-      'h': () => window.location.href = isHome ? '#' : '/index.html',
-      'a': () => scrollTo('#about'),
-      'e': () => scrollTo('#experience'),
-      's': () => scrollTo('#skills'),
-      'p': () => scrollTo('#projects'),
-      'b': () => isHome ? scrollTo('#blog') : window.location.href = '/index.html#blog',
-      'c': () => scrollTo('#contact'),
-      'r': () => window.open('/docs/resume.pdf', '_blank'),
-      't': () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-      ' ': (event) => { event.preventDefault(); palette.hidden ? open() : close(); }
-    };
+    if (keyTimer) clearTimeout(keyTimer);
 
-    if (shortcuts[key]) {
-      shortcuts[key](e);
-    }
+    keyTimer = setTimeout(() => {
+      const sequence = keyBuffer;
+      keyBuffer = ''; // reset
+
+      // 1. Check for specific word sequences (Easter Eggs)
+      if (sequence === 'archit') {
+        console.log("%cArchit Protocol Activated", "color: #C9A84C; font-size: 16px; font-weight: bold;");
+        open();
+        input.value = 'archit';
+        input.dispatchEvent(new Event('input'));
+        return;
+      }
+
+      if (sequence === 'help') {
+        open();
+        input.value = 'help';
+        input.dispatchEvent(new Event('input'));
+        return;
+      }
+
+      if (sequence === 'matrix') {
+        document.body.classList.toggle('matrix-theme');
+        return;
+      }
+
+      // 2. Handle single-key shortcuts
+      if (sequence.length === 1) {
+        const shortcuts = {
+          'h': () => window.location.href = isHome ? '#' : '/index.html',
+          'a': () => scrollTo('#about'),
+          'e': () => scrollTo('#experience'),
+          's': () => scrollTo('#skills'),
+          'p': () => scrollTo('#projects'),
+          'b': () => isHome ? scrollTo('#blog') : window.location.href = '/index.html#blog',
+          'c': () => scrollTo('#contact'),
+          'r': () => window.open('/docs/resume.pdf', '_blank'),
+          't': () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+          ' ': (event) => { if (event) event.preventDefault(); palette.hidden ? open() : close(); }
+        };
+        if (shortcuts[sequence]) shortcuts[sequence](e);
+      }
+    }, 400); // 400ms buffer to recognize typing vs single-key
   });
 
   function fuzzyMatch(query, text) {
