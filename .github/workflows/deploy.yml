@@ -14,6 +14,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'Source Code/**'
+      - 'docs/**'
+      - 'SECURITY.md'
   workflow_dispatch:
 
 permissions:
