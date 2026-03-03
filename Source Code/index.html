@@ -652,10 +652,18 @@
   <footer id="footer">
     <div class="container footer-inner">
       <span class="f-prompt">archit@portfolio:~$</span>
-      <span class="f-cmd">&nbsp;<span class="accent">exit 0</span></span>
+      <span class="f-cmd">&nbsp;<span class="accent clickable" id="footer-exit">exit 0</span></span>
       <span class="f-note">// Archit Konde &copy; <span id="year"></span></span>
     </div>
   </footer>
+
+  <!-- System Shutdown Overlay -->
+  <div id="system-shutdown" class="shutdown-overlay" hidden>
+    <div class="shutdown-content">
+      <p class="shutdown-msg">[Process completed]</p>
+      <button id="system-reboot" class="reboot-link">reconnect to archit@portfolio</button>
+    </div>
+  </div>
 
 
   <!-- Back-to-top button — appears after scrolling down, fixed bottom-right -->

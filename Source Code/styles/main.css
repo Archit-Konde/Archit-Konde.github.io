@@ -1611,3 +1611,55 @@ body.matrix-theme .cmd-modal {
   border-color: var(--accent);
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
 }
+
+/* ── System Shutdown Overlay ── */
+.shutdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+
+.shutdown-overlay:not([hidden]) {
+  display: flex !important;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.shutdown-content {
+  text-align: center;
+}
+
+.shutdown-msg {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: var(--muted);
+}
+
+.reboot-link {
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.8rem 1.5rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reboot-link:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.clickable {
+  cursor: pointer;
+}

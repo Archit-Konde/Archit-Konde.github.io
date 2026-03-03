@@ -760,3 +760,47 @@ document.querySelectorAll('.project-card').forEach(card => {
     }
   });
 })();
+
+/* ── 12. SYSTEM SHUTDOWN CONTROLLER ("exit 0") ────────────────── */
+(function systemShutdown() {
+  const exitBtn = document.getElementById('footer-exit');
+  const shutdownOverlay = document.getElementById('system-shutdown');
+  const rebootBtn = document.getElementById('system-reboot');
+
+  if (!shutdownOverlay) return;
+
+  function runShutdown() {
+    shutdownOverlay.removeAttribute('hidden');
+    console.log('%c[system] connection closed: archit@portfolio disconnected', 'color:#ff5f57; font-weight:bold;');
+    // Disable scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function runReboot() {
+    shutdownOverlay.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+    console.log('%c[system] connection restored: archit@portfolio reconnected', 'color:#28c840; font-weight:bold;');
+
+    // Optional: visual flicker on reboot
+    document.body.style.opacity = '0';
+    setTimeout(() => { document.body.style.opacity = '1'; }, 100);
+  }
+
+  // Click on "exit 0" in footer
+  exitBtn?.addEventListener('click', runShutdown);
+
+  // Click reboot button
+  rebootBtn?.addEventListener('click', runReboot);
+
+  // Global "0" key shortcut
+  document.addEventListener('keydown', (e) => {
+    // Only trigger if not typing in an input and not inside the command palette
+    const isInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+    const isPaletteOpen = !document.getElementById('cmd-palette')?.hasAttribute('hidden');
+
+    if (e.key === '0' && !isInput && !isPaletteOpen) {
+      runShutdown();
+    }
+  });
+})();
+
