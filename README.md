@@ -18,4 +18,4 @@ Structural source code and logic are licensed under the **[MIT License](./Source
 
 ---
 
-*Curated by [Archit Konde](https://github.com/Archit-Konde)*
+*Developed by [Archit Konde](https://github.com/Archit-Konde)*
