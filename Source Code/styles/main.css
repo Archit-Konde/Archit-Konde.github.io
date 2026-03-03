@@ -1623,6 +1623,91 @@ body.matrix-theme .cmd-modal {
   cursor: pointer;
 }
 
+/* ── Man Overlay ── */
+.man-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  font-family: var(--font);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+
+.man-overlay[hidden] {
+  display: none !important;
+}
+
+.man-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.man-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  height: 100%;
+  background: var(--bg);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.man-header,
+.man-footer {
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 0.5rem 0;
+}
+
+.man-header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.man-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.man-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.man-content .man-section {
+  margin-bottom: 2.5rem;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.man-content h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  color: var(--text);
+}
+
+.man-content p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+.man-content strong {
+  color: var(--accent);
+}
+
 /* ── Floating Prompt ── */
 .floating-prompt {
   position: fixed;
@@ -1687,7 +1772,8 @@ body.matrix-theme .cmd-modal {
   .status-dot,
   .mobile-menu,
   .shutdown-overlay,
-  .floating-prompt {
+  .floating-prompt,
+  .man-overlay {
     display: none !important;
   }
 
