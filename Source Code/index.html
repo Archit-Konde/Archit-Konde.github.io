@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,32 +13,36 @@
        robots:      "index, follow" tells crawlers to index & follow links.
        theme-color: colors the browser chrome bar on Android/mobile.
   ════════════════════════════════════════════════════════════════ -->
-  <meta name="description"  content="Archit Konde — Machine Learning Engineer based in Waterloo, Canada. Focused on AI/ML, neural networks, and contributing to AGI research. Open to opportunities." />
-  <meta name="keywords"     content="Archit Konde, Machine Learning Engineer, AI Engineer, ML Engineer, artificial intelligence, neural networks, PyTorch, deep learning, AGI, Waterloo, Canada" />
-  <meta name="author"       content="Archit Konde" />
-  <meta name="robots"       content="index, follow" />
-  <meta name="theme-color"  content="#1e1e1e" />
+  <meta name="description"
+    content="Archit Konde — Machine Learning Engineer based in Waterloo, Canada. Focused on AI/ML, neural networks, and contributing to AGI research. Open to opportunities." />
+  <meta name="keywords"
+    content="Archit Konde, Machine Learning Engineer, AI Engineer, ML Engineer, artificial intelligence, neural networks, PyTorch, deep learning, AGI, Waterloo, Canada" />
+  <meta name="author" content="Archit Konde" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#1e1e1e" />
 
   <!-- ═══ SEO — Open Graph (LinkedIn, Facebook, Discord previews) ═
        When you share your URL on LinkedIn or Discord, these tags
        control what the preview card looks like — title, description,
        and eventually an image thumbnail.
   ════════════════════════════════════════════════════════════════ -->
-  <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://archit-konde.github.io/" />
-  <meta property="og:title"       content="Archit Konde — Machine Learning Engineer" />
-  <meta property="og:description" content="Building intelligent systems, solving the intelligence problem one step at a time." />
-  <meta property="og:locale"      content="en_CA" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://archit-konde.github.io/" />
+  <meta property="og:title" content="Archit Konde — Machine Learning Engineer" />
+  <meta property="og:description"
+    content="Building intelligent systems, solving the intelligence problem one step at a time." />
+  <meta property="og:locale" content="en_CA" />
 
   <!-- ═══ SEO — Twitter / X Card ═════════════════════════════════
        Controls how your link looks when shared on Twitter/X.
        summary_large_image: big card with image (add og:image later).
   ════════════════════════════════════════════════════════════════ -->
-  <meta name="twitter:card"        content="summary" />
-  <meta name="twitter:site"        content="@architkonde" />
-  <meta name="twitter:creator"     content="@architkonde" />
-  <meta name="twitter:title"       content="Archit Konde — Machine Learning Engineer" />
-  <meta name="twitter:description" content="Building intelligent systems, solving the intelligence problem one step at a time." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@architkonde" />
+  <meta name="twitter:creator" content="@architkonde" />
+  <meta name="twitter:title" content="Archit Konde — Machine Learning Engineer" />
+  <meta name="twitter:description"
+    content="Building intelligent systems, solving the intelligence problem one step at a time." />
 
   <!-- ═══ SEO — Canonical URL ═════════════════════════════════════
        Tells search engines "this is the one true URL for this page".
@@ -49,19 +54,22 @@
   <!-- PWA manifest — tells the browser this is installable as an app -->
   <link rel="manifest" href="manifest.json" />
   <!-- Apple Touch Icon — iOS uses this for "Add to Home Screen" (ignores manifest.json) -->
-  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.svg" />
 
   <title>Archit Konde</title>
 
   <!-- Terminal favicon: amber '>' on dark background, no extra file needed -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
 
   <!-- JetBrains Mono — the terminal/code font we use throughout the site -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles/main.css" />
 
   <!-- ═══ SEO — JSON-LD Structured Data ══════════════════════════
        This is machine-readable data embedded in the page that tells
@@ -101,9 +109,10 @@
   }
   </script>
 </head>
+
 <body>
 
-<!--
+  <!--
   ╔══════════════════════════════════════════════════════════════╗
   ║   Hey, you found the source.  Respect. 👋                   ║
   ║                                                              ║
@@ -158,12 +167,12 @@
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <button class="mobile-menu-close" id="mobileClose" aria-label="Close menu">✕</button>
     <ul>
-      <li><a href="#about"      class="mob-link"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="#about" class="mob-link"><span class="nav-slash">./</span>about</a></li>
       <li><a href="#experience" class="mob-link"><span class="nav-slash">./</span>experience</a></li>
-      <li><a href="#skills"     class="mob-link"><span class="nav-slash">./</span>skills</a></li>
-      <li><a href="#projects"   class="mob-link"><span class="nav-slash">./</span>projects</a></li>
-      <li><a href="#blog"       class="mob-link"><span class="nav-slash">./</span>blog</a></li>
-      <li><a href="#contact"    class="mob-link"><span class="nav-slash">./</span>contact</a></li>
+      <li><a href="#skills" class="mob-link"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="#projects" class="mob-link"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="#blog" class="mob-link"><span class="nav-slash">./</span>blog</a></li>
+      <li><a href="#contact" class="mob-link"><span class="nav-slash">./</span>contact</a></li>
       <!-- resume link: re-enable once assets/resume.pdf is added
       <li><a href="assets/resume.pdf" class="mob-link" target="_blank" rel="noopener noreferrer">resume ↗</a></li>
       -->
@@ -216,7 +225,8 @@
 
             <!-- Idle prompt line — ghost-text typed/erased by script.js ghostLoop() -->
             <p class="term-line idle-line">
-              <span class="t-prompt">archit@portfolio:~$</span><span id="ghost-text"></span><span class="idle-cursor"> █</span>
+              <span class="t-prompt">archit@portfolio:~$</span><span id="ghost-text"></span><span class="idle-cursor">
+                █</span>
             </p>
           </div>
         </div>
@@ -275,7 +285,8 @@
                 <span class="meta-key">// currently</span>
                 <span class="meta-val">
                   studying transformers via<br />
-                  <a href="https://github.com/karpathy/micrograd" target="_blank" rel="noopener noreferrer" class="inline-link">karpathy/micrograd ↗</a>
+                  <a href="https://github.com/karpathy/micrograd" target="_blank" rel="noopener noreferrer"
+                    class="inline-link">karpathy/micrograd ↗</a>
                 </span>
               </div>
               <div class="meta-block">
@@ -314,16 +325,13 @@
                 <span class="exp-org-short">(IJRASET)</span>
               </p>
               <ul class="exp-bullets">
-                <li>Authored a research paper examining the architectural and mathematical foundations of neural networks</li>
+                <li>Authored a research paper examining the architectural and mathematical foundations of neural
+                  networks</li>
                 <li>Covered activation functions, backpropagation, gradient descent, and network topologies</li>
               </ul>
               <div class="exp-links">
-                <a
-                  href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=njXhCdwAAAAJ&citation_for_view=njXhCdwAAAAJ:u5HHmVD_uO8C"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="exp-link"
-                >Google Scholar ↗</a>
+                <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=njXhCdwAAAAJ&citation_for_view=njXhCdwAAAAJ:u5HHmVD_uO8C"
+                  target="_blank" rel="noopener noreferrer" class="exp-link">Google Scholar ↗</a>
               </div>
             </div>
           </div>
@@ -336,7 +344,8 @@
               <p class="exp-org">City of Windsor — Affordable Transit Program</p>
               <ul class="exp-bullets">
                 <li>Cleaned and preprocessed transit ridership datasets to ensure data quality and consistency</li>
-                <li>Built dashboards to visualize usage patterns and surface actionable insights for program planning</li>
+                <li>Built dashboards to visualize usage patterns and surface actionable insights for program planning
+                </li>
               </ul>
             </div>
           </div>
@@ -466,13 +475,15 @@
           <div class="projects-grid">
 
             <div class="project-card">
-              <a href="https://architechs-supportops-ai-monitor.hf.space" target="_blank" rel="noopener noreferrer" class="card-overlay-link" aria-label="View SupportOps AI Monitor live demo" tabindex="-1"></a>
+              <a href="https://architechs-supportops-ai-monitor.hf.space" target="_blank" rel="noopener noreferrer"
+                class="card-overlay-link" aria-label="View SupportOps AI Monitor live demo" tabindex="-1"></a>
               <div class="card-top">
                 <span class="card-num">01</span>
                 <span class="card-status">// live</span>
               </div>
               <p class="card-name">supportops_ai_monitor.py</p>
-              <p class="card-desc">Simulates enterprise AI support workflows — ticket triage via GPT-4o-mini, API health logging, and an operational observability dashboard. Runs in simulation mode with no API key.</p>
+              <p class="card-desc">Simulates enterprise AI support workflows — ticket triage via GPT-4o-mini, API health
+                logging, and an operational observability dashboard. Runs in simulation mode with no API key.</p>
               <div class="card-tech">
                 <span class="tag">python</span>
                 <span class="tag">streamlit</span>
@@ -481,9 +492,11 @@
                 <span class="tag">plotly</span>
               </div>
               <div style="margin-top: 0.75rem; font-size: 0.75rem;">
-                <a href="https://github.com/Archit-Konde/supportops-ai-monitor" target="_blank" rel="noopener noreferrer" class="inline-link">GitHub ↗</a>
+                <a href="https://github.com/Archit-Konde/supportops-ai-monitor" target="_blank"
+                  rel="noopener noreferrer" class="inline-link">GitHub ↗</a>
                 &nbsp;·&nbsp;
-                <a href="https://architechs-supportops-ai-monitor.hf.space" target="_blank" rel="noopener noreferrer" class="inline-link">live demo ↗</a>
+                <a href="https://architechs-supportops-ai-monitor.hf.space" target="_blank" rel="noopener noreferrer"
+                  class="inline-link">live demo ↗</a>
               </div>
             </div>
 
@@ -518,7 +531,8 @@
           <p class="projects-note">
             <span class="accent">→</span> projects are actively being built.
             follow along on
-            <a href="https://github.com/Archit-Konde" target="_blank" rel="noopener noreferrer" class="inline-link">GitHub ↗</a>
+            <a href="https://github.com/Archit-Konde" target="_blank" rel="noopener noreferrer"
+              class="inline-link">GitHub ↗</a>
           </p>
 
         </div>
@@ -542,13 +556,16 @@
           <div class="blog-scroll">
 
             <div class="project-card">
-              <a href="blog/supportops-ai-monitor.html" class="card-overlay-link" aria-label="Read post: Building SupportOps AI Monitor" tabindex="-1"></a>
+              <a href="pages/blog/supportops-ai-monitor.html" class="card-overlay-link"
+                aria-label="Read post: Building SupportOps AI Monitor" tabindex="-1"></a>
               <div class="card-top">
                 <span class="card-num" style="font-size: 0.65rem; letter-spacing: 0.05em;">MAR 2026</span>
                 <span class="card-status">// learning writeup</span>
               </div>
               <p class="card-name">Building SupportOps AI Monitor — What I Learned</p>
-              <p class="card-desc">Architecture decisions, bugs found, deployment challenges, and honest answers to questions I couldn&rsquo;t answer at first. Covers <code>applymap()</code> removal in pandas 2.2, SQLite ephemeral containers, Streamlit&rsquo;s PWA limitations, and more.</p>
+              <p class="card-desc">Architecture decisions, bugs found, deployment challenges, and honest answers to
+                questions I couldn&rsquo;t answer at first. Covers <code>applymap()</code> removal in pandas 2.2, SQLite
+                ephemeral containers, Streamlit&rsquo;s PWA limitations, and more.</p>
               <div class="card-tech">
                 <span class="tag">python</span>
                 <span class="tag">streamlit</span>
@@ -556,7 +573,7 @@
                 <span class="tag">sqlite</span>
               </div>
               <div style="margin-top: 0.75rem; font-size: 0.75rem; position: relative; z-index: 1;">
-                <a href="blog/supportops-ai-monitor.html" class="inline-link">read post ↗</a>
+                <a href="pages/blog/supportops-ai-monitor.html" class="inline-link">read post ↗</a>
               </div>
             </div>
 
@@ -600,7 +617,8 @@
               <span class="c-val">Archit-Konde ↗</span>
             </a>
 
-            <a href="https://www.linkedin.com/in/architkonde/" target="_blank" rel="noopener noreferrer" class="contact-row">
+            <a href="https://www.linkedin.com/in/architkonde/" target="_blank" rel="noopener noreferrer"
+              class="contact-row">
               <span class="c-key">linkedin</span>
               <span class="c-arrow accent">→</span>
               <span class="c-val">architkonde ↗</span>
@@ -612,7 +630,8 @@
               <span class="c-val">@architkonde ↗</span>
             </a>
 
-            <a href="https://scholar.google.com/citations?hl=en&user=njXhCdwAAAAJ" target="_blank" rel="noopener noreferrer" class="contact-row">
+            <a href="https://scholar.google.com/citations?hl=en&user=njXhCdwAAAAJ" target="_blank"
+              rel="noopener noreferrer" class="contact-row">
               <span class="c-key">google scholar</span>
               <span class="c-arrow accent">→</span>
               <span class="c-val">Archit Konde — IJRASET ↗</span>
@@ -651,8 +670,8 @@
     <div class="cmd-modal">
       <div class="cmd-input-row">
         <span class="cmd-icon">&gt;</span>
-        <input id="cmd-input" class="cmd-search" type="text"
-               placeholder="Type a command..." autocomplete="off" spellcheck="false" />
+        <input id="cmd-input" class="cmd-search" type="text" placeholder="Type a command..." autocomplete="off"
+          spellcheck="false" />
         <kbd class="cmd-kbd">ESC</kbd>
       </div>
       <ul id="cmd-list" class="cmd-list" role="listbox"></ul>
@@ -664,6 +683,7 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="scripts/app.js"></script>
 </body>
+
 </html>
