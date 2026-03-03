@@ -344,7 +344,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const isHome = !isBlog && !is404;
 
   const baseCommands = [
-    { icon: '🏠', label: 'Go to Home', hint: '[H]', action() { window.location.href = isHome ? '#' : '/index.html'; } },
+    { icon: '~', label: 'Go to Home', hint: '[H]', action() { window.location.href = isHome ? '#' : '/index.html'; } },
     { icon: '↗', label: 'View SupportOps Demo', hint: 'HuggingFace', action() { window.open('https://architechs-supportops-ai-monitor.hf.space', '_blank'); } },
     { icon: './', label: 'View GitHub', hint: 'github.com', action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
     { icon: 'in', label: 'View LinkedIn', hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
@@ -360,7 +360,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   ];
 
   const blogCommands = [
-    { icon: '📝', label: 'Read: SupportOps AI Monitor', hint: '[B] Post', action() { window.location.href = isBlog ? 'supportops-ai-monitor.html' : '/pages/blog/supportops-ai-monitor.html'; } },
+    { icon: '>', label: 'Read: SupportOps AI Monitor', hint: '[B] Post', action() { window.location.href = isBlog ? 'supportops-ai-monitor.html' : '/pages/blog/supportops-ai-monitor.html'; } },
     { icon: '←', label: 'Back to Blog List', hint: 'Home #blog', action() { window.location.href = '/index.html#blog'; } },
   ];
 
@@ -501,7 +501,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const qLower = q.toLowerCase();
 
     if (qLower === 'sudo') {
-      filtered = [{ icon: '🔒', label: 'Nice try. Permission denied.', hint: 'you are not root', action() { } }];
+      filtered = [{ icon: '!!', label: 'Nice try. Permission denied.', hint: 'you are not root', action() { } }];
       activeIdx = 0;
       render();
       return;
@@ -509,9 +509,9 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
     if (qLower === 'help') {
       filtered = [
-        { icon: '❓', label: 'SYSTEM CMD: List Shortcuts', hint: 'show-key-map', action() { alert('Shortcuts:\nH: Home, A: About, E: Exp, S: Skills, P: Proj, B: Blog, C: Contact, R: Resume, T: Top, Space: Menu'); } },
-        { icon: '💾', label: 'SYSTEM CMD: Clear Cache', hint: 'sw-reset', action() { navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())); window.location.reload(); } },
-        { icon: '🕶️', label: 'SYSTEM CMD: Toggle Matrix Mode', hint: 'theme-override', action() { document.body.classList.toggle('matrix-theme'); } },
+        { icon: '?', label: 'SYSTEM CMD: List Shortcuts', hint: 'show-key-map', action() { alert('Shortcuts:\nH: Home, A: About, E: Exp, S: Skills, P: Proj, B: Blog, C: Contact, R: Resume, T: Top, Space: Menu'); } },
+        { icon: '#', label: 'SYSTEM CMD: Clear Cache', hint: 'sw-reset', action() { navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())); window.location.reload(); } },
+        { icon: 'M', label: 'SYSTEM CMD: Toggle Matrix Mode', hint: 'theme-override', action() { document.body.classList.toggle('matrix-theme'); } },
       ];
       activeIdx = 0;
       render();
@@ -520,7 +520,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
     if (qLower === 'archit') {
       filtered = [{
-        icon: '👑',
+        icon: '@',
         label: 'Lead ML Engineer / Researcher',
         hint: 'creator',
         action() {
@@ -542,14 +542,14 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }
 
     if (qLower === 'matrix') {
-      filtered = [{ icon: '💊', label: 'Follow the white rabbit...', hint: 'toggle-theme', action() { document.body.classList.toggle('matrix-theme'); close(); } }];
+      filtered = [{ icon: '[x]', label: 'Follow the white rabbit...', hint: 'toggle-theme', action() { document.body.classList.toggle('matrix-theme'); close(); } }];
       activeIdx = 0;
       render();
       return;
     }
 
     if (qLower === 'boom') {
-      filtered = [{ icon: '💥', label: 'Self destruct in 3... 2... 1...', hint: 'rm -rf /', action() { document.body.style.filter = 'invert(1) blur(10px)'; setTimeout(() => window.location.reload(), 1000); } }];
+      filtered = [{ icon: '[!]', label: 'Self destruct in 3... 2... 1...', hint: 'rm -rf /', action() { document.body.style.filter = 'invert(1) blur(10px)'; setTimeout(() => window.location.reload(), 1000); } }];
       activeIdx = 0;
       render();
       return;
