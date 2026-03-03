@@ -34,13 +34,21 @@ graph TD
 - **Structured Data**: Integrated `Schema.org/Person` JSON-LD to provide search engines with a high-dimensional understanding of professional expertise and alumni history.
 - **Header Meta Information**: Optimized with Open Graph and Twitter/X metadata cards to ensure professional preview rendering across LinkedIn and scholarly forums.
 
+### 4. Performance and Optimization
+- **Latency Budget**: Targeted sub-200ms DOM Interactive time for cached visits. The Service Worker strategy ensures that core structural assets are delivered with zero network latency upon subsequent sessions.
+- **Asset Compression**: Utilizes high-resolution SVG iconography instead of raster images, significantly reducing the payload size while maintaining visual fidelity across 4K displays.
+
+### 5. Security Posture
+- **Static Delivery**: The absence of server-side execution eliminates common vectors like SQL Injection or Remote Code Execution.
+- **Header Implementation**: Future iterations will incorporate specialized Content Security Policies (CSP) to further harden the client-side sandbox.
+
 ---
 
-## Deployment Logic
+## Deployment Strategy
 
-- **Pipeline**: Automated CI/CD execution via **GitHub Actions**, triggering on commits to the `main` branch.
-- **Hosting**: Served exclusively through **GitHub Pages**, utilizing a specialized directory structure to separate repo documentation from production source code.
+- **Automation**: Continuous Deployment executed via **GitHub Actions**, synchronizing the `Source Code` directory to the production environment on every legitimate push.
+- **Integrity**: Each release is tracked through the main branch, maintaining a definitive scholarly record of the site's evolution.
 
 ---
 
-*Technical Specification | Static Architecture | Version 1.0*
+*Technical Specification | Static Architecture | Version 1.1*
