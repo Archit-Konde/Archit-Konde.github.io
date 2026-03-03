@@ -1,0 +1,33 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "name": "Archit Konde — Machine Learning Engineer Portfolio",
+    "description": "Personal portfolio website of Archit Konde, a Machine Learning Engineer focused on AI/ML, neural networks, and AGI research.",
+    "identifier": "Archit-Konde-Portfolio",
+    "license": "https://spdx.org/licenses/MIT.html",
+    "programmingLanguage": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "givenName": "Archit",
+            "familyName": "Konde",
+            "email": "architkonde19@gmail.com",
+            "id": "https://orcid.org/0000-0002-2422-117X"
+        }
+    ],
+    "dateReleased": "2026-03-02",
+    "codeRepository": "https://github.com/Archit-Konde/Archit-Konde.github.io",
+    "developmentStatus": "active",
+    "applicationCategory": "Portfolio / Web Development",
+    "keywords": [
+        "Machine Learning",
+        "Portfolio",
+        "AI/ML",
+        "Web Design",
+        "AGI"
+    ]
+}

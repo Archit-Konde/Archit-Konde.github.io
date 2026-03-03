@@ -1,13 +1,11 @@
 cff-version: 1.2.0
-message: "If you use this repository, please cite it as below."
-title: "Archit Konde — Machine Learning Engineer Portfolio"
-version: "1.0.0"
-date-released: "2026-02-24"
-license: MIT
+message: "If you use this project or its associated academic materials, please cite them as below."
 authors:
-  - family-names: Konde
-    given-names: Archit
-    email: architkonde19@gmail.com
-    orcid: "https://orcid.org/0000-0002-2422-117X"
-url: "https://archit-konde.github.io/"
-repository-code: "https://github.com/Archit-Konde/Archit-Konde.github.io"
+- family-names: "Konde"
+  given-names: "Archit"
+  email: "architkonde19@gmail.com"
+  orcid: "https://orcid.org/0000-0002-2422-117X"
+title: "Archit Konde — Machine Learning Engineer Portfolio"
+version: 1.0.0
+date-released: 2026-03-02
+url: "https://github.com/Archit-Konde/Archit-Konde.github.io"
