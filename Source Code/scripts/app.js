@@ -514,3 +514,39 @@ document.querySelectorAll('.project-card').forEach(card => {
     }
   });
 });
+
+/* ── 10. CONTENT PROTECTION (Right-click / Selection / Inspector) ── */
+(function protectContent() {
+  // Disable right-click context menu
+  document.addEventListener('contextmenu', e => {
+    if (e.target.closest('input, textarea, code, pre')) return;
+    e.preventDefault();
+  });
+
+  // Disable common developer inspection shortcuts
+  document.addEventListener('keydown', e => {
+    // F12
+    if (e.keyCode === 123) {
+      e.preventDefault();
+    }
+    // Ctrl+Shift+I (Inspector), Ctrl+Shift+J (Console), Ctrl+Shift+C (Element selector)
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+    }
+    // Ctrl+U (View Source)
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+    }
+    // Ctrl+S (Save Page)
+    if (e.ctrlKey && e.keyCode === 83) {
+      e.preventDefault();
+    }
+  });
+
+  // Periodic check if dev tools are open (rudimentary detection)
+  let devtools = function () { };
+  devtools.toString = function () {
+    console.log("%cSecurity Violation: Unauthorized inspection detected.", "color: red; font-size: 20px; font-weight: bold;");
+    return '';
+  };
+})();
