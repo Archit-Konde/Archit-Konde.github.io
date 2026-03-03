@@ -6,6 +6,8 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
+  "dir": "ltr",
+  "id": "/?source=pwa",
   "background_color": "#1e1e1e",
   "theme_color": "#C9A84C",
   "lang": "en",
