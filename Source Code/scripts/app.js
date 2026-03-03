@@ -374,8 +374,21 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         `<span class="cmd-item-icon">${cmd.icon}</span>` +
         `<span class="cmd-item-label">${cmd.label}</span>` +
         `<span class="cmd-item-hint">${cmd.hint}</span>`;
-      li.addEventListener('click', () => { cmd.action(); close(); });
-      li.addEventListener('mouseenter', () => { activeIdx = i; render(); });
+
+      li.addEventListener('mousedown', (e) => {
+        // Use mousedown to trigger before the input loses focus if that was an issue
+        e.preventDefault();
+        cmd.action();
+        close();
+      });
+
+      li.addEventListener('mouseenter', () => {
+        activeIdx = i;
+        const items = list.querySelectorAll('.cmd-item');
+        items.forEach((item, idx) => {
+          item.classList.toggle('active', idx === i);
+        });
+      });
       list.appendChild(li);
     });
   }

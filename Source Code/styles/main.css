@@ -1381,6 +1381,11 @@ ul {
   box-shadow: none;
 }
 
+.cmd-pal-btn span {
+  pointer-events: none;
+}
+
+
 .cmd-pal-btn:hover {
   border-color: var(--accent);
   color: var(--text);
