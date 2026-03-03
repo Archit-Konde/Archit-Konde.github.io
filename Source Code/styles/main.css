@@ -20,25 +20,33 @@
    Changing one value here updates every element that uses it.
 ──────────────────────────────────────────────────────────────── */
 :root {
-  --bg:       #1e1e1e;
-  --surface:  #252526;
-  --border:   #3e3e42;
-  --text:     #d4d4d4;
-  --muted:    #858585;
-  --accent:   #C9A84C;
+  --bg: #1e1e1e;
+  --surface: #252526;
+  --border: #3e3e42;
+  --text: #d4d4d4;
+  --muted: #858585;
+  --accent: #C9A84C;
 
   --font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
 
   /* Spacing scale — multiples of 0.4rem for visual consistency */
-  --s1: 0.4rem;   /*  ~6px  */
-  --s2: 0.8rem;   /* ~12px  */
-  --s3: 1.6rem;   /* ~24px  */
-  --s4: 3.2rem;   /* ~48px  */
-  --s5: 6.4rem;   /* ~96px  */
+  --s1: 0.4rem;
+  /*  ~6px  */
+  --s2: 0.8rem;
+  /* ~12px  */
+  --s3: 1.6rem;
+  /* ~24px  */
+  --s4: 3.2rem;
+  /* ~48px  */
+  --s5: 6.4rem;
+  /* ~96px  */
 
-  --nav-h: 60px;            /* Height of the fixed navbar              */
-  --ease:  0.2s ease;       /* Default transition duration + easing    */
-  --max-w: 880px;           /* Max content width                       */
+  --nav-h: 60px;
+  /* Height of the fixed navbar              */
+  --ease: 0.2s ease;
+  /* Default transition duration + easing    */
+  --max-w: 880px;
+  /* Max content width                       */
 }
 
 
@@ -46,7 +54,9 @@
    Removes browser default margins/paddings and enforces
    border-box sizing (width includes padding, not just content).
 ──────────────────────────────────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -81,23 +91,42 @@ a {
 }
 
 /* Remove list bullet points globally (re-added where needed) */
-ul { list-style: none; }
+ul {
+  list-style: none;
+}
 
 
 /* ── 2. Scrollbar ─────────────────────────────────────────────
    Custom scrollbar so it matches the dark theme.
 ──────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar              { width: 5px; }
-::-webkit-scrollbar-track        { background: var(--bg); }
-::-webkit-scrollbar-thumb        { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover  { background: var(--accent); }
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
 
 
 /* ── 3. Utility Classes ───────────────────────────────────────
    Small reusable helpers applied directly in HTML.
 ──────────────────────────────────────────────────────────────── */
-.accent    { color: var(--accent); }
-.muted     { color: var(--muted); }
+.accent {
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+}
 
 /* Prevent accidental text selection on interactive UI elements.
    Applied to navigation, buttons, tags, and clickable rows —
@@ -133,14 +162,17 @@ ul { list-style: none; }
 ──────────────────────────────────────────────────────────────── */
 #navbar {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   height: var(--nav-h);
   display: flex;
   align-items: center;
   gap: var(--s3);
   padding: 0 var(--s4);
-  background: rgba(30, 30, 30, 0.88);   /* slightly transparent --bg */
+  background: rgba(30, 30, 30, 0.88);
+  /* slightly transparent --bg */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(62, 62, 66, 0.4);
@@ -232,15 +264,25 @@ ul { list-style: none; }
 }
 
 /* Animate hamburger into an ✕ when menu is open */
-.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
 
 /* ─ Mobile menu full-screen overlay ── */
 .mobile-menu {
-  display: none;                /* hidden by default */
+  display: none;
+  /* hidden by default */
   position: fixed;
-  inset: 0;                     /* shorthand for top/right/bottom/left: 0 */
+  inset: 0;
+  /* shorthand for top/right/bottom/left: 0 */
   z-index: 99;
   background: var(--bg);
   flex-direction: column;
@@ -284,7 +326,9 @@ ul { list-style: none; }
   transition: color var(--ease);
 }
 
-.mobile-menu-close:hover { color: var(--accent); }
+.mobile-menu-close:hover {
+  color: var(--accent);
+}
 
 
 /* ── 5. Section Layout ────────────────────────────────────────
@@ -328,7 +372,8 @@ ul { list-style: none; }
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding-top: var(--nav-h);    /* prevent overlap with fixed navbar */
+  padding-top: var(--nav-h);
+  /* prevent overlap with fixed navbar */
 }
 
 /* ─ Terminal window widget ── */
@@ -352,7 +397,10 @@ ul { list-style: none; }
 }
 
 /* macOS-style traffic light dots */
-.term-dots { display: flex; gap: 7px; }
+.term-dots {
+  display: flex;
+  gap: 7px;
+}
 
 .dot {
   width: 12px;
@@ -360,9 +408,17 @@ ul { list-style: none; }
   border-radius: 50%;
 }
 
-.dot-r { background: #ff5f57; }
-.dot-y { background: #febc2e; }
-.dot-g { background: #28c840; }
+.dot-r {
+  background: #ff5f57;
+}
+
+.dot-y {
+  background: #febc2e;
+}
+
+.dot-g {
+  background: #28c840;
+}
 
 /* The "archit@portfolio: ~" title in the topbar */
 .term-label {
@@ -370,7 +426,8 @@ ul { list-style: none; }
   color: var(--muted);
   /* Push to center: auto on both sides minus the dots width */
   margin: 0 auto;
-  padding-right: 48px;    /* optical correction to account for dots width */
+  padding-right: 48px;
+  /* optical correction to account for dots width */
 }
 
 /* Terminal body — the black part where text appears */
@@ -392,7 +449,9 @@ ul { list-style: none; }
   font-weight: 600;
 }
 
-.t-cmd { color: var(--text); }
+.t-cmd {
+  color: var(--text);
+}
 
 /* ─ The output block after "whoami" command ── */
 .hero-output {
@@ -421,12 +480,14 @@ ul { list-style: none; }
   font-size: 0.95rem;
   color: var(--accent);
   font-style: italic;
-  min-height: 1.5rem;    /* reserve space so layout doesn't jump as text types */
+  min-height: 1.5rem;
+  /* reserve space so layout doesn't jump as text types */
 }
 
 /* The blinking █ cursor after the typewriter text */
 .tw-cursor {
-  display: none;           /* hidden until typewriter finishes (script.js shows it) */
+  display: none;
+  /* hidden until typewriter finishes (script.js shows it) */
   color: var(--accent);
   font-style: normal;
   animation: blink 1s step-end infinite;
@@ -450,7 +511,9 @@ ul { list-style: none; }
 }
 
 /* Idle line at bottom of terminal */
-.idle-line { color: var(--muted); }
+.idle-line {
+  color: var(--muted);
+}
 
 /* Blinking cursor on the idle line */
 .idle-cursor {
@@ -492,7 +555,9 @@ ul { list-style: none; }
   margin-bottom: var(--s3);
 }
 
-.about-text p:last-child { margin-bottom: 0; }
+.about-text p:last-child {
+  margin-bottom: 0;
+}
 
 /* Metadata sidebar (status, focus, learning) */
 .about-meta {
@@ -520,7 +585,9 @@ ul { list-style: none; }
 }
 
 /* Green "● open to work" */
-.status-open { color: #28c840; }
+.status-open {
+  color: #28c840;
+}
 
 /* Inline links within body text */
 .inline-link {
@@ -530,7 +597,9 @@ ul { list-style: none; }
   transition: border-color var(--ease);
 }
 
-.inline-link:hover { border-color: var(--accent); }
+.inline-link:hover {
+  border-color: var(--accent);
+}
 
 
 /* ── 8. Experience Section ────────────────────────────────────
@@ -604,7 +673,9 @@ ul { list-style: none; }
 }
 
 /* Links row below bullets */
-.exp-links { margin-top: var(--s2); }
+.exp-links {
+  margin-top: var(--s2);
+}
 
 .exp-link {
   font-size: 0.75rem;
@@ -614,7 +685,9 @@ ul { list-style: none; }
   transition: border-color var(--ease);
 }
 
-.exp-link:hover { border-color: var(--accent); }
+.exp-link:hover {
+  border-color: var(--accent);
+}
 
 
 /* ── 9. Education Section ─────────────────────────────────────
@@ -666,13 +739,23 @@ ul { list-style: none; }
   gap: var(--s4);
 }
 
-.skill-group { font-size: 0.83rem; }
+.skill-group {
+  font-size: 0.83rem;
+}
 
 /* JSON key color — amber like a variable name */
-.sk-key   { color: var(--accent); }
+.sk-key {
+  color: var(--accent);
+}
+
 /* JSON syntax characters */
-.sk-colon { color: var(--muted); }
-.sk-close { color: var(--muted); }
+.sk-colon {
+  color: var(--muted);
+}
+
+.sk-close {
+  color: var(--muted);
+}
 
 /* Tag row inside each group */
 .skill-tags {
@@ -684,7 +767,8 @@ ul { list-style: none; }
 
 /* Individual skill pill */
 .tag {
-  background: rgba(37, 37, 38, 0.8);    /* --surface with transparency */
+  background: rgba(37, 37, 38, 0.8);
+  /* --surface with transparency */
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 0.72rem;
@@ -727,7 +811,8 @@ ul { list-style: none; }
   padding: var(--s3);
   transition: border-color var(--ease), transform var(--ease);
   cursor: default;
-  position: relative;   /* needed for .card-overlay-link to position inside */
+  position: relative;
+  /* needed for .card-overlay-link to position inside */
 }
 
 /* Full-card clickable overlay — invisible anchor stretched over the entire card.
@@ -810,8 +895,13 @@ ul { list-style: none; }
   padding-top: var(--s1);
 }
 
-.projects-note a { color: var(--accent); }
-.projects-note a:hover { text-decoration: underline; }
+.projects-note a {
+  color: var(--accent);
+}
+
+.projects-note a:hover {
+  text-decoration: underline;
+}
 
 
 /* ── 12. Blog Placeholder ─────────────────────────────────────
@@ -879,7 +969,9 @@ ul { list-style: none; }
   border-color: rgba(62, 62, 66, 0.6);
 }
 
-.contact-row:hover .c-val { color: var(--accent); }
+.contact-row:hover .c-val {
+  color: var(--accent);
+}
 
 .c-key {
   color: var(--muted);
@@ -888,7 +980,9 @@ ul { list-style: none; }
   letter-spacing: 0.02em;
 }
 
-.c-arrow { font-size: 0.8rem; }
+.c-arrow {
+  font-size: 0.8rem;
+}
 
 .c-val {
   color: var(--text);
@@ -910,9 +1004,18 @@ ul { list-style: none; }
   font-size: 0.75rem;
 }
 
-.f-prompt { color: var(--accent); }
-.f-cmd    { color: var(--text); }
-.f-note   { margin-left: auto; color: var(--border); }
+.f-prompt {
+  color: var(--accent);
+}
+
+.f-cmd {
+  color: var(--text);
+}
+
+.f-note {
+  margin-left: auto;
+  color: var(--border);
+}
 
 
 /* ── 15. Animations ───────────────────────────────────────────
@@ -920,26 +1023,54 @@ ul { list-style: none; }
 
 /* Blinking cursor — step-end means instant on/off, not a fade */
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 /* Pulsing glow on the green status dot */
 @keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(40, 200, 64, 0.4); }
-  50%       { box-shadow: 0 0 0 5px rgba(40, 200, 64, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 200, 64, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px rgba(40, 200, 64, 0);
+  }
 }
 
 /* Gentle floating for the scroll hint arrow */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(5px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
 }
 
 /* Fade-in used on section bodies when they scroll into view */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fade-up {
@@ -974,8 +1105,8 @@ ul { list-style: none; }
   visibility: hidden;
   transform: translateY(8px);
   transition: opacity var(--ease), visibility var(--ease),
-              border-color var(--ease), background var(--ease),
-              color var(--ease), transform var(--ease);
+    border-color var(--ease), background var(--ease),
+    color var(--ease), transform var(--ease);
 }
 
 #back-to-top.visible {
@@ -997,26 +1128,43 @@ ul { list-style: none; }
 ──────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
 
-  :root { font-size: 15px; }
+  :root {
+    font-size: 15px;
+  }
 
   /* Collapse navbar links, show hamburger */
   #navbar {
     padding: 0 var(--s3);
   }
 
-  .nav-links  { display: none; }
-  .resume-btn { display: none; }
-  .nav-kbd    { display: none; }
-  .hamburger  { display: flex; }
+  .nav-links {
+    display: none;
+  }
+
+  .resume-btn {
+    display: none;
+  }
+
+  .nav-kbd {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
 
   /* Hero adjustments */
-  .hero { padding-top: var(--nav-h); }
+  .hero {
+    padding-top: var(--nav-h);
+  }
 
   .term-body {
     padding: var(--s3);
   }
 
-  .hero-name { font-size: 2rem; }
+  .hero-name {
+    font-size: 2rem;
+  }
 
   .hero-output {
     padding-left: var(--s2);
@@ -1039,7 +1187,9 @@ ul { list-style: none; }
     grid-template-columns: 1fr;
   }
 
-  .c-key { min-width: 80px; }
+  .c-key {
+    min-width: 80px;
+  }
 
   .f-note {
     margin-left: 0;
@@ -1048,8 +1198,13 @@ ul { list-style: none; }
 }
 
 @media (max-width: 480px) {
-  .hero-name { font-size: 1.7rem; }
-  .section   { padding: var(--s4) 0; }
+  .hero-name {
+    font-size: 1.7rem;
+  }
+
+  .section {
+    padding: var(--s4) 0;
+  }
 }
 
 /* ── Command Palette ────────────────────────────────────────
@@ -1065,7 +1220,9 @@ ul { list-style: none; }
   padding-top: 20vh;
 }
 
-.cmd-palette[hidden] { display: none; }
+.cmd-palette[hidden] {
+  display: none;
+}
 
 .cmd-backdrop {
   position: absolute;
@@ -1111,7 +1268,9 @@ ul { list-style: none; }
   color: var(--text);
 }
 
-.cmd-search::placeholder { color: var(--muted); }
+.cmd-search::placeholder {
+  color: var(--muted);
+}
 
 .cmd-kbd {
   font-family: var(--font);
@@ -1153,7 +1312,9 @@ ul { list-style: none; }
   color: var(--accent);
 }
 
-.cmd-item-label { flex: 1; }
+.cmd-item-label {
+  flex: 1;
+}
 
 .cmd-item-hint {
   font-size: 0.70rem;
@@ -1194,68 +1355,60 @@ ul { list-style: none; }
   user-select: none;
 }
 
-.nav-kbd:hover { border-color: var(--accent); color: var(--accent); }
- 
+.nav-kbd:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* ── Command Palette Float Button (Bottom-Left) ── */
 .cmd-pal-btn {
   position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
+  bottom: 2rem;
+  left: 2rem;
   z-index: 995;
-  background: var(--surface);
+  background: var(--bg);
   border: 1px solid var(--border);
   color: var(--muted);
   font-family: var(--font);
-  font-size: 0.68rem;
-  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  padding: 4px 10px;
   border-radius: 4px;
   cursor: pointer;
   transition: all var(--ease);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  gap: 0;
+  box-shadow: none;
 }
 
 .cmd-pal-btn:hover {
   border-color: var(--accent);
   color: var(--text);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-}
-
-.cmd-pal-btn kbd {
-  font-family: var(--font);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  padding: 1px 4px;
-  border-radius: 2px;
-  font-size: 0.62rem;
+  background: var(--surface);
 }
 
 /* Tooltip */
 .cmd-pal-btn::after {
-  content: 'Open Command Palette';
+  content: 'Actions';
   position: absolute;
-  bottom: 100%;
-  left: 0;
-  margin-bottom: 0.5rem;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
   background: var(--surface);
   border: 1px solid var(--border);
-  color: var(--muted);
-  padding: 0.3rem 0.6rem;
-  font-size: 0.65rem;
+  color: var(--accent);
+  padding: 2px 8px;
+  font-size: 0.6rem;
   border-radius: 2px;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--ease), transform var(--ease);
-  transform: translateY(4px);
+  transition: all var(--ease);
 }
 
 .cmd-pal-btn:hover::after {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
 
@@ -1278,7 +1431,12 @@ ul { list-style: none; }
   white-space: nowrap;
   font-family: var(--font);
 }
-.cmd-toast.visible { opacity: 1; transform: translateY(0); }
+
+.cmd-toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .cmd-toast kbd {
   font-family: var(--font);
   background: var(--bg);
@@ -1292,9 +1450,15 @@ ul { list-style: none; }
 
 /* Respect user's preference for reduced motion (accessibility) */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-  html { scroll-behavior: auto; }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
