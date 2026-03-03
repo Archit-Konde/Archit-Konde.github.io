@@ -345,9 +345,9 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
   const baseCommands = [
     { icon: '~', label: 'Go to Home', hint: '[H]', action() { window.location.href = isHome ? '#' : '/index.html'; } },
-    { icon: '↗', label: 'View SupportOps Demo', hint: 'HuggingFace', action() { window.open('https://architechs-supportops-ai-monitor.hf.space', '_blank'); } },
-    { icon: './', label: 'View GitHub', hint: 'github.com', action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
-    { icon: 'in', label: 'View LinkedIn', hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
+    { icon: '↗', label: 'Go to SupportOps Demo', hint: 'HuggingFace', action() { window.open('https://architechs-supportops-ai-monitor.hf.space', '_blank'); } },
+    { icon: './', label: 'Go to GitHub', hint: 'github.com', action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
+    { icon: 'in', label: 'Go to LinkedIn', hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
   ];
 
   const homeCommands = [
