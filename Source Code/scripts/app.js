@@ -567,4 +567,19 @@ document.querySelectorAll('.project-card').forEach(card => {
       e.stopImmediatePropagation();
     }
   }, true);
+
+  // Anti-Debugging: Pauses execution if DevTools are open
+  // This is a common deterrent
+  const antiDebug = () => {
+    const start = new Date();
+    debugger;
+    const end = new Date();
+    if (end - start > 100) {
+      // If it took longer than 100ms, a debugger (DevTools) is likely active
+      window.location.reload();
+    }
+  };
+
+  // Run anti-debug periodically
+  setInterval(antiDebug, 2000);
 })();
