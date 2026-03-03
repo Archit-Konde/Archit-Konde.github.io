@@ -1,19 +1,21 @@
 # Archit Konde — Machine Learning Portfolio
 
-This repository hosts the professional portfolio and technical blog of **Archit Konde**, a Machine Learning Engineer focused on AI research, neural network architectures, and intelligent systems development.
+Professional portfolio and technical blog of Archit Konde, a Machine Learning Engineer focused on neural network architectures and AI research.
+
+**Live Website**: [archit-konde.github.io](https://archit-konde.github.io/)
 
 ## Dual-Licensing Model
 
-To balance technical transparency with the protection of original creative writing, this project utilizes a dual-licensing framework.
+This repository implements a dual-licensing framework to distinguish between technical infrastructure and intellectual narrative.
 
-### Intellectual Content & Writing
-Original blog posts, technical write-ups, and professional prose are licensed under **[Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE)**.
-- **Scope**: All narrative content and technical articles located within the `Source Code/pages/blog/` directory.
+### Content and Narrative
+Original technical articles and professional prose are licensed under **[Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE)**.
+- **Scope**: Documents within the `Source Code/pages/blog/` directory.
 
-### Source Code & Technical Logic
-The underlying web infrastructure, including styling (CSS), interactive logic (JavaScript), and structural scaffolding (HTML), is licensed under the **[MIT License](./Source%20Code/LICENSE)**.
-- **Scope**: Core logic and structural source code maintained within the **[Source Code](./Source%20Code/)** directory.
+### Infrastructure and Logic
+Structural source code and logic are licensed under the **[MIT License](./Source%20Code/LICENSE)**.
+- **Scope**: All files maintained within the **[Source Code](./Source%20Code/)** directory.
 
 ---
 
-*Authored and maintained by [Archit Konde](https://github.com/Archit-Konde)*
+*Curated by [Archit Konde](https://github.com/Archit-Konde)*
