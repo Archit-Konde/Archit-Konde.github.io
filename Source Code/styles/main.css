@@ -1663,3 +1663,138 @@ body.matrix-theme .cmd-modal {
 .clickable {
   cursor: pointer;
 }
+
+/* ═══════════════════════════════════════════════════════════
+     7. PRINT OPTIMIZATION (Ctrl+P)
+     Transforms the site into a high-quality technical report.
+   ═══════════════════════════════════════════════════════════ */
+@media print {
+  @page {
+    margin: 2cm;
+    size: A4;
+  }
+
+  /* 1. Reset Backgrounds for Ink */
+  :root {
+    --bg: #ffffff;
+    --surface: #f8f8f8;
+    --border: #e0e0e0;
+    --text: #1a1a1a;
+    --muted: #666666;
+    --accent: #95782a;
+    /* Darker amber for better legibility on white */
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    user-select: text !important;
+  }
+
+  /* 2. Hide Interactive Bloat */
+  #navbar,
+  #footer,
+  #cmd-palette,
+  #cmd-pal-btn,
+  #back-to-top,
+  .hero-footer,
+  .term-dots,
+  .status-dot,
+  .mobile-menu,
+  .shutdown-overlay {
+    display: none !important;
+  }
+
+  /* 3. Layout Adjustments */
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  section {
+    padding: 1.5rem 0 !important;
+    page-break-inside: avoid;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .hero {
+    min-height: auto !important;
+    padding-top: 0 !important;
+  }
+
+  /* 4. Terminal Styling for Print */
+  .term-window {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+    background: #fff !important;
+    margin-bottom: 2rem;
+  }
+
+  .term-topbar {
+    background: #f0f0f0 !important;
+    border-bottom: 1px solid #000 !important;
+    color: #000 !important;
+  }
+
+  .term-body {
+    padding: 1rem !important;
+  }
+
+  .hero-name {
+    font-size: 24pt !important;
+    color: #000 !important;
+    margin-bottom: 0.5rem;
+  }
+
+  /* 5. Typography */
+  .accent {
+    font-weight: 700 !important;
+    color: var(--accent) !important;
+  }
+
+  .s-cmd,
+  .t-cmd {
+    font-weight: 600;
+  }
+
+  .tag {
+    border: 1px solid #000 !important;
+    background: none !important;
+    color: #000 !important;
+    padding: 2pt 6pt !important;
+  }
+
+  /* 6. Remove Animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  #tw-cursor,
+  .idle-cursor {
+    display: none !important;
+  }
+
+  /* 7. Links */
+  a {
+    text-decoration: none !important;
+    color: #000 !important;
+  }
+
+  a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .inline-link::after,
+  .card-overlay-link::after {
+    content: "" !important;
+  }
+}
