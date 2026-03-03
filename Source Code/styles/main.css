@@ -402,7 +402,74 @@ ul {
   background: var(--surface);
   max-width: 640px;
   width: 100%;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s ease,
+    width 0.4s ease,
+    height 0.4s ease,
+    border-radius 0.4s ease;
+  transform-origin: center center;
+  position: relative;
+  z-index: 10;
 }
+
+/* ── Signal Button States ── */
+
+/* Red: Close -> Fade out and scale down */
+.term-window.is-closed {
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  pointer-events: none;
+}
+
+/* Yellow: Minimize -> Shrink to topbar only or "dock" */
+.term-window.is-minimized {
+  transform: translateY(100px) scale(0.8);
+  opacity: 0.5;
+  height: 40px;
+  /* Only show topbar */
+}
+
+.term-window.is-minimized .term-body {
+  display: none;
+}
+
+/* Green: Maximize -> Full width/height of container or viewport */
+.term-window.is-maximized {
+  max-width: 100% !important;
+  width: 95vw;
+  height: 80vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  border-radius: 12px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* "System Alert" when window is closed/minimized */
+.hero-restore-btn {
+  display: none;
+  background: transparent;
+  border: 1px dashed var(--muted);
+  color: var(--muted);
+  padding: var(--s2) var(--s3);
+  font-family: var(--font);
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: all 0.2s ease;
+}
+
+.hero-restore-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.hero.window-gone .hero-restore-btn {
+  display: inline-block;
+}
+
 
 /* The top bar with colored dots */
 .term-topbar {
@@ -424,6 +491,42 @@ ul {
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Show icons on dot hover like real macOS */
+.dot::after {
+  font-size: 8px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.term-dots:hover .dot::after {
+  opacity: 1;
+}
+
+.dot-r::after {
+  content: '✕';
+}
+
+.dot-y::after {
+  content: '—';
+}
+
+.dot-g::after {
+  content: '↕';
+}
+
+.dot:hover {
+  transform: scale(1.1);
+  filter: brightness(1.1);
 }
 
 .dot-r {
@@ -437,6 +540,7 @@ ul {
 .dot-g {
   background: #28c840;
 }
+
 
 /* The "archit@portfolio: ~" title in the topbar */
 .term-label {

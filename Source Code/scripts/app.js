@@ -694,3 +694,61 @@ document.querySelectorAll('.project-card').forEach(card => {
   // Run anti-debug periodically
   setInterval(antiDebug, 2000);
 })();
+
+/* ── 11. TERMINAL WINDOW CONTROLLER (Traffic Light Buttons) ───── */
+(function terminalController() {
+  const windowEl = document.querySelector('.term-window');
+  const heroEl = document.getElementById('home');
+  const restoreBtn = document.getElementById('restore-term');
+  const dots = {
+    red: document.querySelector('.dot-r'),
+    yellow: document.querySelector('.dot-y'),
+    green: document.querySelector('.dot-g')
+  };
+
+  if (!windowEl) return;
+
+  // 1. Red Dot (Close)
+  dots.red?.addEventListener('click', () => {
+    windowEl.classList.add('is-closed');
+    heroEl?.classList.add('window-gone');
+
+    // Log system event
+    console.log('%c[system] process terminated: terminal.exe exited with code 0', 'color:#858585; font-style:italic;');
+  });
+
+  // 2. Yellow Dot (Minimize)
+  dots.yellow?.addEventListener('click', () => {
+    windowEl.classList.toggle('is-minimized');
+  });
+
+  // 3. Green Dot (Maximize/Fullscreen)
+  dots.green?.addEventListener('click', () => {
+    windowEl.classList.toggle('is-maximized');
+
+    // If maximizing, ensure it's not minimized
+    if (windowEl.classList.contains('is-maximized')) {
+      windowEl.classList.remove('is-minimized');
+    }
+  });
+
+  // 4. Restore Logic
+  restoreBtn?.addEventListener('click', () => {
+    windowEl.classList.remove('is-closed', 'is-minimized', 'is-maximized');
+    heroEl?.classList.remove('window-gone');
+
+    // Visual "re-boot" effect
+    windowEl.style.opacity = '0';
+    setTimeout(() => {
+      windowEl.style.opacity = '1';
+      console.log('%c[system] process initiated: terminal.exe', 'color:#28c840; font-weight:bold;');
+    }, 50);
+  });
+
+  // Close with Esc if maximized
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && windowEl.classList.contains('is-maximized')) {
+      windowEl.classList.remove('is-maximized');
+    }
+  });
+})();
