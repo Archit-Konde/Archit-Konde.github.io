@@ -451,9 +451,23 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   /* Backdrop click to close */
   palette.querySelector('.cmd-backdrop').addEventListener('click', close);
 
-  /* Nav bar kbd trigger */
-  const kbdBtn = document.getElementById('nav-kbd-trigger');
-  if (kbdBtn) kbdBtn.addEventListener('click', open);
+  /* Ctrl+K hint toast — show briefly on first visit, hide on palette open */
+  const toast = document.getElementById('cmd-toast');
+  if (toast) {
+    if (!sessionStorage.getItem('cmd-hint-shown')) {
+      setTimeout(() => toast.classList.add('visible'), 1500);
+      setTimeout(() => toast.classList.remove('visible'), 5500);
+      sessionStorage.setItem('cmd-hint-shown', '1');
+    }
+    /* Hide toast when palette is opened */
+    const origOpen = open;
+    // patch: hide toast whenever palette opens
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        toast.classList.remove('visible');
+      }
+    });
+  }
 })();
 
 

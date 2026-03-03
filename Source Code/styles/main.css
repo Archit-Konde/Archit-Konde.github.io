@@ -1196,6 +1196,36 @@ ul { list-style: none; }
 
 .nav-kbd:hover { border-color: var(--accent); color: var(--accent); }
 
+/* ── Ctrl+K hint toast ── */
+.cmd-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 990;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.68rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: var(--font);
+}
+.cmd-toast.visible { opacity: 1; transform: translateY(0); }
+.cmd-toast kbd {
+  font-family: var(--font);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-size: 0.62rem;
+  margin: 0 2px;
+}
+
 
 /* Respect user's preference for reduced motion (accessibility) */
 @media (prefers-reduced-motion: reduce) {
