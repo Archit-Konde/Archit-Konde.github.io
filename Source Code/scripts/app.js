@@ -339,17 +339,35 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 ──────────────────────────────────────────────────────────────── */
 
 (function commandPalette() {
-  const COMMANDS = [
-    { icon: '→', label: 'Go to About', hint: '#about', action() { scrollTo('#about'); } },
-    { icon: '→', label: 'Go to Experience', hint: '#experience', action() { scrollTo('#experience'); } },
-    { icon: '→', label: 'Go to Skills', hint: '#skills', action() { scrollTo('#skills'); } },
-    { icon: '→', label: 'Go to Projects', hint: '#projects', action() { scrollTo('#projects'); } },
-    { icon: '→', label: 'Go to Blog', hint: '#blog', action() { scrollTo('#blog'); } },
-    { icon: '→', label: 'Go to Contact', hint: '#contact', action() { scrollTo('#contact'); } },
+  const isBlog = window.location.pathname.includes('/blog/');
+  const is404 = window.location.pathname.includes('404.html');
+  const isHome = !isBlog && !is404;
+
+  const baseCommands = [
+    { icon: '🏠', label: 'Go to Home', hint: '/', action() { window.location.href = isHome ? '#' : '/index.html'; } },
     { icon: '↗', label: 'View SupportOps Demo', hint: 'HuggingFace', action() { window.open('https://architechs-supportops-ai-monitor.hf.space', '_blank'); } },
     { icon: './', label: 'View GitHub', hint: 'github.com', action() { window.open('https://github.com/Archit-Konde', '_blank'); } },
     { icon: 'in', label: 'View LinkedIn', hint: 'linkedin.com', action() { window.open('https://www.linkedin.com/in/architkonde/', '_blank'); } },
   ];
+
+  const homeCommands = [
+    { icon: '→', label: 'Jump to About', hint: '#about', action() { scrollTo('#about'); } },
+    { icon: '→', label: 'Jump to Experience', hint: '#experience', action() { scrollTo('#experience'); } },
+    { icon: '→', label: 'Jump to Skills', hint: '#skills', action() { scrollTo('#skills'); } },
+    { icon: '→', label: 'Jump to Projects', hint: '#projects', action() { scrollTo('#projects'); } },
+    { icon: '→', label: 'Jump to Blog', hint: '#blog', action() { scrollTo('#blog'); } },
+    { icon: '→', label: 'Jump to Contact', hint: '#contact', action() { scrollTo('#contact'); } },
+  ];
+
+  const blogCommands = [
+    { icon: '📝', label: 'Read: SupportOps AI Monitor', hint: 'Blog Post', action() { window.location.href = isBlog ? 'supportops-ai-monitor.html' : '/pages/blog/supportops-ai-monitor.html'; } },
+    { icon: '←', label: 'Back to Blog List', hint: 'Home #blog', action() { window.location.href = '/index.html#blog'; } },
+  ];
+
+  let currentCommands = [...baseCommands];
+  if (isHome) currentCommands = [...homeCommands, ...blogCommands, ...baseCommands];
+  else if (isBlog) currentCommands = [...blogCommands, ...baseCommands];
+  else currentCommands = [...baseCommands];
 
   function scrollTo(sel) {
     const el = document.querySelector(sel);
@@ -362,7 +380,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   if (!palette || !input || !list) return;
 
   let activeIdx = 0;
-  let filtered = COMMANDS.slice();
+  let filtered = currentCommands.slice();
 
   function render() {
     list.innerHTML = '';
@@ -376,7 +394,6 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         `<span class="cmd-item-hint">${cmd.hint}</span>`;
 
       li.addEventListener('mousedown', (e) => {
-        // Use mousedown to trigger before the input loses focus if that was an issue
         e.preventDefault();
         cmd.action();
         close();
@@ -396,7 +413,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   function open() {
     palette.hidden = false;
     input.value = '';
-    filtered = COMMANDS.slice();
+    filtered = currentCommands.slice();
     activeIdx = 0;
     render();
     requestAnimationFrame(() => input.focus());
@@ -420,7 +437,6 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   input.addEventListener('input', () => {
     const q = input.value.trim();
 
-    /* Easter egg: sudo */
     if (q.toLowerCase() === 'sudo') {
       filtered = [{ icon: '🔒', label: 'Nice try. Permission denied.', hint: 'you are not root', action() { } }];
       activeIdx = 0;
@@ -429,20 +445,21 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }
 
     filtered = q
-      ? COMMANDS.filter(c => fuzzyMatch(q, c.label) || fuzzyMatch(q, c.hint))
-      : COMMANDS.slice();
+      ? currentCommands.filter(c => fuzzyMatch(q, c.label) || fuzzyMatch(q, c.hint))
+      : currentCommands.slice();
     activeIdx = 0;
     render();
   });
 
   input.addEventListener('keydown', (e) => {
+    const len = filtered.length;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      activeIdx = (activeIdx + 1) % Math.max(filtered.length, 1);
+      activeIdx = (activeIdx + 1) % Math.max(len, 1);
       render();
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      activeIdx = (activeIdx - 1 + filtered.length) % Math.max(filtered.length, 1);
+      activeIdx = (activeIdx - 1 + len) % Math.max(len, 1);
       render();
     } else if (e.key === 'Enter') {
       e.preventDefault();
@@ -452,7 +469,6 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }
   });
 
-  /* Ctrl+K / Cmd+K toggle — capture phase to intercept before Chrome */
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
       e.preventDefault();
@@ -461,10 +477,9 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }
   }, { capture: true });
 
-  /* Backdrop click to close */
-  palette.querySelector('.cmd-backdrop').addEventListener('click', close);
+  const backdrop = palette.querySelector('.cmd-backdrop');
+  if (backdrop) backdrop.addEventListener('click', close);
 
-  /* Floating button trigger */
   const floatBtn = document.getElementById('cmd-pal-btn');
   if (floatBtn) {
     floatBtn.addEventListener('click', () => {

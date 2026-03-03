@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>404 — page not found | Archit Konde</title>
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
 
   <style>
     /* ── Same palette as the main site ── */
     :root {
-      --bg:      #1e1e1e;
+      --bg: #1e1e1e;
       --surface: #252526;
-      --border:  #3e3e42;
-      --text:    #d4d4d4;
-      --muted:   #858585;
-      --accent:  #C9A84C;
-      --font:    'JetBrains Mono', 'Fira Code', monospace;
+      --border: #3e3e42;
+      --text: #d4d4d4;
+      --muted: #858585;
+      --accent: #C9A84C;
+      --font: 'JetBrains Mono', 'Fira Code', monospace;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       font-family: var(--font);
       background: var(--bg);
@@ -33,7 +43,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    ::selection { background: var(--accent); color: var(--bg); }
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
 
     /* Center the terminal window on the page */
     .page {
@@ -64,17 +77,35 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .dots { display: flex; gap: 6px; }
-    .dot  { width: 12px; height: 12px; border-radius: 50%; }
-    .d-r  { background: #ff5f57; }
-    .d-y  { background: #febc2e; }
-    .d-g  { background: #28c840; }
+    .dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .d-r {
+      background: #ff5f57;
+    }
+
+    .d-y {
+      background: #febc2e;
+    }
+
+    .d-g {
+      background: #28c840;
+    }
 
     .bar-label {
       font-size: 0.72rem;
       color: var(--muted);
       margin: 0 auto;
-      padding-right: 46px;  /* optical center */
+      padding-right: 46px;
+      /* optical center */
     }
 
     /* Terminal body */
@@ -86,11 +117,28 @@
       line-height: 1.6;
     }
 
-    .line       { font-size: 0.82rem; }
-    .prompt     { color: var(--accent); font-weight: 600; }
-    .cmd        { color: var(--text); }
-    .error-line { color: #f14c4c; font-size: 0.82rem; }
-    .dim        { color: var(--muted); font-size: 0.78rem; }
+    .line {
+      font-size: 0.82rem;
+    }
+
+    .prompt {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .cmd {
+      color: var(--text);
+    }
+
+    .error-line {
+      color: #f14c4c;
+      font-size: 0.82rem;
+    }
+
+    .dim {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
 
     /* The big 404 */
     .code-block {
@@ -155,17 +203,30 @@
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
     }
 
     /* Responsive */
     @media (max-width: 480px) {
-      .err-code { font-size: 3rem; }
-      .term-body { padding: 1.2rem; }
+      .err-code {
+        font-size: 3rem;
+      }
+
+      .term-body {
+        padding: 1.2rem;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="page">
     <div class="term">
@@ -216,5 +277,36 @@
       </div>
     </div>
   </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       COMMAND PALETTE  (Ctrl+K / Cmd+K)
+       VS Code-style quick action overlay.
+  ═══════════════════════════════════════════════════════════════ -->
+  <div id="cmd-palette" class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="cmd-backdrop"></div>
+    <div class="cmd-modal">
+      <div class="cmd-input-row">
+        <span class="cmd-icon">&gt;</span>
+        <input id="cmd-input" class="cmd-search" type="text" placeholder="Type a command..." autocomplete="off"
+          spellcheck="false" />
+        <kbd class="cmd-kbd">ESC</kbd>
+      </div>
+      <ul id="cmd-list" class="cmd-list" role="listbox"></ul>
+      <div class="cmd-footer">
+        <span><kbd>&#8593;&#8595;</kbd> navigate</span>
+        <span><kbd>&#8629;</kbd> select</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Command Palette floating toggle (bottom-left) -->
+  <button id="cmd-pal-btn" class="cmd-pal-btn" aria-label="Open command palette">
+    <span class="accent">></span>&nbsp;⌘K
+  </button>
+
+  <script src="scripts/app.js"></script>
 </body>
+
 </html>

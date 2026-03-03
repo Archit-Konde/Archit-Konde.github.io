@@ -395,7 +395,8 @@
         (<code>pandas==2.2.1</code>) felt safe. On Python 3.14, no pre-built wheels existed and pip tried to compile
         pandas from source. Switching to minimum-version pins (<code>>=</code>) let pip pull the latest compatible
         wheels. The real lesson: exact pins ≠ reproducible builds. For reproducibility you need a lockfile (Poetry,
-        pip-compile, uv).</p>
+        pip-compile, uv).
+      </p>
 
       <h3>Connection lifecycle and try/finally</h3>
 
@@ -440,7 +441,8 @@ tickets = load_all_tickets(st.session_state.data_version)</code></pre>
       <p><strong>Service layer abstraction.</strong> Right now <code>app.py</code> calls <code>database.py</code> and
         <code>ai_triage.py</code> directly. A thin service layer — <code>TicketService.generate_and_triage(n)</code> —
         would make the business logic testable without Streamlit. There are no unit tests because everything is tangled
-        with the UI.</p>
+        with the UI.
+      </p>
 
       <p><strong>PostgreSQL from the start.</strong> Every cloud deployment path hits the ephemeral filesystem problem.
         Starting with Supabase and <code>psycopg2</code> would have made deployment a non-issue.</p>
@@ -454,7 +456,8 @@ tickets = load_all_tickets(st.session_state.data_version)</code></pre>
       <h3>SQLite + ephemeral containers</h3>
 
       <p>Streamlit Community Cloud, Heroku, and Render all run containers where the filesystem resets on restart. The
-        <code>db/supportops.db</code> file disappears. Every demo starts empty.</p>
+        <code>db/supportops.db</code> file disappears. Every demo starts empty.
+      </p>
 
       <table>
         <thead>
@@ -506,6 +509,30 @@ tickets = load_all_tickets(st.session_state.data_version)</code></pre>
 
   </main>
 
+  <!-- Command Palette -->
+  <div id="cmd-palette" class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="cmd-backdrop"></div>
+    <div class="cmd-modal">
+      <div class="cmd-input-row">
+        <span class="cmd-icon">&gt;</span>
+        <input id="cmd-input" class="cmd-search" type="text" placeholder="Type a command..." autocomplete="off"
+          spellcheck="false" />
+        <kbd class="cmd-kbd">ESC</kbd>
+      </div>
+      <ul id="cmd-list" class="cmd-list" role="listbox"></ul>
+      <div class="cmd-footer">
+        <span><kbd>&#8593;&#8595;</kbd> navigate</span>
+        <span><kbd>&#8629;</kbd> select</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <button id="cmd-pal-btn" class="cmd-pal-btn" aria-label="Open command palette">
+    <span class="accent">></span>&nbsp;⌘K
+  </button>
+
+  <script src="../../scripts/app.js"></script>
 </body>
 
 </html>
