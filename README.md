@@ -10,11 +10,11 @@ This repository implements a dual-licensing framework to distinguish between tec
 
 ### Content and Narrative
 Original technical articles and professional prose are licensed under **[Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE)**.
-- **Scope**: Documents within the `Source Code/pages/blog/` directory.
+- **Scope**: Documents within the `pages/blog/` directory.
 
 ### Infrastructure and Logic
-Structural source code and logic are licensed under the **[MIT License](./Source%20Code/LICENSE)**.
-- **Scope**: All files maintained within the **[Source Code](./Source%20Code/)** directory.
+Structural source code and logic are licensed under the **[MIT License](./LICENSE-CODE)**.
+- **Scope**: All files maintained within the repository root.
 
 ---
 

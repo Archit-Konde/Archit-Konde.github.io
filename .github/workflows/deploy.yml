@@ -51,7 +51,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './Source Code'
+          path: '.'
 
       # Step 4: Execute deployment to the live environment
       - name: Deploy to GitHub Pages
