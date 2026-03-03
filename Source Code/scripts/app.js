@@ -157,9 +157,18 @@ const sectionObserver = new IntersectionObserver((entries) => {
     if (entry.isIntersecting) {
       const id = entry.target.id;
       const matchingLink = document.querySelector(`.nav-links a[href="#${id}"]`);
-      // Only update active state when the section has a nav link.
-      // Sections like #education have no nav entry — skip them
-      // so the previously-active link stays highlighted.
+
+      // Update Navigation Sync HUD
+      const activeDirEl = document.getElementById('active-dir');
+      const floatingPrompt = document.getElementById('floating-prompt');
+      if (activeDirEl && id) {
+        activeDirEl.innerHTML = `&nbsp;cd ./${id}`;
+        // Show prompt only if we are not in the 'home' section
+        if (floatingPrompt) {
+          floatingPrompt.classList.toggle('visible', id !== 'home');
+        }
+      }
+
       if (matchingLink) {
         navLinks.forEach(link => link.classList.remove('nav-active'));
         matchingLink.classList.add('nav-active');
@@ -167,8 +176,8 @@ const sectionObserver = new IntersectionObserver((entries) => {
     }
   });
 }, {
-  threshold: 0.35,              // section must be 35% visible to trigger
-  rootMargin: '-60px 0px 0px 0px'  // offset for the fixed navbar height
+  threshold: 0.35,
+  rootMargin: '-60px 0px 0px 0px'
 });
 
 allSections.forEach(section => sectionObserver.observe(section));

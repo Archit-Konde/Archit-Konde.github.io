@@ -691,10 +691,11 @@
     </div>
   </div>
 
-  <!-- Command Palette floating toggle (bottom-left) -->
-  <button id="cmd-pal-btn" class="cmd-pal-btn" aria-label="Open command palette">
-    <span class="accent">></span>&nbsp;⌘K
-  </button>
+  <!-- Floating Prompt / CD Tracker (bottom-right) -->
+  <div id="floating-prompt" class="floating-prompt" aria-hidden="true">
+    <span class="f-prompt">archit<span class="accent">@</span>portfolio<span class="accent">:~$</span></span>
+    <span id="active-dir" class="f-cmd">&nbsp;cd ./home</span>
+  </div>
 
   <script src="scripts/app.min.js"></script>
 </body>

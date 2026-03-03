@@ -1664,6 +1664,30 @@ body.matrix-theme .cmd-modal {
   cursor: pointer;
 }
 
+/* ── Floating Prompt ── */
+.floating-prompt {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  z-index: 1000;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.floating-prompt.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
 /* ═══════════════════════════════════════════════════════════
      7. PRINT OPTIMIZATION (Ctrl+P)
      Transforms the site into a high-quality technical report.
@@ -1704,7 +1728,8 @@ body.matrix-theme .cmd-modal {
   .term-dots,
   .status-dot,
   .mobile-menu,
-  .shutdown-overlay {
+  .shutdown-overlay,
+  .floating-prompt {
     display: none !important;
   }
 
