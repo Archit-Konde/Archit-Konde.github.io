@@ -39,8 +39,12 @@ node_modules/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+npm-debug.log*
 
 # Data and Temporary Artifacts
 *.tmp
 *.temp
 .cache/
+
+# Theory doc — local only
+THEORY.MD
