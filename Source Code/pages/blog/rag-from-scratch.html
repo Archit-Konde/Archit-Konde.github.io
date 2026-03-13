@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description"
+    content="Building a complete RAG pipeline from scratch — BM25, cosine similarity, mean pooling, RRF, cross-encoder reranking. Full math derivations and implementation decisions. A learning writeup by Archit Konde." />
+  <meta name="author" content="Archit Konde" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#1e1e1e" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://archit-konde.github.io/pages/blog/rag-from-scratch.html" />
+  <meta property="og:title" content="Building RAG From Scratch — A Complete Technical Deep-Dive" />
+  <meta property="og:description"
+    content="Every algorithm in a RAG pipeline derived from first principles. BM25, cosine similarity, mean pooling, RRF, cross-encoder reranking, and evaluation metrics." />
+  <meta property="og:locale" content="en_CA" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:creator" content="@architkonde" />
+  <meta name="twitter:title" content="Building RAG From Scratch — A Complete Technical Deep-Dive" />
+  <meta name="twitter:description"
+    content="Every algorithm in a RAG pipeline derived from first principles. No LangChain, no LlamaIndex." />
+
+  <link rel="canonical" href="https://archit-konde.github.io/pages/blog/rag-from-scratch.html" />
+
+  <title>Building RAG From Scratch — Archit Konde</title>
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../styles/main.min.css" />
+
+  <style>
+    /* ── Blog post layout ──────────────────────────────────────── */
+    .blog-post {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + var(--s3)) var(--s4) var(--s5);
+    }
+
+    @media (max-width: 600px) {
+      .blog-post {
+        padding: calc(var(--nav-h) + var(--s3)) var(--s3) var(--s4);
+      }
+    }
+
+    .post-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: var(--s4);
+      letter-spacing: 0.04em;
+    }
+
+    .post-meta .accent {
+      margin-right: 0.4rem;
+    }
+
+    .post-title {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: var(--s3);
+    }
+
+    .post-body h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: var(--s4) 0 var(--s2);
+      letter-spacing: -0.01em;
+      scroll-margin-top: calc(var(--nav-h) + 1.6rem);
+    }
+
+    .post-body h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: var(--s4) 0 var(--s1);
+    }
+
+    .post-body p {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: var(--s3);
+    }
+
+    .post-body a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+      transition: border-color 0.2s;
+    }
+
+    .post-body a:hover {
+      border-color: var(--accent);
+    }
+
+    .post-body code {
+      font-family: var(--font);
+      font-size: 0.80rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1em 0.35em;
+      color: var(--text);
+    }
+
+    .post-body pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .post-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .arch-diagram {
+      font-family: var(--font);
+      font-size: 0.72rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      color: var(--muted);
+      white-space: pre;
+      margin: var(--s3) 0 var(--s4);
+      line-height: 1.5;
+    }
+
+    .arch-diagram .hl {
+      color: var(--accent);
+    }
+
+    .arch-diagram .dim {
+      color: var(--border);
+    }
+
+    .post-body table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .post-body th {
+      text-align: left;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 0.6rem;
+      font-weight: 600;
+    }
+
+    .post-body td {
+      color: var(--muted);
+      border-bottom: 1px solid rgba(62, 62, 66, 0.5);
+      padding: 0.4rem 0.6rem;
+      vertical-align: top;
+    }
+
+    .post-body tr:last-child td {
+      border-bottom: none;
+    }
+
+    .post-body td code {
+      font-size: 0.75rem;
+    }
+
+    .callout {
+      background: var(--surface);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .post-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: var(--s3) 0;
+    }
+
+    .post-toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .toc-label {
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: var(--s1);
+    }
+
+    .post-toc ul {
+      padding-left: var(--s3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s1);
+    }
+
+    .post-toc a {
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-bottom: none;
+      transition: color 0.2s;
+    }
+
+    .post-toc a:hover {
+      color: var(--accent);
+    }
+
+    .post-toc .accent {
+      margin-right: 0.3rem;
+    }
+
+    .post-back {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      margin-bottom: var(--s4);
+      transition: border-color 0.2s;
+    }
+
+    .post-back:hover {
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+
+<body oncontextmenu="return false;">
+
+  <!-- Navigation (mirrors main site) -->
+  <nav id="navbar">
+    <a href="../../index.html" class="nav-brand">
+      archit<span class="accent">@</span>portfolio<span class="accent">:~$</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#about"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="../../index.html#experience"><span class="nav-slash">./</span>experience</a></li>
+      <li><a href="../../index.html#skills"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="../../index.html#projects"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="../../index.html#blog"><span class="nav-slash">./</span>blog</a></li>
+      <li><a href="../../index.html#contact"><span class="nav-slash">./</span>contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="blog-post">
+
+    <a href="../../index.html#blog" class="post-back">&larr; back to blog</a>
+
+    <div class="post-meta">
+      <span class="accent">$</span> cat ./blog/rag-from-scratch.md
+      &nbsp;&middot;&nbsp; March 2026 &nbsp;&middot;&nbsp; ~15 min read
+    </div>
+
+    <h1 class="post-title">Building RAG From Scratch<br>&mdash; A Complete Technical Deep-Dive</h1>
+
+    <hr class="post-divider" />
+
+    <div class="post-body">
+
+      <nav class="post-toc" aria-label="Table of contents">
+        <p class="toc-label">$ jump to:</p>
+        <ul>
+          <li><a href="#what-is-rag"><span class="accent">&rarr;</span> what is RAG and why?</a></li>
+          <li><a href="#chunking"><span class="accent">&rarr;</span> recursive text chunking</a></li>
+          <li><a href="#embeddings"><span class="accent">&rarr;</span> sentence embeddings &mdash; mean pooling</a></li>
+          <li><a href="#vectorstore"><span class="accent">&rarr;</span> vector store &mdash; cosine sim as dot product</a></li>
+          <li><a href="#bm25"><span class="accent">&rarr;</span> BM25 &mdash; sparse retrieval from first principles</a></li>
+          <li><a href="#hybrid"><span class="accent">&rarr;</span> hybrid retrieval &mdash; reciprocal rank fusion</a></li>
+          <li><a href="#reranking"><span class="accent">&rarr;</span> cross-encoder reranking</a></li>
+          <li><a href="#generation"><span class="accent">&rarr;</span> generation &mdash; prompt engineering &amp; attribution</a></li>
+          <li><a href="#evaluation"><span class="accent">&rarr;</span> evaluation &mdash; measuring what matters</a></li>
+          <li><a href="#decisions"><span class="accent">&rarr;</span> implementation decisions</a></li>
+        </ul>
+      </nav>
+
+      <p>Large language models are trained on static snapshots of the internet. They cannot know about documents you
+        wrote last week, the internal policy PDF sitting on your server, or a research paper published after their
+        training cutoff. They also hallucinate &mdash; they fill knowledge gaps with plausible-sounding but fabricated text.</p>
+
+      <p><strong>Retrieval-Augmented Generation</strong> (RAG) solves both problems. Instead of asking the model to recall
+        facts from its weights, you store your documents in a searchable index, retrieve the most relevant passages when a
+        question arrives, stuff those passages into the prompt as context, and ask the model to answer <em>only from that
+        context</em>. The model becomes a reading comprehension engine over a knowledge base you control.</p>
+
+      <p>I wanted to understand every layer of this &mdash; not by calling <code>langchain.RetrievalQA()</code>, but by
+        deriving each algorithm from scratch and implementing it by hand. No frameworks, no abstractions. Nine components,
+        each in its own file, each with its own math.</p>
+
+      <div class="arch-diagram"><span class="hl">ingestion</span> <span class="dim">&rarr;</span> <span class="hl">chunker</span> <span class="dim">&rarr;</span> <span class="hl">embeddings</span> <span class="dim">&rarr;</span> <span class="hl">vectorstore</span>
+                                                 <span class="dim">&darr;</span>
+<span class="hl">query</span> <span class="dim">&rarr;</span> <span class="hl">embeddings</span> <span class="dim">&rarr;</span> <span class="hl">retriever</span> <span class="dim">(hybrid)</span> <span class="dim">&rarr;</span> <span class="hl">reranker</span> <span class="dim">&rarr;</span> <span class="hl">generator</span>
+                     <span class="dim">&uarr;</span>
+                  <span class="hl">bm25</span></div>
+
+      <!-- ── Section 1: What is RAG ──────────────────────────────── -->
+      <h2 id="what-is-rag">// what is RAG and why?</h2>
+
+      <p>The pipeline has two phases. <strong>Indexing</strong> happens once: load documents, split into chunks, embed
+        into vectors, store in the vector database. <strong>Querying</strong> happens on every user request: embed the
+        query, retrieve candidates from both dense (vector) and sparse (BM25) indexes, fuse rankings, rerank with a
+        cross-encoder, and generate an answer grounded in the retrieved context.</p>
+
+      <p>Every component is a separate Python file. Every file maps to one section in this writeup.</p>
+
+      <!-- ── Section 2: Chunking ─────────────────────────────────── -->
+      <h2 id="chunking">// recursive text chunking</h2>
+
+      <p>Embedding models have a fixed maximum input length. <code>all-MiniLM-L6-v2</code> handles at most 256 tokens.
+        You cannot embed a 50-page PDF as a single vector &mdash; even if it fit, the resulting vector would be a diffuse
+        average of everything, matching nothing well.</p>
+
+      <p>Chunking splits documents into passages that fit within the model's window, are semantically coherent, and
+        overlap slightly so information at boundaries isn't lost.</p>
+
+      <h3>Why "recursive"?</h3>
+
+      <p>A naive approach splits on <code>\n\n</code>. But what if a paragraph is still 2,000 characters? You split on
+        <code>\n</code>. Still too long? Split on <code>". "</code>. Still? On <code>" "</code>. Still? Hard-slice by
+        character. This hierarchy of separators is the "recursive" part &mdash; try the most semantically meaningful
+        separator first, then fall back progressively.</p>
+
+      <h3>The overlap window</h3>
+
+      <p>After splitting, short pieces are merged back into full-sized chunks using a sliding deque. When the window fills,
+        emit the current chunk, then pop from the left until only <code>chunk_overlap</code> characters remain. That
+        retained tail becomes the start of the next chunk, preventing a question about a concept that straddles two
+        chunks from missing context entirely.</p>
+
+      <h3>Position reconstruction</h3>
+
+      <p>Each chunk needs <code>start_char</code> and <code>end_char</code> positions in the original text for source
+        attribution. A forward cursor tracks position: <code>text.find(chunk, cursor)</code> always starts from roughly
+        the right place, avoiding backtracking.</p>
+
+      <!-- ── Section 3: Embeddings ───────────────────────────────── -->
+      <h2 id="embeddings">// sentence embeddings &mdash; mean pooling</h2>
+
+      <p>A sentence embedding maps a variable-length string to a fixed-length vector in &Ropf;<sup>d</sup> such that
+        semantically similar sentences are geometrically close. <code>all-MiniLM-L6-v2</code> outputs 384-dimensional
+        vectors.</p>
+
+      <h3>Why not the [CLS] token?</h3>
+
+      <p>BERT-family models prepend a <code>[CLS]</code> token whose final hidden state is used for classification.
+        For sentence similarity, <strong>mean pooling</strong> &mdash; averaging all token embeddings weighted by the
+        attention mask &mdash; produces significantly better representations. This is what sentence-transformers were
+        fine-tuned to use.</p>
+
+      <h3>The math</h3>
+
+      <p>The model outputs <code>last_hidden_state</code> of shape <code>(B, T, D)</code>. Not all T tokens are real &mdash;
+        padding fills shorter sequences. The attention mask is a <code>(B, T)</code> binary tensor.</p>
+
+      <pre><code>mask_expanded = attention_mask.unsqueeze(-1).expand_as(token_embeddings)
+# shape: (B, T, D)
+
+sum_embeddings = torch.sum(token_embeddings * mask_expanded, dim=1)
+# shape: (B, D) — sum of real token embeddings only
+
+sum_mask = torch.clamp(mask_expanded.sum(dim=1), min=1e-9)
+# shape: (B, D) — count of real tokens
+
+pooled = sum_embeddings / sum_mask
+# shape: (B, D) — mean of real token embeddings</code></pre>
+
+      <div class="callout">
+        The <code>.unsqueeze(-1)</code> adds a trailing dimension so the mask broadcasts across D.
+        Forgetting <code>.expand_as()</code> is the most common implementation bug &mdash; you get a shape mismatch
+        or incorrect broadcast silently.
+      </div>
+
+      <h3>L2 normalization</h3>
+
+      <p>After pooling, normalize each vector to unit length with <code>np.clip(norms, 1e-12, None)</code> to prevent
+        division by zero. This converts cosine similarity into a simple dot product.</p>
+
+      <!-- ── Section 4: Vector Store ─────────────────────────────── -->
+      <h2 id="vectorstore">// vector store &mdash; cosine similarity as dot product</h2>
+
+      <p>For two vectors <strong>a</strong> and <strong>b</strong>:</p>
+
+      <pre><code>cosine_similarity(a, b) = (a &middot; b) / (&Vert;a&Vert; &middot; &Vert;b&Vert;)</code></pre>
+
+      <p>If all stored vectors are L2-normalized (&Vert;v&Vert; = 1), then cosine similarity = dot product. A dot product
+        against the entire matrix is a single BLAS call:</p>
+
+      <pre><code>scores = self._embeddings @ query_embedding   # (N, D) @ (D,) &rarr; (N,)</code></pre>
+
+      <p>This is O(N &times; D) and runs in microseconds for tens of thousands of chunks.</p>
+
+      <h3>Top-k without full sort</h3>
+
+      <p><code>np.argpartition</code> is a quickselect variant &mdash; it finds the k largest values in O(N) without
+        sorting everything. We then sort only those k candidates: O(k log k) instead of O(N log N).</p>
+
+      <!-- ── Section 5: BM25 ─────────────────────────────────────── -->
+      <h2 id="bm25">// BM25 &mdash; sparse retrieval from first principles</h2>
+
+      <p>Classic TF-IDF has two problems: term frequency is unbounded (mentioning "cat" 100 times scores 10&times; higher
+        than 10 times, but both clearly discuss cats), and longer documents naturally have higher TF even for the same
+        density.</p>
+
+      <h3>BM25 fixes both</h3>
+
+      <p><strong>TF saturation</strong> (k1 = 1.5): As tf &rarr; &infin;, the score approaches (k1 + 1). Mentioning a
+        term 100 times is only slightly better than 10 times.</p>
+
+      <p><strong>Length normalization</strong> (b = 0.75): A document twice the average length is penalized but not
+        eliminated. The formula divides by <code>1 - b + b &times; |d|/avgdl</code>.</p>
+
+      <h3>IDF &mdash; Robertson-Walker formula</h3>
+
+      <pre><code>IDF(t) = log( (N - df(t) + 0.5) / (df(t) + 0.5)  +  1 )</code></pre>
+
+      <div class="callout">
+        The outer <code>+1</code> is critical. Without it, if df(t) = N (term in every document),
+        <code>log(0) = -&infin;</code>. With it: <code>log(0 + 1) = 0</code> &mdash; universal terms contribute nothing,
+        not negative infinity.
+      </div>
+
+      <h3>Full BM25 formula</h3>
+
+      <pre><code>score(d, q) = &Sigma;<sub>t &isin; q</sub> IDF(t) &times; tf(t,d) &times; (k1 + 1)
+              &divide; (tf(t,d) + k1 &times; (1 - b + b &times; |d| / avgdl))</code></pre>
+
+      <p>This implementation uses <code>text.lower().translate(...punctuation...).split()</code> for tokenization &mdash;
+        no NLTK, no spaCy, no stopword lists. BM25's IDF naturally down-weights common words since they appear in
+        nearly every document.</p>
+
+      <!-- ── Section 6: Hybrid Retrieval ─────────────────────────── -->
+      <h2 id="hybrid">// hybrid retrieval &mdash; reciprocal rank fusion</h2>
+
+      <p>Dense retrieval excels at semantic matching ("furry household companion" &rarr; "The cat sat on the mat").
+        Sparse retrieval excels at exact keywords ("PyTorch 2.1 changelog"). Neither dominates. A hybrid approach
+        gets the best of both.</p>
+
+      <h3>Why not average scores?</h3>
+
+      <p>Dense scores are cosine similarities in [-1, 1]. BM25 scores are unbounded positive floats. These distributions
+        are completely different &mdash; combining them requires calibration that varies by corpus.</p>
+
+      <h3>RRF operates on rankings, not scores</h3>
+
+      <pre><code>RRF_score(d) = &Sigma;<sub>list L</sub> 1 / (k + rank<sub>L</sub>(d))</code></pre>
+
+      <p>Ranks are always integers starting at 1. No calibration needed. With k = 60 (empirically determined by
+        Cormack et al., 2009), the difference between rank 1 and rank 10 is only ~15%, making RRF robust to noise
+        in individual rankers.</p>
+
+      <p>Before fusing, we over-fetch 3&times; top_k from each retriever (minimum 20) to give RRF enough candidates to
+        find the true best results.</p>
+
+      <!-- ── Section 7: Cross-Encoder Reranking ──────────────────── -->
+      <h2 id="reranking">// cross-encoder reranking &mdash; joint attention</h2>
+
+      <p>A <strong>bi-encoder</strong> embeds query and document independently, then computes similarity in vector space.
+        A <strong>cross-encoder</strong> concatenates them as <code>[CLS] query [SEP] document [SEP]</code> and runs them
+        through the transformer together. Every query token attends to every document token.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Bi-encoder</th>
+            <th>Cross-encoder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Accuracy</td>
+            <td>Moderate</td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td>Precompute docs</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Query latency</td>
+            <td>O(1) once indexed</td>
+            <td>O(candidates)</td>
+          </tr>
+          <tr>
+            <td>Use case</td>
+            <td>First-stage retrieval</td>
+            <td>Re-ranking</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>We use raw logits from the MS-MARCO model, not softmax. Softmax would normalize across the batch, making one
+        document's score dependent on which others happen to be present &mdash; wrong for ranking where we want
+        absolute scores.</p>
+
+      <!-- ── Section 8: Generation ───────────────────────────────── -->
+      <h2 id="generation">// generation &mdash; prompt engineering &amp; source attribution</h2>
+
+      <p>The system prompt establishes a binding contract: answer only from context, cite with <code>[Source N]</code>
+        notation, and refuse gracefully when context is insufficient. This constrains the model, allows graceful
+        refusal, and enables source attribution in the UI.</p>
+
+      <h3>Source attribution metadata</h3>
+
+      <p>Each chunk carries its origin through the entire pipeline: <code>metadata["source"]</code> is set during
+        ingestion, preserved through chunking and storage, and read by the generator to build citations. The user
+        sees which file and chunk each answer draws from.</p>
+
+      <h3>Raw HTTP, no SDK</h3>
+
+      <p>A single <code>requests.post</code> to <code>/chat/completions</code> works identically with OpenAI, Together AI,
+        Groq, Ollama, or any OpenAI-compatible endpoint. The URL and key change; the code does not.
+        Temperature is set to 0.2 &mdash; low enough for determinism, high enough to avoid repetition.</p>
+
+      <!-- ── Section 9: Evaluation ───────────────────────────────── -->
+      <h2 id="evaluation">// evaluation &mdash; measuring what matters</h2>
+
+      <p>RAG quality has two distinct components. <strong>Retrieval quality</strong>: are the right chunks being found?
+        Measured without an LLM. <strong>Generation quality</strong>: does the answer faithfully reflect the context?
+        Requires language understanding to measure.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Formula</th>
+            <th>What it measures</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Precision@k</td>
+            <td><code>|retrieved &cap; relevant| / k</code></td>
+            <td>Fraction of retrieved chunks that are relevant</td>
+          </tr>
+          <tr>
+            <td>Recall@k</td>
+            <td><code>|retrieved &cap; relevant| / |relevant|</code></td>
+            <td>Fraction of all relevant chunks that were retrieved</td>
+          </tr>
+          <tr>
+            <td>MRR</td>
+            <td><code>1 / rank(first relevant)</code></td>
+            <td>How early the first relevant chunk appears</td>
+          </tr>
+          <tr>
+            <td>Faithfulness</td>
+            <td>LLM-as-judge (0.0 &ndash; 1.0)</td>
+            <td>Whether the answer is grounded in context</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>MRR matters most for RAG: if the best chunk is at rank 5 but we only pass rank 1 to the LLM, the question
+        goes unanswered. Faithfulness uses an LLM-as-judge approach &mdash; expensive but necessary since no formula
+        can measure semantic grounding.</p>
+
+      <!-- ── Section 10: Implementation Decisions ────────────────── -->
+      <h2 id="decisions">// implementation decisions</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Decision</th>
+            <th>Chose</th>
+            <th>Over</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PDF parsing</td>
+            <td>PyPDF2</td>
+            <td>pdfminer.six</td>
+            <td>Pure Python, zero compiled deps, simpler environment</td>
+          </tr>
+          <tr>
+            <td>Vector search</td>
+            <td>NumPy exact</td>
+            <td>FAISS (ANN)</td>
+            <td>&lt;10ms for 100K vectors, no ANN errors, trivially inspectable</td>
+          </tr>
+          <tr>
+            <td>Tokenization</td>
+            <td>Whitespace</td>
+            <td>NLTK/spaCy</td>
+            <td>BM25's IDF handles stopwords; simpler is more transparent</td>
+          </tr>
+          <tr>
+            <td>Embeddings</td>
+            <td>Raw transformers</td>
+            <td>sentence-transformers lib</td>
+            <td>Shows what the library does internally; generalizes to any model</td>
+          </tr>
+          <tr>
+            <td>LLM calls</td>
+            <td><code>requests.post</code></td>
+            <td>OpenAI SDK</td>
+            <td>Works with any compatible endpoint; zero vendor lock-in</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Every decision optimizes for <strong>transparency over convenience</strong>. The goal isn't the shortest code &mdash;
+        it's the clearest mapping from math to implementation.</p>
+
+      <hr class="post-divider" />
+
+      <p style="font-size: 0.75rem;">
+        <a href="https://github.com/Archit-Konde/RAG" target="_blank" rel="noopener noreferrer">Repository &nearr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://github.com/Archit-Konde/RAG/blob/master/docs/LEARNING.md" target="_blank"
+          rel="noopener noreferrer">Full math derivations (LEARNING.md) &nearr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="../../index.html#blog">&larr; more writing</a>
+      </p>
+
+    </div><!-- /.post-body -->
+
+  </main>
+
+  <!-- Command Palette -->
+  <div id="cmd-palette" class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="cmd-backdrop"></div>
+    <div class="cmd-modal">
+      <div class="cmd-input-row">
+        <span class="cmd-icon">&gt;</span>
+        <input id="cmd-input" class="cmd-search" type="text" placeholder="Type a command..." autocomplete="off"
+          spellcheck="false" />
+        <kbd class="cmd-kbd">ESC</kbd>
+      </div>
+      <ul id="cmd-list" class="cmd-list" role="listbox"></ul>
+      <div class="cmd-footer">
+        <span><kbd>&#8593;&#8595;</kbd> navigate</span>
+        <span><kbd>&#8629;</kbd> select</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <button id="cmd-pal-btn" class="cmd-pal-btn" aria-label="Open command palette">
+    <span class="accent">></span>&nbsp;&Ctrl;K
+  </button>
+
+  <script src="../../scripts/app.min.js"></script>
+</body>
+
+</html>
