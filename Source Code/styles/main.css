@@ -1079,7 +1079,7 @@ ul {
   display: flex;
   gap: var(--s3);
   overflow-x: auto;
-  padding-bottom: var(--s2);
+  padding: var(--s1) 0 var(--s2);  /* top padding prevents hover clip */
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
