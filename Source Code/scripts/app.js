@@ -357,6 +357,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     { icon: '→', label: 'Jump to Experience', hint: '[E]', action() { scrollTo('#experience'); } },
     { icon: '→', label: 'Jump to Skills', hint: '[S]', action() { scrollTo('#skills'); } },
     { icon: '→', label: 'Jump to Projects', hint: '[P]', action() { scrollTo('#projects'); } },
+    { icon: '→', label: 'Jump to GitHub', hint: '[G]', action() { scrollTo('#github'); } },
     { icon: '→', label: 'Jump to Blog', hint: '[B]', action() { scrollTo('#blog'); } },
     { icon: '→', label: 'Jump to Contact', hint: '[C]', action() { scrollTo('#contact'); } },
   ];
@@ -479,6 +480,7 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           'e': () => scrollTo('#experience'),
           's': () => scrollTo('#skills'),
           'p': () => scrollTo('#projects'),
+          'g': () => scrollTo('#github'),
           'b': () => isHome ? scrollTo('#blog') : window.location.href = '/index.html#blog',
           'c': () => scrollTo('#contact'),
           'r': () => window.open('/docs/resume.pdf', '_blank'),
