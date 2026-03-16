@@ -1039,6 +1039,20 @@ ul {
 }
 
 
+/* ── 12a. GitHub Activity Section ─────────────────────────────── */
+.gh-chart-wrap {
+  padding: var(--s2) 0;
+}
+
+.gh-chart {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+
 /* Blog post card scroll container — horizontal flex row with snap.
    When a single card exists it renders normally (no scroll).
    When multiple cards are added they flow horizontally and snap. */
