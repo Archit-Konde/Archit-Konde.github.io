@@ -291,7 +291,7 @@ const GHOST_CMDS = [
   ' grep "University of Windsor" education.txt',
   ' python train.py --epochs-to-agi 1',
   ' man fundamentals_of_neural_networks',
-  ' git status --profile archit@portoflio',
+  ' git status --profile archit@portfolio',
 ];
 
 let ghostIdx = 0;
