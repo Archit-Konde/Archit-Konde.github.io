@@ -163,7 +163,6 @@ ul {
 .mobile-menu a,
 .mobile-menu-close,
 .scroll-hint,
-#back-to-top,
 .tag,
 .contact-row,
 .exp-link,
@@ -1234,7 +1233,6 @@ ul {
 }
 
 
-/* ... back-to-top removed ... */
 
 
 /* ── 17. Responsive (Mobile-first breakpoints) ────────────────
@@ -1570,7 +1568,15 @@ ul {
 
 /* Respect user's preference for reduced motion (accessibility) */
 @media (prefers-reduced-motion: reduce) {
-  /* ... existing reduce motion ... */
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ── Matrix Mode Easter Egg ── */
