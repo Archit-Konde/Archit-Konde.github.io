@@ -1,0 +1,158 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake
+% License : MIT
+%------------------------
+\documentclass[letterpaper,11pt]{article}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+\pdfgentounicode=1
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+% DATE FIX: both rows use \small (no italic on dates anywhere)
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \small #2 \\
+      \textit{\small#3} & \small #4 \\
+    \end{tabular*}\vspace{-7pt}
+}
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \small #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \small #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+%-------------------------------------------
+\begin{document}
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Archit Konde} \\ \vspace{1pt}
+    \small +1~(226)~961-5286 $|$
+    \href{mailto:architkonde19@gmail.com}{\underline{architkonde19@gmail.com}} $|$
+    \href{https://linkedin.com/in/archit-konde}{\underline{linkedin.com/in/archit-konde}} $|$
+    \href{https://github.com/Archit-Konde}{\underline{github.com/Archit-Konde}} $|$
+    Waterloo, ON
+\end{center}
+%-----------SUMMARY-----------
+\section{Summary}
+\small{ML engineer who builds AI systems end-to-end and actually tests them.
+Shipped a complete RAG pipeline in pure Python --- custom chunker, BM25, vector
+search, hybrid retrieval, cross-encoder re-ranking --- 87 tests, no external
+RAG frameworks. Also built and deployed an LLM-powered ticket triage system
+using the OpenAI API. MEng in Electrical \& Computer Engineering (University of Windsor).}
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Python, SQL} \\
+     \textbf{ML / Deep Learning}{: PyTorch, Hugging Face Transformers, scikit-learn, NumPy, pandas} \\
+     \textbf{LLM / RAG}{: OpenAI API, Anthropic API, vector search, BM25, cross-encoder re-ranking} \\
+     \textbf{Tools}{: Git, Docker, pytest, Hugging Face Spaces}
+    }}
+ \end{itemize}
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{RAG Pipeline from Scratch} $|$
+          \href{https://huggingface.co/spaces/architechs/RAG}{\underline{Demo}}}{Feb.~2026 -- Present}
+          \resumeItemListStart
+            \resumeItem{Built all 9 pipeline components in pure Python --- custom chunker, NumPy vector
+            store, and BM25 from scratch --- with no external RAG frameworks}
+            \resumeItem{Combined dense cosine similarity and sparse BM25 via reciprocal rank fusion, with a
+            cross-encoder re-ranking stage; benchmarked against dense-only and sparse-only baselines}
+            \resumeItem{Hybrid + Rerank achieved MRR~1.00 on a 25-question evaluation set, placing the
+            correct chunk at rank~1 for every query (dense-only: 0.97, sparse-only: 0.89)}
+            \resumeItem{Validated with 87 unit tests covering chunking, retrieval, and ranking; deployed on
+            Hugging Face Spaces}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{SupportOps AI Monitor} $|$
+          \href{https://architechs-supportops-ai-monitor.hf.space/}{\underline{Demo}}}{Jan.~2026 -- Feb.~2026}
+          \resumeItemListStart
+            \resumeItem{Built an LLM-powered ticket triage system using GPT-4o-mini for automated
+            classification and priority scoring via structured multi-step tool-calling}
+            \resumeItem{Designed conditional routing logic that selects triage actions based on model output,
+            demonstrating the tool-use patterns central to production LLM pipelines}
+            \resumeItem{Built a persistent SQLite layer and observability dashboard tracking model routing
+            decisions and classification outcomes over time; deployed on Hugging Face Spaces}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Data Analyst}{Jun.~2024 -- Sep.~2024}
+      {City of Windsor (Volunteer)}{Windsor, ON}
+      \resumeItemListStart
+        \resumeItem{Analyzed transit ridership data across multiple routes to surface usage patterns
+        and support service planning decisions}
+        \resumeItem{Cleaned and restructured raw operational datasets; delivered summary reports
+        used by program coordinators for planning cycles}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of Windsor}{Windsor, ON}
+      {Master of Engineering, Electrical \& Computer Engineering}{May~2023 -- Apr.~2025}
+    \resumeSubheading
+      {University of Mumbai}{Mumbai, India}
+      {Bachelor of Engineering, Computer Engineering}{Jun.~2018 -- May~2022}
+  \resumeSubHeadingListEnd
+%-----------PUBLICATIONS-----------
+\section{Publications}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+      ``Fundamentals of Neural Networks,''
+      \textit{International Journal for Research in Applied Science \& Engineering Technology (IJRASET)},
+      Vol.~9, Issue~12, Dec.~2021.
+      \href{https://www.researchgate.net/profile/Amey-Thakur/publication/353827517_Fundamentals_of_Neural_Networks/links/6113d8be1ca20f6f8616cf5d/Fundamentals-of-Neural-Networks.pdf}{\underline{[link]}}
+    }}
+ \end{itemize}
+%-------------------------------------------
+\end{document}
