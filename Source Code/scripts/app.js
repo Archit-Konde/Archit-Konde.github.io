@@ -923,7 +923,7 @@ window.toggleManPage = (show) => {
       container.innerHTML = buildSVG(stats.pct);
       if (updatedEl && stats.updatedAt) {
         const d = new Date(stats.updatedAt);
-        updatedEl.textContent = `// updated ${d.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' })}`;
+        updatedEl.textContent = '/' + '/ updated ' + d.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' });
       }
     })
     .catch(() => { /* silently skip if JSON unavailable */ });
