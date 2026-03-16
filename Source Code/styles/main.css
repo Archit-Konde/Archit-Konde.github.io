@@ -923,17 +923,6 @@ ul {
   color: var(--accent);
 }
 
-/* "currently learning" tags — dimmed + italic to show WIP */
-.tag-wip {
-  border-color: rgba(201, 168, 76, 0.3);
-  color: var(--muted);
-  font-style: italic;
-}
-
-.tag-wip:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
 
 
 /* ── 11. Projects Section ─────────────────────────────────────
@@ -982,12 +971,6 @@ ul {
 .project-card:hover {
   border-color: var(--accent);
   transform: translateY(-3px);
-}
-
-/* Dimmed + dashed border for placeholder cards */
-.project-card.placeholder {
-  opacity: 0.55;
-  border-style: dashed;
 }
 
 .card-top {
