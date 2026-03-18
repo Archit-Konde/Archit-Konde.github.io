@@ -212,7 +212,7 @@
         <p class="toc-label">$ jump to:</p>
         <ul>
           <li><a href="#what-it-is"><span class="accent">→</span> what the competition was</a></li>
-          <li><a href="#text-first"><span class="accent">→</span> the text-first unlock</a></li>
+          <li><a href="#text-first"><span class="accent">→</span> where the points came from</a></li>
           <li><a href="#error-analysis"><span class="accent">→</span> error analysis — every mistake, one diagnosis</a></li>
           <li><a href="#architecture"><span class="accent">→</span> the 3-tier hybrid architecture</a></li>
           <li><a href="#features"><span class="accent">→</span> feature engineering</a></li>
@@ -245,11 +245,11 @@
 
       <p>The task: predict <code>triage_acuity</code> (1–5). Metric: accuracy. The challenge is that class 1 (resuscitation) and class 2 (emergent) are clinically distinct but often look similar in structured vitals alone.</p>
 
-      <h2 id="text-first">// the text-first unlock</h2>
+      <h2 id="text-first">// where the points came from</h2>
 
-      <p>The single biggest improvement in the entire competition came from a single change: treating <code>chief_complaint_raw</code> as a first-class feature and scaling up TF-IDF.</p>
+      <p>Scaling <code>chief_complaint_raw</code> from 50 TF-IDF features to 2000 bigrams moved CV accuracy from 0.891 to 0.9989. That was the move that mattered. Everything else was secondary.</p>
 
-      <p>The intuition is obvious in hindsight. "Thunderclap headache" and "minor skin rash" have very different acuity implications regardless of what the vitals say. The model should know this. But the baseline had TF-IDF capped at 50 features — not enough to capture the vocabulary.</p>
+      <p>In hindsight it's obvious. "Thunderclap headache" and "minor skin rash" carry very different acuity signals regardless of what the vitals show. The baseline had TF-IDF capped at 50 features — nowhere near enough to capture the complaint vocabulary.</p>
 
       <table>
         <thead>
@@ -266,7 +266,7 @@
         </tbody>
       </table>
 
-      <p>Going from 50 to 150 features — a single number change — was worth 9.3 points of accuracy. That is more than everything else in the project combined. The lesson: when the dataset contains free-text that directly describes what you are predicting, that text is the primary feature. Everything else is secondary.</p>
+      <p>Going from 50 to 150 features was worth 9.3 points of accuracy — more than everything else in the project combined. When a dataset has free-text that directly describes what you are predicting, that text is the primary feature. Everything else is cleanup.</p>
 
       <div class="callout">
         We also tried hyperparameter tuning (LightGBM <code>num_leaves</code>, <code>learning_rate</code>, <code>subsample</code>) after reaching 0.9980. It gave 0.9980 back — no improvement. We reverted and scaled TF-IDF instead. This is a common pattern: hyperparameter tuning cannot compensate for a missing signal.
@@ -351,11 +351,11 @@ X_val_fe = apply_features(X_val, fit_params)</code></pre>
 
       <h2 id="lessons">// lessons</h2>
 
-      <p><strong>Text beats everything else when it describes the target.</strong> Before the TF-IDF unlock, we spent time on vitals engineering, clinical interactions, and comorbidity combinations. None of it moved the needle more than 0.5%. The text move was worth 9.3 points. When a dataset has free-text that directly describes what you are predicting, treat it as the primary feature from day one — not something to add later.</p>
+      <p><strong>Text beats everything else when it describes the target.</strong> Before figuring this out, we spent time on vitals engineering, clinical interactions, and comorbidity combinations. None of it moved accuracy by more than 0.5%. The text change was worth 9.3 points. Treat free-text that describes your target as the primary feature from day one, not an afterthought.</p>
 
-      <p><strong>Error analysis is worth more than hyperparameter tuning.</strong> Going from 0.9989 to 0.9995 required understanding why the model was wrong, not trying parameter combinations. Every single error had the same root cause. Once you find the root cause, the fix is obvious. Before you find it, you are optimising in the wrong direction.</p>
+      <p><strong>Error analysis beats hyperparameter tuning.</strong> Going from 0.9989 to 0.9995 required understanding why the model was wrong, not trying parameter combinations. Every single error had the same root cause. Once you find it, the fix is obvious. Before that, you're just guessing.</p>
 
-      <p><strong>Know when to stop using a model.</strong> For 99.4% of this dataset, the answer already existed in the training data. A lookup table outperforms any model on those rows because it is exact, not approximate. The model is only needed for genuinely novel inputs — the 0.6% where the training data provides no definitive answer. The best ML system is often not purely a model.</p>
+      <p><strong>Sometimes the answer is already in the training data.</strong> For 99.4% of this dataset, the right prediction was just a lookup. A lookup can't be wrong the way a model can. The model is only needed for the 0.6% where training data gives no definitive answer.</p>
 
       <hr class="post-divider" />
 
