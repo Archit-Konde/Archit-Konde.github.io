@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description"
+    content="Triagegeist — how we pushed emergency triage acuity prediction from 0.891 to 0.9995 CV accuracy. TF-IDF scaling experiments, error analysis tracing every mistake to one diagnosis, and a 3-tier hybrid predictor. A Kaggle competition writeup by Archit Konde." />
+  <meta name="author" content="Archit Konde" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#1e1e1e" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://archit-konde.github.io/pages/blog/triagegeist-solution.html" />
+  <meta property="og:title" content="Triagegeist — From 0.891 to 0.9995 CV Accuracy" />
+  <meta property="og:description"
+    content="How text beat everything else in an emergency triage competition. TF-IDF scaling, error analysis, and a 3-tier hybrid that routes 99.4% of predictions through a lookup table." />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:image" content="https://archit-konde.github.io/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://archit-konde.github.io/assets/og-image.png" />
+  <meta name="twitter:creator" content="@architkonde" />
+  <meta name="twitter:title" content="Triagegeist — From 0.891 to 0.9995 CV Accuracy" />
+  <meta name="twitter:description"
+    content="How text beat everything else in emergency triage prediction. 3-tier hybrid, error analysis, and lessons from a $10k Kaggle competition." />
+
+  <link rel="canonical" href="https://archit-konde.github.io/pages/blog/triagegeist-solution.html" />
+
+  <title>Triagegeist — From 0.891 to 0.9995 — Archit Konde</title>
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../styles/main.min.css" />
+
+  <style>
+    .blog-post {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + var(--s3)) var(--s4) var(--s5);
+    }
+
+    @media (max-width: 600px) {
+      .blog-post { padding: calc(var(--nav-h) + var(--s3)) var(--s3) var(--s4); }
+    }
+
+    .post-meta { font-size: 0.72rem; color: var(--muted); margin-bottom: var(--s4); letter-spacing: 0.04em; }
+    .post-meta .accent { margin-right: 0.4rem; }
+
+    .post-title {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: var(--s3);
+    }
+
+    .post-body h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: var(--s4) 0 var(--s2);
+      letter-spacing: -0.01em;
+      scroll-margin-top: calc(var(--nav-h) + 1.6rem);
+    }
+
+    .post-body h3 { font-size: 0.88rem; font-weight: 600; color: var(--text); margin: var(--s4) 0 var(--s1); }
+    .post-body p { font-size: 0.85rem; line-height: 1.75; color: var(--muted); margin-bottom: var(--s3); }
+
+    .post-body a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(201, 168, 76, 0.3); transition: border-color 0.2s; }
+    .post-body a:hover { border-color: var(--accent); }
+
+    .post-body code {
+      font-family: var(--font);
+      font-size: 0.80rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1em 0.35em;
+      color: var(--text);
+    }
+
+    .post-body pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .post-body pre code { background: none; border: none; padding: 0; font-size: 0.78rem; line-height: 1.6; }
+
+    .arch-diagram {
+      font-family: var(--font);
+      font-size: 0.72rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      color: var(--muted);
+      white-space: pre;
+      margin: var(--s3) 0 var(--s4);
+      line-height: 1.5;
+    }
+    .arch-diagram .hl { color: var(--accent); }
+    .arch-diagram .dim { color: var(--border); }
+
+    .post-body table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: var(--s3) 0 var(--s4); }
+    .post-body th { text-align: left; color: var(--accent); border-bottom: 1px solid var(--border); padding: 0.4rem 0.6rem; font-weight: 600; }
+    .post-body td { color: var(--muted); border-bottom: 1px solid rgba(62, 62, 66, 0.5); padding: 0.4rem 0.6rem; vertical-align: top; }
+    .post-body tr:last-child td { border-bottom: none; }
+    .post-body td code { font-size: 0.75rem; }
+    .post-body td.highlight { color: var(--accent); font-weight: 600; }
+
+    .callout {
+      background: var(--surface);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .post-divider { border: none; border-top: 1px solid var(--border); margin: var(--s3) 0; }
+
+    .post-toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+    }
+    .toc-label { font-size: 0.72rem; color: var(--accent); font-weight: 600; margin-bottom: var(--s1); }
+    .post-toc ul { padding-left: var(--s3); display: flex; flex-direction: column; gap: var(--s1); }
+    .post-toc a { font-size: 0.78rem; color: var(--muted); border-bottom: none; transition: color 0.2s; }
+    .post-toc a:hover { color: var(--accent); }
+    .post-toc .accent { margin-right: 0.3rem; }
+
+    .post-back { display: inline-block; font-size: 0.75rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; margin-bottom: var(--s4); transition: border-color 0.2s; }
+    .post-back:hover { border-color: var(--accent); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Triagegeist — From 0.891 to 0.9995 CV Accuracy",
+    "author": {
+      "@type": "Person",
+      "name": "Archit Konde",
+      "url": "https://archit-konde.github.io/"
+    },
+    "datePublished": "2026-03-17",
+    "url": "https://archit-konde.github.io/pages/blog/triagegeist-solution.html",
+    "description": "How text beat everything else in emergency triage prediction. TF-IDF scaling, error analysis, and a 3-tier hybrid that routes 99.4% of predictions through a lookup table.",
+    "publisher": {
+      "@type": "Person",
+      "name": "Archit Konde"
+    }
+  }
+  </script>
+</head>
+
+<body oncontextmenu="return false;">
+
+  <nav id="navbar">
+    <a href="../../index.html" class="nav-brand">
+      archit<span class="accent">@</span>portfolio<span class="accent">:~$</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#about"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="../../index.html#experience"><span class="nav-slash">./</span>experience</a></li>
+      <li><a href="../../index.html#skills"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="../../index.html#projects"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="../../index.html#github"><span class="nav-slash">./</span>github</a></li>
+      <li><a href="../../index.html#blog"><span class="nav-slash">./</span>blog</a></li>
+      <li><a href="../../index.html#contact"><span class="nav-slash">./</span>contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="blog-post">
+
+    <a href="../../index.html#blog" class="post-back">← back to blog</a>
+
+    <div class="post-meta">
+      <span class="accent">$</span> cat ./blog/triagegeist-solution.md
+      &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; ~12 min read
+    </div>
+
+    <h1 class="post-title">Triagegeist &mdash; From 0.891<br>to 0.9995 CV Accuracy</h1>
+
+    <hr class="post-divider" />
+
+    <div class="post-body">
+
+      <nav class="post-toc" aria-label="Table of contents">
+        <p class="toc-label">$ jump to:</p>
+        <ul>
+          <li><a href="#what-it-is"><span class="accent">→</span> what the competition was</a></li>
+          <li><a href="#text-first"><span class="accent">→</span> the text-first unlock</a></li>
+          <li><a href="#error-analysis"><span class="accent">→</span> error analysis — every mistake, one diagnosis</a></li>
+          <li><a href="#architecture"><span class="accent">→</span> the 3-tier hybrid architecture</a></li>
+          <li><a href="#features"><span class="accent">→</span> feature engineering</a></li>
+          <li><a href="#lessons"><span class="accent">→</span> lessons</a></li>
+        </ul>
+      </nav>
+
+      <p>
+        <a href="https://www.kaggle.com/competitions/triagegeist" target="_blank" rel="noopener noreferrer">Triagegeist</a>
+        is a $10,000 Kaggle hackathon — predict emergency triage acuity (1–5, where 1 is most critical)
+        from 80k clinical ED records. The dataset has 37 features, free-text chief complaints, and 24 binary
+        comorbidity flags. We went from a baseline of 0.891 CV accuracy to <strong>0.9995</strong>.
+        Here is exactly how.
+      </p>
+
+      <h2 id="what-it-is">// what the competition was</h2>
+
+      <p>Three data sources, joined on <code>patient_id</code>:</p>
+
+      <table>
+        <thead>
+          <tr><th>File</th><th>Rows</th><th>Key content</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>train.csv</code> / <code>test.csv</code></td><td>80k / 20k</td><td>37 clinical features — vitals, NEWS2, GCS, demographics</td></tr>
+          <tr><td><code>chief_complaints.csv</code></td><td>100k</td><td>free-text description of why the patient came in</td></tr>
+          <tr><td><code>patient_history.csv</code></td><td>100k</td><td>24 binary comorbidity flags (diabetes, hypertension, etc.)</td></tr>
+        </tbody>
+      </table>
+
+      <p>The task: predict <code>triage_acuity</code> (1–5). Metric: accuracy. The challenge is that class 1 (resuscitation) and class 2 (emergent) are clinically distinct but often look similar in structured vitals alone.</p>
+
+      <h2 id="text-first">// the text-first unlock</h2>
+
+      <p>The single biggest improvement in the entire competition came from a single change: treating <code>chief_complaint_raw</code> as a first-class feature and scaling up TF-IDF.</p>
+
+      <p>The intuition is obvious in hindsight. "Thunderclap headache" and "minor skin rash" have very different acuity implications regardless of what the vitals say. The model should know this. But the baseline had TF-IDF capped at 50 features — not enough to capture the vocabulary.</p>
+
+      <table>
+        <thead>
+          <tr><th>Experiment</th><th>CV Accuracy</th><th>Change</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Baseline (TF-IDF 50 features)</td><td>0.8910</td><td>—</td></tr>
+          <tr><td>TF-IDF 150 features</td><td>0.9836</td><td>+0.0926</td></tr>
+          <tr><td>TF-IDF 300 features</td><td>0.9919</td><td>+0.0083</td></tr>
+          <tr><td>TF-IDF 500 features</td><td>0.9948</td><td>+0.0029</td></tr>
+          <tr><td>TF-IDF 1000 features</td><td>0.9980</td><td>+0.0032</td></tr>
+          <tr><td>TF-IDF 2000 features</td><td>0.9989</td><td>+0.0009</td></tr>
+          <tr><td>+ glaucoma tier (final)</td><td class="highlight">0.9995</td><td class="highlight">+0.0006</td></tr>
+        </tbody>
+      </table>
+
+      <p>Going from 50 to 150 features — a single number change — was worth 9.3 points of accuracy. That is more than everything else in the project combined. The lesson: when the dataset contains free-text that directly describes what you are predicting, that text is the primary feature. Everything else is secondary.</p>
+
+      <div class="callout">
+        We also tried hyperparameter tuning (LightGBM <code>num_leaves</code>, <code>learning_rate</code>, <code>subsample</code>) after reaching 0.9980. It gave 0.9980 back — no improvement. We reverted and scaled TF-IDF instead. This is a common pattern: hyperparameter tuning cannot compensate for a missing signal.
+      </div>
+
+      <h2 id="error-analysis">// error analysis — every mistake, one diagnosis</h2>
+
+      <p>After reaching 0.9989, the model had plateaued. Adding more TF-IDF features yielded diminishing returns. At this point we ran full error analysis across all 5 CV folds — 80k rows, ~39 total errors.</p>
+
+      <p>Every single error came from the same complaint: variants of <strong>"acute angle closure glaucoma"</strong>.</p>
+
+      <p>Why? Because this condition sits right on the clinical boundary between acuity 1 (critical) and acuity 2 (emergent). The complaint text is identical across patients but the correct label differs. The text alone cannot resolve it — the vital signs can.</p>
+
+      <p>Specifically: patients labeled acuity 1 had higher NEWS2 scores, lower GCS totals, and different pain scores compared to those labeled acuity 2. The text is ambiguous; the vitals are not.</p>
+
+      <p>This error analysis took about 30 minutes. It was worth more than days of hyperparameter tuning would have been.</p>
+
+      <h2 id="architecture">// the 3-tier hybrid architecture</h2>
+
+      <p>Once we knew the error source, the fix was straightforward: build a dedicated classifier for those 76 test rows that the text couldn't resolve, and keep everything else as a lookup.</p>
+
+      <div class="arch-diagram"><span class="hl">                   test row</span>
+                      │
+         <span class="dim">┌────────────▼────────────┐</span>
+         <span class="dim">│</span>  Complaint text in      <span class="dim">│</span>
+         <span class="dim">│</span>  unambiguous lookup?    <span class="dim">│</span>
+         <span class="dim">└──────┬──────────────────┘</span>
+                │ <span class="hl">YES</span> (19,885 rows, 99.4%)
+                ▼
+         Return label directly ──────────────► prediction
+                │ <span class="hl">NO</span>
+                ▼
+         <span class="dim">┌──────────────────────────┐</span>
+         <span class="dim">│</span>  Glaucoma variant?       <span class="dim">│</span>
+         <span class="dim">│</span>  (15 ambiguous texts)    <span class="dim">│</span>
+         <span class="dim">└──────┬───────────────────┘</span>
+                │ <span class="hl">YES</span> (76 rows)
+                ▼
+         Binary LightGBM
+         (news2, gcs, pain, hr) ──────────────► prediction
+                │ <span class="hl">NO</span>
+                ▼
+         <span class="dim">┌──────────────────────────┐</span>
+         <span class="dim">│</span>  Unseen complaint text   <span class="dim">│</span>
+         <span class="dim">│</span>  (39 rows)               <span class="dim">│</span>
+         <span class="dim">└──────┬───────────────────┘</span>
+                │
+                ▼
+         Full LightGBM multiclass ────────────► prediction</div>
+
+      <p><strong>Tier 1 — Direct lookup (19,885 rows, 99.4%).</strong> Any complaint text that appeared in training and always mapped to the same acuity is stored in a dictionary. For these rows, no model is needed. The lookup is deterministic and perfect. A model can only be wrong; a lookup of a memorised pattern cannot.</p>
+
+      <p><strong>Tier 2 — Glaucoma binary classifier (76 rows, 0.4%).</strong> Trained only on the 237 training rows with an "acute angle closure glaucoma" complaint. Features: NEWS2 score, GCS total, pain score, heart rate, systolic BP, respiratory rate, SpO2, temperature, shock index. Binary target: acuity 1 vs acuity 2. CV accuracy: 94% — compared to ~27% without it (random performance on heavily imbalanced data).</p>
+
+      <p><strong>Tier 3 — Full LightGBM multiclass (39 rows, 0.2%).</strong> Complaint texts not seen during training. Falls back to the complete feature set: TF-IDF, all vitals, comorbidities, interactions. These 39 rows are genuinely novel — no lookup can help them.</p>
+
+      <h2 id="features">// feature engineering</h2>
+
+      <p>All feature logic lives in <code>features.py</code>. The key design constraint: no leakage. Encoders are fit on training data only and applied to validation/test through a <code>fit_params</code> dictionary.</p>
+
+      <pre><code>X_train_fe, fit_params = engineer_features(X_train, is_train=True)
+X_val_fe = apply_features(X_val, fit_params)</code></pre>
+
+      <h3>What we use</h3>
+
+      <table>
+        <thead>
+          <tr><th>Feature group</th><th>Method</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Chief complaint text</td><td>TF-IDF bigrams, 2000 features, sublinear TF</td><td>Dominant signal — see scaling table above</td></tr>
+          <tr><td>Categorical columns</td><td>Frequency encoding</td><td>Fitted on train only</td></tr>
+          <tr><td>Vitals with missingness</td><td>Median imputation</td><td>Medians fitted on train</td></tr>
+          <tr><td>Clinical interactions</td><td><code>gcs × news2</code>, <code>resp × spo2</code>, <code>pain × news2</code></td><td>Clinically meaningful combinations</td></tr>
+          <tr><td>Comorbidities</td><td>24 binary flags + sum (burden score)</td><td>From <code>patient_history.csv</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3>What we drop</h3>
+
+      <p><code>ed_los_hours</code> and <code>disposition</code> are post-triage outcomes — they're in training but not in test, so including them would be pure leakage. <code>triage_nurse_id</code> and <code>site_id</code> are high-cardinality identifiers that won't generalise to held-out data.</p>
+
+      <h2 id="lessons">// lessons</h2>
+
+      <p><strong>Text beats everything else when it describes the target.</strong> Before the TF-IDF unlock, we spent time on vitals engineering, clinical interactions, and comorbidity combinations. None of it moved the needle more than 0.5%. The text move was worth 9.3 points. When a dataset has free-text that directly describes what you are predicting, treat it as the primary feature from day one — not something to add later.</p>
+
+      <p><strong>Error analysis is worth more than hyperparameter tuning.</strong> Going from 0.9989 to 0.9995 required understanding why the model was wrong, not trying parameter combinations. Every single error had the same root cause. Once you find the root cause, the fix is obvious. Before you find it, you are optimising in the wrong direction.</p>
+
+      <p><strong>Know when to stop using a model.</strong> For 99.4% of this dataset, the answer already existed in the training data. A lookup table outperforms any model on those rows because it is exact, not approximate. The model is only needed for genuinely novel inputs — the 0.6% where the training data provides no definitive answer. The best ML system is often not purely a model.</p>
+
+      <hr class="post-divider" />
+
+      <p style="font-size: 0.75rem;">
+        <a href="https://github.com/Archit-Konde/triagegeist-solution" target="_blank" rel="noopener noreferrer">Repository ↗</a>
+        &nbsp;·&nbsp;
+        <a href="https://triagegeist-solution-dashboard.streamlit.app/" target="_blank" rel="noopener noreferrer">Live Dashboard ↗</a>
+        &nbsp;·&nbsp;
+        <a href="../../index.html#blog">← more writing</a>
+      </p>
+
+    </div><!-- /.post-body -->
+
+  </main>
+
+  <!-- Command Palette -->
+  <div id="cmd-palette" class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="cmd-backdrop"></div>
+    <div class="cmd-modal">
+      <div class="cmd-input-row">
+        <span class="cmd-icon">&gt;</span>
+        <input id="cmd-input" class="cmd-search" type="text" placeholder="Type a command..." autocomplete="off"
+          spellcheck="false" />
+        <kbd class="cmd-kbd">ESC</kbd>
+      </div>
+      <ul id="cmd-list" class="cmd-list" role="listbox"></ul>
+      <div class="cmd-footer">
+        <span><kbd>&#8593;&#8595;</kbd> navigate</span>
+        <span><kbd>&#8629;</kbd> select</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <button id="cmd-pal-btn" class="cmd-pal-btn" aria-label="Open command palette">
+    <span class="accent">></span>&nbsp;Ctrl+K
+  </button>
+
+  <script src="../../scripts/app.min.js"></script>
+</body>
+
+</html>
