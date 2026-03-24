@@ -57,6 +57,10 @@ docs/
 - **MIT License** → source code in `Source Code/`
 - **CC BY 4.0** → blog content in `Source Code/pages/blog/`
 
+## Design System
+
+Read `DESIGN.md` before making any visual or UI decisions. All font choices, colors, spacing, and aesthetic direction are defined there. Do not deviate without explicit user approval.
+
 ## Important Conventions
 
 - After editing `main.css` or `app.js`, always regenerate the `.min` files by running `python3 minify_assets.py`.
