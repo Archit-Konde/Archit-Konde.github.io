@@ -10,8 +10,11 @@
   <meta name="author" content="Archit Konde" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#1e1e1e" />
+  <meta name="keywords" content="RAG pipeline, BM25, cosine similarity, cross-encoder reranking, reciprocal rank fusion, Python, information retrieval, Archit Konde" />
 
   <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-03-13T00:00:00Z" />
+  <meta property="article:author" content="https://archit-konde.github.io/" />
   <meta property="og:url" content="https://archit-konde.github.io/pages/blog/rag-from-scratch.html" />
   <meta property="og:title" content="Building RAG From Scratch — A Complete Technical Deep-Dive" />
   <meta property="og:description"
@@ -263,19 +266,69 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://archit-konde.github.io/pages/blog/rag-from-scratch.html"
+    },
     "headline": "Building RAG From Scratch — A Complete Technical Deep-Dive",
+    "image": "https://archit-konde.github.io/assets/og-image.png",
     "author": {
       "@type": "Person",
       "name": "Archit Konde",
       "url": "https://archit-konde.github.io/"
     },
     "datePublished": "2026-03-13",
+    "dateModified": "2026-03-16",
     "url": "https://archit-konde.github.io/pages/blog/rag-from-scratch.html",
     "description": "Every algorithm in a RAG pipeline derived from first principles. BM25, cosine similarity, mean pooling, RRF, cross-encoder reranking, and evaluation metrics.",
+    "keywords": ["RAG pipeline", "BM25", "cosine similarity", "cross-encoder reranking", "reciprocal rank fusion", "information retrieval", "Python"],
     "publisher": {
       "@type": "Person",
       "name": "Archit Konde"
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://archit-konde.github.io/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://archit-konde.github.io/#blog" },
+      { "@type": "ListItem", "position": 3, "name": "Building RAG From Scratch" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do you build a RAG pipeline from scratch in Python?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A RAG pipeline has two phases: indexing (load documents, chunk text, embed into vectors, store in a vector database) and querying (embed the query, retrieve candidates from dense and sparse indexes, fuse rankings with Reciprocal Rank Fusion, rerank with a cross-encoder, and generate an answer grounded in retrieved context). Key components include BM25 for sparse retrieval, sentence-transformers for dense embeddings, and cross-encoder models for reranking."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Reciprocal Rank Fusion in RAG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Reciprocal Rank Fusion (RRF) is a technique for combining results from multiple retrieval methods (e.g., BM25 sparse search and dense vector search) into a single ranked list. Each document's score is calculated as the sum of 1/(k + rank) across all retrieval methods, where k is a constant (typically 60). This approach is rank-based rather than score-based, making it robust to different score distributions across retrieval methods."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is cross-encoder reranking in a RAG pipeline?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cross-encoder reranking is a second-stage ranking step that takes the top candidates from initial retrieval and re-scores them using a model that processes the query and document together (rather than independently). This produces more accurate relevance scores than bi-encoder embeddings because it can attend to fine-grained interactions between query and document tokens. Models like ms-marco-MiniLM are commonly used."
+        }
+      }
+    ]
   }
   </script>
 </head>
@@ -670,6 +723,13 @@ pooled = sum_embeddings / sum_mask
         &nbsp;&middot;&nbsp;
         <a href="../../index.html#blog">&larr; more writing</a>
       </p>
+
+      <div style="margin-top:6.4rem;padding-top:3.2rem;border-top:1px solid var(--border);">
+        <h2 style="font-size:0.88rem;color:var(--accent);margin-bottom:1.6rem;">// related posts</h2>
+        <a href="ragops-api.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; RAGOps API &mdash; production RAG with FastAPI and pgvector</a>
+        <a href="supportops-ai-monitor.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; SupportOps AI Monitor &mdash; LLM-powered ticket triage</a>
+        <a href="triagegeist-solution.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; Triagegeist &mdash; from 0.891 to 0.9995 CV accuracy</a>
+      </div>
 
     </div><!-- /.post-body -->
 

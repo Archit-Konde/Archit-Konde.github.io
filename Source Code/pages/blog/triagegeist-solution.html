@@ -10,8 +10,11 @@
   <meta name="author" content="Archit Konde" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#1e1e1e" />
+  <meta name="keywords" content="emergency triage, clinical NLP, TF-IDF, LightGBM, Kaggle, hybrid classifier, machine learning, Archit Konde" />
 
   <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-03-17T00:00:00Z" />
+  <meta property="article:author" content="https://archit-konde.github.io/" />
   <meta property="og:url" content="https://archit-konde.github.io/pages/blog/triagegeist-solution.html" />
   <meta property="og:title" content="Triagegeist — From 0.891 to 0.9995 CV Accuracy" />
   <meta property="og:description"
@@ -159,19 +162,37 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://archit-konde.github.io/pages/blog/triagegeist-solution.html"
+    },
     "headline": "Triagegeist — From 0.891 to 0.9995 CV Accuracy",
+    "image": "https://archit-konde.github.io/assets/og-image.png",
     "author": {
       "@type": "Person",
       "name": "Archit Konde",
       "url": "https://archit-konde.github.io/"
     },
     "datePublished": "2026-03-17",
+    "dateModified": "2026-03-18",
     "url": "https://archit-konde.github.io/pages/blog/triagegeist-solution.html",
     "description": "How text beat everything else in emergency triage prediction. TF-IDF scaling, error analysis, and a 3-tier hybrid that routes 99.4% of predictions through a lookup table.",
+    "keywords": ["emergency triage", "clinical NLP", "TF-IDF", "LightGBM", "Kaggle", "hybrid classifier"],
     "publisher": {
       "@type": "Person",
       "name": "Archit Konde"
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://archit-konde.github.io/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://archit-konde.github.io/#blog" },
+      { "@type": "ListItem", "position": 3, "name": "Triagegeist — From 0.891 to 0.9995" }
+    ]
   }
   </script>
 </head>
@@ -366,6 +387,13 @@ X_val_fe = apply_features(X_val, fit_params)</code></pre>
         &nbsp;·&nbsp;
         <a href="../../index.html#blog">← more writing</a>
       </p>
+
+      <div style="margin-top:6.4rem;padding-top:3.2rem;border-top:1px solid var(--border);">
+        <h2 style="font-size:0.88rem;color:var(--accent);margin-bottom:1.6rem;">// related posts</h2>
+        <a href="insurance-reshopping-predictor.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; Insurance Re-Shopping Predictor &mdash; data quality first ML</a>
+        <a href="rag-from-scratch.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; Building RAG From Scratch &mdash; every algorithm from first principles</a>
+        <a href="ragops-api.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; RAGOps API &mdash; production RAG with FastAPI and pgvector</a>
+      </div>
 
     </div><!-- /.post-body -->
 

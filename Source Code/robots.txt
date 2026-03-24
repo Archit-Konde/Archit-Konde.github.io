@@ -1,0 +1,8 @@
+# robots.txt — Archit Konde Portfolio
+# Allow all crawlers to index the full site.
+
+User-agent: *
+Allow: /
+
+# Sitemap location for search engine discovery
+Sitemap: https://archit-konde.github.io/sitemap.xml

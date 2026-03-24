@@ -10,8 +10,11 @@
   <meta name="author" content="Archit Konde" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#1e1e1e" />
+  <meta name="keywords" content="AI ticket triage, LLM operations, GPT-4o-mini, Streamlit, support automation, machine learning, Archit Konde" />
 
   <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-03-01T00:00:00Z" />
+  <meta property="article:author" content="https://archit-konde.github.io/" />
   <meta property="og:url" content="https://archit-konde.github.io/pages/blog/supportops-ai-monitor.html" />
   <meta property="og:title" content="Building SupportOps AI Monitor — What I Learned" />
   <meta property="og:description"
@@ -270,19 +273,37 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://archit-konde.github.io/pages/blog/supportops-ai-monitor.html"
+    },
     "headline": "Building SupportOps AI Monitor — What I Learned",
+    "image": "https://archit-konde.github.io/assets/og-image.png",
     "author": {
       "@type": "Person",
       "name": "Archit Konde",
       "url": "https://archit-konde.github.io/"
     },
     "datePublished": "2026-03-01",
+    "dateModified": "2026-03-16",
     "url": "https://archit-konde.github.io/pages/blog/supportops-ai-monitor.html",
     "description": "Architecture decisions, bugs found, deployment challenges, and honest answers to questions I couldn't answer at first.",
+    "keywords": ["AI ticket triage", "LLM operations", "GPT-4o-mini", "Streamlit", "support automation"],
     "publisher": {
       "@type": "Person",
       "name": "Archit Konde"
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://archit-konde.github.io/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://archit-konde.github.io/#blog" },
+      { "@type": "ListItem", "position": 3, "name": "Building SupportOps AI Monitor" }
+    ]
   }
   </script>
 </head>
@@ -529,6 +550,13 @@ tickets = load_all_tickets(st.session_state.data_version)</code></pre>
         &nbsp;·&nbsp;
         <a href="../../index.html#blog">← more writing</a>
       </p>
+
+      <div style="margin-top:6.4rem;padding-top:3.2rem;border-top:1px solid var(--border);">
+        <h2 style="font-size:0.88rem;color:var(--accent);margin-bottom:1.6rem;">// related posts</h2>
+        <a href="rag-from-scratch.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; Building RAG From Scratch &mdash; every algorithm derived from first principles</a>
+        <a href="ragops-api.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; RAGOps API &mdash; production RAG with FastAPI and pgvector</a>
+        <a href="insurance-reshopping-predictor.html" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:0.4rem 0;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">&rarr; Insurance Re-Shopping Predictor &mdash; data quality first ML</a>
+      </div>
 
     </div><!-- /.post-body -->
 
