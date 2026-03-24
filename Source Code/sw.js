@@ -55,7 +55,7 @@
    changes. The activate event deletes any caches with old names,
    forcing users to re-download the latest assets.
 ──────────────────────────────────────────────────────────────── */
-const CACHE_NAME = 'archit-portfolio-v39';
+const CACHE_NAME = 'archit-portfolio-v40';
 const OFFLINE_PAGE = '/404.html';   // shown if navigation fails offline
 
 /* ── Assets to pre-cache on install ─────────────────────────────

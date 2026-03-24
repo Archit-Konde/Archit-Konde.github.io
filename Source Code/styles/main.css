@@ -908,10 +908,21 @@ ul {
 /* ── 11. Projects Section ─────────────────────────────────────
 ──────────────────────────────────────────────────────────────── */
 .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  display: flex;
   gap: var(--s3);
-  margin-bottom: var(--s3);
+  overflow-x: auto;
+  padding: var(--s1) 0 var(--s2);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.projects-grid .project-card {
+  min-width: 300px;
+  max-width: 360px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
 }
 
 .project-card {
@@ -977,6 +988,7 @@ ul {
   font-weight: 600;
   color: var(--text);
   margin-bottom: var(--s1);
+  overflow-wrap: anywhere;
 }
 
 .card-desc {
@@ -996,7 +1008,7 @@ ul {
 /* Links row below card tech tags */
 .card-links {
   margin-top: 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
 }
 
 /* Blog section overrides for card-num (date style) */
@@ -1260,11 +1272,6 @@ ul {
   .exp-item {
     grid-template-columns: 1fr;
     gap: var(--s2);
-  }
-
-  /* Projects: single column */
-  .projects-grid {
-    grid-template-columns: 1fr;
   }
 
   .c-key {
