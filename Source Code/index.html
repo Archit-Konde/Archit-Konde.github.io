@@ -85,31 +85,94 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Archit Konde",
-    "jobTitle": "Machine Learning Engineer",
-    "url": "https://archit-konde.github.io/",
-    "email": "architkonde19@gmail.com",
-    "description": "Machine Learning Engineer building AI systems end-to-end — RAG pipelines, LLM applications, and production ML.",
-    "alumniOf": [
+    "@graph": [
       {
-        "@type": "CollegeOrUniversity",
-        "name": "University of Windsor",
-        "address": { "@type": "PostalAddress", "addressCountry": "CA" }
+        "@type": "Person",
+        "@id": "https://archit-konde.github.io/#person",
+        "name": "Archit Konde",
+        "jobTitle": "Machine Learning Engineer",
+        "url": "https://archit-konde.github.io/",
+        "email": "architkonde19@gmail.com",
+        "description": "Machine Learning Engineer building AI systems end-to-end — RAG pipelines, LLM applications, and production ML.",
+        "alumniOf": [
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Windsor",
+            "address": { "@type": "PostalAddress", "addressCountry": "CA" }
+          },
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "University of Mumbai",
+            "address": { "@type": "PostalAddress", "addressCountry": "IN" }
+          }
+        ],
+        "sameAs": [
+          "https://github.com/Archit-Konde",
+          "https://www.linkedin.com/in/architkonde/",
+          "https://x.com/architkonde",
+          "https://scholar.google.com/citations?hl=en&user=njXhCdwAAAAJ"
+        ],
+        "knowsAbout": ["Machine Learning", "Deep Learning", "PyTorch", "Hugging Face Transformers", "RAG", "LLM", "Neural Networks", "Artificial Intelligence", "Python"]
       },
       {
-        "@type": "CollegeOrUniversity",
-        "name": "University of Mumbai",
-        "address": { "@type": "PostalAddress", "addressCountry": "IN" }
+        "@type": "WebSite",
+        "@id": "https://archit-konde.github.io/#website",
+        "url": "https://archit-konde.github.io/",
+        "name": "Archit Konde — Machine Learning Engineer",
+        "description": "Portfolio and technical blog of Archit Konde, ML Engineer building RAG pipelines, LLM applications, and production ML systems.",
+        "author": { "@id": "https://archit-konde.github.io/#person" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "SupportOps AI Monitor",
+        "description": "LLM-powered ticket triage system using GPT-4o-mini for automated classification and priority scoring with structured multi-step tool-calling.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "url": "https://architechs-supportops-ai-monitor.hf.space",
+        "author": { "@id": "https://archit-konde.github.io/#person" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "RAG From Scratch",
+        "description": "Complete RAG pipeline built in pure Python — custom chunker, Okapi BM25, NumPy vector store, hybrid retrieval via Reciprocal Rank Fusion, cross-encoder re-ranking. 87 unit tests. No LangChain, no LlamaIndex.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "url": "https://huggingface.co/spaces/architechs/RAG",
+        "author": { "@id": "https://archit-konde.github.io/#person" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Insurance Re-Shopping Predictor",
+        "description": "ML model trained on 381K real insurance profiles to predict whether you'd benefit from re-shopping car insurance. LightGBM classification with SHAP waterfall explanations.",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "url": "https://huggingface.co/spaces/architechs/insurance-reshopping-predictor",
+        "author": { "@id": "https://archit-konde.github.io/#person" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "RAGOps",
+        "description": "Production RAG service built on FastAPI and PostgreSQL/pgvector — persistent vector database, offline evaluation harness with Precision@k/Recall@k/MRR, CI regression gate.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "url": "https://github.com/Archit-Konde/RAGOps",
+        "author": { "@id": "https://archit-konde.github.io/#person" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Triagegeist Solution",
+        "description": "Emergency triage acuity prediction achieving 0.9995 CV accuracy via 3-tier hybrid: deterministic lookup, glaucoma-specific classifier, and LightGBM fallback. $10k Kaggle competition.",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
+        "url": "https://triagegeist-solution-dashboard.streamlit.app/",
+        "author": { "@id": "https://archit-konde.github.io/#person" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
       }
-    ],
-    "sameAs": [
-      "https://github.com/Archit-Konde",
-      "https://www.linkedin.com/in/architkonde/",
-      "https://x.com/architkonde",
-      "https://scholar.google.com/citations?hl=en&user=njXhCdwAAAAJ"
-    ],
-    "knowsAbout": ["Machine Learning", "Deep Learning", "PyTorch", "Hugging Face Transformers", "RAG", "LLM", "Neural Networks", "Artificial Intelligence", "Python"]
+    ]
   }
   </script>
 </head>
@@ -495,6 +558,8 @@
                 &nbsp;·&nbsp;
                 <a href="https://architechs-supportops-ai-monitor.hf.space" target="_blank" rel="noopener noreferrer"
                   class="inline-link">live demo ↗</a>
+                &nbsp;·&nbsp;
+                <a href="pages/blog/supportops-ai-monitor.html" class="inline-link">writeup ↗</a>
               </div>
             </div>
 
@@ -523,6 +588,8 @@
                 &nbsp;·&nbsp;
                 <a href="https://huggingface.co/spaces/architechs/RAG" target="_blank" rel="noopener noreferrer"
                   class="inline-link">live demo ↗</a>
+                &nbsp;·&nbsp;
+                <a href="pages/blog/rag-from-scratch.html" class="inline-link">writeup ↗</a>
               </div>
             </div>
 
@@ -551,6 +618,8 @@
                 &nbsp;·&nbsp;
                 <a href="https://triagegeist-solution-dashboard.streamlit.app/" target="_blank" rel="noopener noreferrer"
                   class="inline-link">dashboard ↗</a>
+                &nbsp;·&nbsp;
+                <a href="pages/blog/triagegeist-solution.html" class="inline-link">writeup ↗</a>
               </div>
             </div>
 
@@ -579,17 +648,19 @@
                 &nbsp;·&nbsp;
                 <a href="https://huggingface.co/spaces/architechs/insurance-reshopping-predictor" target="_blank" rel="noopener noreferrer"
                   class="inline-link">live demo ↗</a>
+                &nbsp;·&nbsp;
+                <a href="pages/blog/insurance-reshopping-predictor.html" class="inline-link">writeup ↗</a>
               </div>
             </div>
 
             <div class="project-card">
-              <a href="https://github.com/Archit-Konde/ragops-api" target="_blank" rel="noopener noreferrer"
-                class="card-overlay-link" aria-label="View RAGOps API on GitHub" tabindex="-1"></a>
+              <a href="https://github.com/Archit-Konde/RAGOps" target="_blank" rel="noopener noreferrer"
+                class="card-overlay-link" aria-label="View RAGOps on GitHub" tabindex="-1"></a>
               <div class="card-top">
                 <span class="card-num">05</span>
                 <span class="card-status">// live</span>
               </div>
-              <p class="card-name">ragops_api.py</p>
+              <p class="card-name">ragops.py</p>
               <p class="card-desc">Production RAG service built on FastAPI and PostgreSQL/pgvector &mdash; persistent
                 vector database, offline evaluation harness with Precision@k/Recall@k/MRR, CI regression gate,
                 Docker Compose dev environment.</p>
@@ -602,8 +673,10 @@
                 <span class="tag">pytest</span>
               </div>
               <div class="card-links">
-                <a href="https://github.com/Archit-Konde/ragops-api" target="_blank"
+                <a href="https://github.com/Archit-Konde/RAGOps" target="_blank"
                   rel="noopener noreferrer" class="inline-link">GitHub ↗</a>
+                &nbsp;·&nbsp;
+                <a href="pages/blog/ragops-api.html" class="inline-link">writeup ↗</a>
               </div>
             </div>
 
@@ -663,6 +736,28 @@
         <div class="section-body">
 
           <div class="blog-scroll">
+
+            <div class="project-card">
+              <a href="pages/blog/ragops-api.html" class="card-overlay-link"
+                aria-label="Read post: RAGOps — Production RAG with FastAPI and pgvector" tabindex="-1"></a>
+              <div class="card-top">
+                <span class="card-num">MAR 2026</span>
+                <span class="card-status">// learning writeup</span>
+              </div>
+              <p class="card-name">RAGOps API &mdash; Production RAG with FastAPI and pgvector</p>
+              <p class="card-desc">Upgrading a from-scratch RAG pipeline to a real API. Persistent vector storage with
+                pgvector, layered FastAPI architecture, offline evaluation with Precision@k/Recall@k/MRR, and CI
+                regression gating. The gap between notebook and production.</p>
+              <div class="card-tech">
+                <span class="tag">fastapi</span>
+                <span class="tag">pgvector</span>
+                <span class="tag">docker</span>
+                <span class="tag">production ML</span>
+              </div>
+              <div class="card-links">
+                <a href="pages/blog/ragops-api.html" class="inline-link">read post ↗</a>
+              </div>
+            </div>
 
             <div class="project-card">
               <a href="pages/blog/insurance-reshopping-predictor.html" class="card-overlay-link"

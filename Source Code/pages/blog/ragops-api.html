@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description"
+    content="RAGOps API — building a production RAG service with FastAPI, PostgreSQL pgvector, Docker Compose, and CI regression gating. Upgrading a from-scratch pipeline to a real API. A learning writeup by Archit Konde." />
+  <meta name="author" content="Archit Konde" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#1e1e1e" />
+  <meta name="keywords" content="RAG API, FastAPI, pgvector, PostgreSQL, production RAG, Docker, vector database, sentence-transformers, Archit Konde" />
+
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-03-24T00:00:00Z" />
+  <meta property="article:author" content="https://archit-konde.github.io/" />
+  <meta property="og:url" content="https://archit-konde.github.io/pages/blog/ragops-api.html" />
+  <meta property="og:title" content="RAGOps — Production RAG with FastAPI and pgvector" />
+  <meta property="og:description"
+    content="Upgrading a from-scratch RAG pipeline to a production API with FastAPI, PostgreSQL pgvector, and CI regression gating." />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:image" content="https://archit-konde.github.io/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://archit-konde.github.io/assets/og-image.png" />
+  <meta name="twitter:creator" content="@architkonde" />
+  <meta name="twitter:title" content="RAGOps — Production RAG with FastAPI and pgvector" />
+  <meta name="twitter:description"
+    content="From-scratch RAG pipeline upgraded to a containerised, testable API with CI regression gating." />
+
+  <link rel="canonical" href="https://archit-konde.github.io/pages/blog/ragops-api.html" />
+
+  <title>RAGOps API — Archit Konde</title>
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../styles/main.min.css" />
+
+  <style>
+    .blog-post {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + var(--s3)) var(--s4) var(--s5);
+    }
+
+    @media (max-width: 600px) {
+      .blog-post { padding: calc(var(--nav-h) + var(--s3)) var(--s3) var(--s4); }
+    }
+
+    .post-meta { font-size: 0.72rem; color: var(--muted); margin-bottom: var(--s4); letter-spacing: 0.04em; }
+    .post-meta .accent { margin-right: 0.4rem; }
+
+    .post-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--s3);
+    }
+
+    @media (max-width: 600px) { .post-title { font-size: 1.4rem; } }
+
+    .post-divider { border: none; border-top: 1px solid var(--border); margin: var(--s3) 0; }
+
+    .post-body { font-size: 0.88rem; line-height: 1.85; }
+    .post-body h2 { font-size: 1rem; color: var(--accent); margin: var(--s4) 0 var(--s2); font-weight: 600; }
+    .post-body h3 { font-size: 0.92rem; color: var(--text); margin: var(--s3) 0 var(--s2); font-weight: 600; }
+    .post-body p { margin-bottom: var(--s3); color: var(--text); }
+    .post-body strong { color: var(--accent); font-weight: 600; }
+    .post-body code { background: var(--surface); border: 1px solid var(--border); padding: 1px 5px; font-size: 0.82em; border-radius: 2px; }
+    .post-body ul, .post-body ol { margin: var(--s2) 0 var(--s3) var(--s3); }
+    .post-body li { margin-bottom: var(--s1); }
+    .post-body li::before { content: '\2192'; color: var(--accent); margin-right: 0.5rem; }
+
+    .post-toc { background: var(--surface); border: 1px solid var(--border); padding: var(--s3); margin-bottom: var(--s4); }
+    .toc-label { font-size: 0.75rem; color: var(--accent); margin-bottom: var(--s2); font-weight: 600; }
+    .post-toc ul { display: flex; flex-direction: column; gap: var(--s1); }
+    .post-toc a { font-size: 0.8rem; color: var(--muted); text-decoration: none; transition: color var(--ease); }
+    .post-toc a:hover { color: var(--accent); }
+
+    .arch-diagram { background: var(--surface); border: 1px solid var(--border); padding: var(--s3); font-size: 0.78rem; white-space: pre; overflow-x: auto; margin: var(--s3) 0; line-height: 1.6; }
+    .arch-diagram .hl { color: var(--accent); font-weight: 600; }
+    .arch-diagram .dim { color: var(--muted); }
+
+    .tech-table { width: 100%; border-collapse: collapse; margin: var(--s3) 0; font-size: 0.82rem; }
+    .tech-table th, .tech-table td { border: 1px solid var(--border); padding: var(--s2); text-align: left; }
+    .tech-table th { background: var(--surface); color: var(--accent); font-weight: 600; }
+    .tech-table td { color: var(--text); }
+
+    .cta-block { display: flex; gap: var(--s3); margin: var(--s4) 0; flex-wrap: wrap; }
+    .cta-btn { display: inline-block; font-size: 0.82rem; color: var(--accent); border: 1px solid var(--accent); padding: var(--s2) var(--s3); text-decoration: none; transition: background var(--ease), color var(--ease); font-family: var(--font); }
+    .cta-btn:hover { background: var(--accent); color: var(--bg); }
+
+    .related-posts { margin-top: var(--s5); padding-top: var(--s4); border-top: 1px solid var(--border); }
+    .related-posts h2 { font-size: 0.88rem; color: var(--accent); margin-bottom: var(--s3); }
+    .related-link { display: block; font-size: 0.82rem; color: var(--muted); text-decoration: none; padding: var(--s1) 0; transition: color var(--ease); }
+    .related-link:hover { color: var(--accent); }
+
+    .post-back { display: inline-block; font-size: 0.75rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; margin-bottom: var(--s4); transition: border-color 0.2s; }
+    .post-back:hover { border-color: var(--accent); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://archit-konde.github.io/pages/blog/ragops-api.html"
+    },
+    "headline": "RAGOps — Production RAG with FastAPI and pgvector",
+    "image": "https://archit-konde.github.io/assets/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "Archit Konde",
+      "url": "https://archit-konde.github.io/"
+    },
+    "datePublished": "2026-03-24",
+    "dateModified": "2026-03-24",
+    "url": "https://archit-konde.github.io/pages/blog/ragops-api.html",
+    "description": "Upgrading a from-scratch RAG pipeline to a production API with FastAPI, PostgreSQL pgvector, and CI regression gating.",
+    "keywords": ["RAG API", "FastAPI", "pgvector", "PostgreSQL", "production RAG", "Docker", "vector database"],
+    "publisher": {
+      "@type": "Person",
+      "name": "Archit Konde"
+    }
+  }
+  </script>
+</head>
+
+<body oncontextmenu="return false;">
+
+  <!-- Navigation (mirrors main site) -->
+  <nav id="navbar">
+    <a href="../../index.html" class="nav-brand">
+      archit<span class="accent">@</span>portfolio<span class="accent">:~$</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#about"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="../../index.html#experience"><span class="nav-slash">./</span>experience</a></li>
+      <li><a href="../../index.html#skills"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="../../index.html#projects"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="../../index.html#github"><span class="nav-slash">./</span>github</a></li>
+      <li><a href="../../index.html#blog"><span class="nav-slash">./</span>blog</a></li>
+      <li><a href="../../index.html#contact"><span class="nav-slash">./</span>contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="blog-post">
+
+    <a href="../../index.html#blog" class="post-back">&larr; back to blog</a>
+
+    <div class="post-meta">
+      <span class="accent">$</span> cat ./blog/ragops-api.md
+      &nbsp;&middot;&nbsp; March 2026 &nbsp;&middot;&nbsp; ~8 min read
+    </div>
+
+    <h1 class="post-title">RAGOps API<br>&mdash; Production RAG with FastAPI and pgvector</h1>
+
+    <hr class="post-divider" />
+
+    <div class="post-body">
+
+      <nav class="post-toc" aria-label="Table of contents">
+        <p class="toc-label">$ jump to:</p>
+        <ul>
+          <li><a href="#why"><span class="accent">&rarr;</span> why build this</a></li>
+          <li><a href="#architecture"><span class="accent">&rarr;</span> architecture</a></li>
+          <li><a href="#tech-stack"><span class="accent">&rarr;</span> tech stack</a></li>
+          <li><a href="#api"><span class="accent">&rarr;</span> API design</a></li>
+          <li><a href="#evaluation"><span class="accent">&rarr;</span> offline evaluation</a></li>
+          <li><a href="#decisions"><span class="accent">&rarr;</span> key decisions</a></li>
+          <li><a href="#links"><span class="accent">&rarr;</span> try it / source code</a></li>
+        </ul>
+      </nav>
+
+      <h2 id="why">// why build this</h2>
+
+      <p>After building <a href="rag-from-scratch.html" class="inline-link">RAG from scratch</a> &mdash; deriving every
+        algorithm by hand &mdash; I wanted to answer a different question: <em>what does it take to ship a RAG pipeline
+        as a real API?</em></p>
+
+      <p>The from-scratch project proved I understood the algorithms. RAGOps proves I can productionise them. The gap
+        between a Jupyter notebook and a deployed API is where most ML projects die. This project bridges that gap:
+        persistent vector storage, containerised deployment, automated testing, and CI regression gating.</p>
+
+      <h2 id="architecture">// architecture</h2>
+
+      <div class="arch-diagram"><span class="hl">Client</span> <span class="dim">&rarr;</span> <span class="hl">FastAPI</span> <span class="dim">(routers)</span>
+   <span class="dim">&darr;</span>
+<span class="hl">Services</span> <span class="dim">(ingest_service, rag_service)</span>
+   <span class="dim">&darr;</span>
+<span class="hl">rag_core</span> <span class="dim">(chunking, embedding, rerank)</span>  +  <span class="hl">PostgreSQL + pgvector</span>
+   <span class="dim">&darr;</span>
+<span class="hl">OpenAI-compatible LLM</span></div>
+
+      <p><strong>Layered design:</strong> Routers handle HTTP, services contain business logic, rag_core holds the ML
+        components, and PostgreSQL with pgvector stores vectors persistently. No business logic in routers &mdash;
+        they only validate input and call services.</p>
+
+      <p>This is the standard separation you'd see in a production FastAPI codebase. Each layer is independently
+        testable. The router tests mock services, the service tests mock the database, and the rag_core tests
+        run against real models.</p>
+
+      <h2 id="tech-stack">// tech stack</h2>
+
+      <table class="tech-table">
+        <thead>
+          <tr><th>Component</th><th>Technology</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>API</td><td>FastAPI with auto OpenAPI docs</td></tr>
+          <tr><td>Database</td><td>PostgreSQL 15 + pgvector (HNSW index)</td></tr>
+          <tr><td>Embeddings</td><td>sentence-transformers (all-MiniLM-L6-v2, 384-dim)</td></tr>
+          <tr><td>Reranker</td><td>cross-encoder (ms-marco-MiniLM-L-6-v2)</td></tr>
+          <tr><td>LLM</td><td>Raw HTTP to any OpenAI-compatible endpoint</td></tr>
+          <tr><td>Containers</td><td>Docker Compose (api + postgres)</td></tr>
+          <tr><td>CI</td><td>GitHub Actions &mdash; pytest + ruff on push</td></tr>
+          <tr><td>Config</td><td>pydantic-settings via <code>.env</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="api">// API design</h2>
+
+      <p>Three endpoints. That's it. Simplicity is a feature.</p>
+
+      <p><strong><code>POST /v1/ingest</code></strong> &mdash; upload a document (<code>.txt</code>, <code>.md</code>,
+        <code>.pdf</code>). The service chunks it, embeds each chunk, and stores vectors in pgvector. Returns a
+        document ID and chunk count.</p>
+
+      <p><strong><code>POST /v1/query</code></strong> &mdash; ask a question with a <code>top_k</code> parameter.
+        The service embeds the query, retrieves candidates from pgvector, reranks with the cross-encoder, and
+        generates an answer with source attribution. Returns the answer, source chunks with scores, and token usage.</p>
+
+      <p><strong><code>GET /health</code></strong> &mdash; liveness probe for container orchestration.</p>
+
+      <h2 id="evaluation">// offline evaluation</h2>
+
+      <p>A RAG API without evaluation metrics is just a demo. RAGOps includes an offline evaluation harness that
+        measures <strong>Precision@k</strong>, <strong>Recall@k</strong>, and <strong>MRR</strong> (Mean Reciprocal
+        Rank) against a test corpus.</p>
+
+      <p>The evaluation runs as part of CI. If retrieval quality regresses below the baseline, the pipeline fails.
+        This is the "ops" in RAGOps &mdash; you don't just build it, you continuously verify it works.</p>
+
+      <h2 id="decisions">// key decisions</h2>
+
+      <p><strong>pgvector over Pinecone/Weaviate</strong> &mdash; PostgreSQL is battle-tested infrastructure.
+        pgvector adds vector similarity search to a database most teams already run. No new service to manage,
+        no vendor lock-in, and HNSW indexing gives sub-linear search time.</p>
+
+      <p><strong>Raw HTTP over LangChain</strong> &mdash; the LLM integration is a single HTTP call to an
+        OpenAI-compatible endpoint. LangChain adds 50+ transitive dependencies for something that's 20 lines of code.
+        When the abstraction costs more than the thing it abstracts, skip the abstraction.</p>
+
+      <p><strong>Docker Compose for local dev</strong> &mdash; <code>make up</code> starts the API and PostgreSQL
+        with pgvector pre-configured. No "install PostgreSQL, enable pgvector extension, run migrations" dance.
+        One command, everything works.</p>
+
+      <p><strong>CI regression gate</strong> &mdash; every push runs tests and linting. The evaluation harness
+        ensures retrieval quality doesn't regress silently. This is the difference between a project and a product.</p>
+
+      <h2 id="links">// try it / source code</h2>
+
+      <div class="cta-block">
+        <a href="https://github.com/Archit-Konde/RAGOps" target="_blank" rel="noopener noreferrer" class="cta-btn">View on GitHub &nearr;</a>
+      </div>
+
+      <div class="related-posts">
+        <h2>// related posts</h2>
+        <a href="rag-from-scratch.html" class="related-link">&rarr; Building RAG From Scratch &mdash; the algorithms behind this API</a>
+        <a href="supportops-ai-monitor.html" class="related-link">&rarr; SupportOps AI Monitor &mdash; another LLM-powered production system</a>
+        <a href="insurance-reshopping-predictor.html" class="related-link">&rarr; Insurance Re-Shopping Predictor &mdash; data quality first ML</a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="../../scripts/main.js" defer></script>
+</body>
+
+</html>
