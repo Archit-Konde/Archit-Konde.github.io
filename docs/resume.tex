@@ -78,11 +78,12 @@
 \end{center}
 %-----------SUMMARY-----------
 \section{Summary}
-\small{ML engineer who builds AI systems end-to-end and actually tests them.
-Shipped a complete RAG pipeline in pure Python --- custom chunker, BM25, vector
-search, hybrid retrieval, cross-encoder re-ranking --- 87 tests, no external
-RAG frameworks. Also built and deployed an LLM-powered ticket triage system
-using the OpenAI API. MEng in Electrical \& Computer Engineering (University of Windsor).}
+\small{ML engineer who builds end-to-end AI systems and actually tests
+them. Shipped a production RAG service on FastAPI~+~pgvector with CI
+regression gating, a from-scratch RAG pipeline with MRR~1.00 and 87
+unit tests, and a full ML pipeline on 381K insurance records with
+automated data quality checks and SHAP explainability. MEng in
+Electrical \& Computer Engineering (University of Windsor).}
 %-----------TECHNICAL SKILLS-----------
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
@@ -109,8 +110,8 @@ using the OpenAI API. MEng in Electrical \& Computer Engineering (University of 
             \resumeItem{Hybrid~+~Rerank achieved MRR~1.00 on a 25-question evaluation set,
             placing the correct chunk at rank~1 for every query (dense-only: 0.97,
             sparse-only: 0.89)}
-            \resumeItem{Validated with 87 unit tests covering chunking, retrieval, and
-            ranking; deployed on Hugging Face Spaces}
+            \resumeItem{Validated with 87 unit tests covering chunking, retrieval, and ranking;
+            deployed on Hugging Face Spaces}
           \resumeItemListEnd
       \resumeProjectHeading
           {\textbf{Insurance Re-Shopping Predictor} $|$
@@ -125,8 +126,8 @@ using the OpenAI API. MEng in Electrical \& Computer Engineering (University of 
             Test ROC-AUC 0.847 on an 88/12 imbalanced target}
           \resumeItemListEnd
       \resumeProjectHeading
-          {\textbf{RAGOps API} $|$
-          \href{https://github.com/Archit-Konde/ragops-api}{\underline{GitHub}}}{Mar.~2026}
+          {\textbf{RAGOps} $|$
+          \href{https://github.com/Archit-Konde/RAGOps}{\underline{GitHub}}}{Mar.~2026}
           \resumeItemListStart
             \resumeItem{Production-grade RAG service built with FastAPI and
             PostgreSQL~+~pgvector; upgrades an in-memory NumPy store to a persistent
