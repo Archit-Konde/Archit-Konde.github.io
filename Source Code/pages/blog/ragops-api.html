@@ -82,6 +82,7 @@
     .post-body ul, .post-body ol { margin: var(--s2) 0 var(--s3) var(--s3); }
     .post-body li { margin-bottom: var(--s1); }
     .post-body li::before { content: '\2192'; color: var(--accent); margin-right: 0.5rem; }
+    .post-toc li::before { content: none; }
 
     .post-toc { background: var(--surface); border: 1px solid var(--border); padding: var(--s3); margin-bottom: var(--s4); }
     .toc-label { font-size: 0.75rem; color: var(--accent); margin-bottom: var(--s2); font-weight: 600; }
@@ -135,6 +136,41 @@
       "@type": "Person",
       "name": "Archit Konde"
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://archit-konde.github.io/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://archit-konde.github.io/#blog" },
+      { "@type": "ListItem", "position": 3, "name": "RAGOps API" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do you build a production RAG API with FastAPI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A production RAG API uses FastAPI for HTTP routing, PostgreSQL with pgvector for persistent vector storage, sentence-transformers for embeddings, and a cross-encoder for reranking. The architecture follows a layered design: routers handle HTTP validation, services contain business logic, and a rag_core package holds ML components. Docker Compose manages the API and database containers, and CI runs tests plus an offline evaluation harness that gates on retrieval quality metrics like Precision@k, Recall@k, and MRR."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why use pgvector instead of Pinecone or Weaviate for RAG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "pgvector adds vector similarity search to PostgreSQL, which most teams already run. This eliminates the need for a separate vector database service, avoids vendor lock-in, and reduces infrastructure complexity. HNSW indexing in pgvector provides sub-linear search time. For most production RAG workloads, pgvector offers sufficient performance without the operational overhead of a dedicated vector database."
+        }
+      }
+    ]
   }
   </script>
 </head>
