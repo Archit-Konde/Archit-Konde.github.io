@@ -5,6 +5,7 @@
 .codex/
 *.clause
 *.codex
+.claude/settings.local.json
 
 # Operating System Files
 .DS_Store
