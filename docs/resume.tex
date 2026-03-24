@@ -101,48 +101,41 @@ using the OpenAI API. MEng in Electrical \& Computer Engineering (University of 
           \href{https://github.com/Archit-Konde/RAG}{\underline{GitHub}} $|$
           \href{https://huggingface.co/spaces/architechs/RAG}{\underline{Demo}}}{Feb.~2026 -- Present}
           \resumeItemListStart
-            \resumeItem{Built all 9 pipeline components in pure Python --- custom chunker, NumPy vector
-            store, and BM25 from scratch --- with no external RAG frameworks}
-            \resumeItem{Combined dense cosine similarity and sparse BM25 via reciprocal rank fusion, with a
-            cross-encoder re-ranking stage; benchmarked against dense-only and sparse-only baselines}
-            \resumeItem{Hybrid + Rerank achieved MRR~1.00 on a 25-question evaluation set, placing the
-            correct chunk at rank~1 for every query (dense-only: 0.97, sparse-only: 0.89)}
-            \resumeItem{Validated with 87 unit tests covering chunking, retrieval, and ranking; deployed on
-            Hugging Face Spaces}
+            \resumeItem{Built all 9 pipeline components in pure Python --- custom chunker, NumPy
+            vector store, and BM25 from scratch --- with no external RAG frameworks}
+            \resumeItem{Combined dense cosine similarity and sparse BM25 via reciprocal rank
+            fusion, with a cross-encoder re-ranking stage; benchmarked against dense-only
+            and sparse-only baselines}
+            \resumeItem{Hybrid~+~Rerank achieved MRR~1.00 on a 25-question evaluation set,
+            placing the correct chunk at rank~1 for every query (dense-only: 0.97,
+            sparse-only: 0.89)}
+            \resumeItem{Validated with 87 unit tests covering chunking, retrieval, and
+            ranking; deployed on Hugging Face Spaces}
           \resumeItemListEnd
       \resumeProjectHeading
           {\textbf{Insurance Re-Shopping Predictor} $|$
           \href{https://github.com/Archit-Konde/insurance-reshopping-predictor}{\underline{GitHub}} $|$
           \href{https://huggingface.co/spaces/architechs/insurance-reshopping-predictor}{\underline{Demo}}}{Mar.~2026}
           \resumeItemListStart
-            \resumeItem{Built a full ML pipeline on 381K insurance records ---
-            automated data quality checks, SMOTE for class imbalance, LightGBM
-            classifier, SHAP explainability --- deployed as a Streamlit app on
-            Hugging Face Spaces}
-            \resumeItem{DataQualityReport class detects schema violations, outlier
-            patterns, and encoding anomalies; LightGBM with stratified 80/10/10
-            split achieves Test ROC-AUC 0.847 on an 88/12 imbalanced target}
+            \resumeItem{Built a full ML pipeline on 381K insurance records --- automated data
+            quality checks, SMOTE for class imbalance, LightGBM classifier, SHAP
+            explainability --- deployed as a Streamlit app on Hugging Face Spaces}
+            \resumeItem{DataQualityReport class detects schema violations, outlier patterns,
+            and encoding anomalies; LightGBM with stratified 80/10/10 split achieves
+            Test ROC-AUC 0.847 on an 88/12 imbalanced target}
           \resumeItemListEnd
       \resumeProjectHeading
           {\textbf{RAGOps API} $|$
           \href{https://github.com/Archit-Konde/ragops-api}{\underline{GitHub}}}{Mar.~2026}
           \resumeItemListStart
             \resumeItem{Production-grade RAG service built with FastAPI and
-            PostgreSQL~+~pgvector; upgrades an in-memory NumPy store to a
-            persistent vector database with OpenAPI-first endpoint contracts}
-            \resumeItem{Offline evaluation harness computes Precision@k, Recall@k,
-            and MRR; CI regression gate fails the build if retrieval quality drops,
-            enforcing eval as a first-class engineering constraint}
-            \resumeItem{Docker Compose local dev environment with GitHub Actions CI
-            running pytest and ruff lint on every push}
-          \resumeItemListEnd
-      \resumeProjectHeading
-          {\textbf{SupportOps AI Monitor} $|$
-          \href{https://architechs-supportops-ai-monitor.hf.space/}{\underline{Demo}}}{Jan.~2026 -- Feb.~2026}
-          \resumeItemListStart
-            \resumeItem{LLM-powered ticket triage using GPT-4o-mini with structured tool-calling,
-            conditional routing logic, SQLite persistence, and an observability dashboard;
-            deployed on Hugging Face Spaces}
+            PostgreSQL~+~pgvector; upgrades an in-memory NumPy store to a persistent
+            vector database with OpenAPI-first endpoint contracts}
+            \resumeItem{Offline evaluation harness computes Precision@k, Recall@k, and MRR;
+            CI regression gate fails the build if retrieval quality drops, enforcing eval
+            as a first-class engineering constraint}
+            \resumeItem{Docker Compose local dev environment with GitHub Actions CI running
+            pytest and ruff lint on every push}
           \resumeItemListEnd
     \resumeSubHeadingListEnd
 %-----------EXPERIENCE-----------
