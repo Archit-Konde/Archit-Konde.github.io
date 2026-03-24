@@ -255,8 +255,10 @@ ul {
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--s1);
-  margin-left: var(--s2);
+  padding: var(--s2);
+  margin-left: var(--s1);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .hamburger span {
@@ -1011,6 +1013,11 @@ ul {
   font-size: 0.68rem;
 }
 
+.card-links .inline-link {
+  display: inline-block;
+  padding: 0.4rem 0;
+}
+
 /* Blog section overrides for card-num (date style) */
 .blog-scroll .card-num {
   font-size: 0.65rem;
@@ -1272,6 +1279,13 @@ ul {
   .exp-item {
     grid-template-columns: 1fr;
     gap: var(--s2);
+  }
+
+  /* Shrink scroll cards to fit mobile viewport with padding */
+  .projects-grid .project-card,
+  .blog-scroll .project-card {
+    min-width: calc(100vw - var(--s3) * 2 - var(--s3) - 2px);
+    max-width: calc(100vw - var(--s3) * 2 - var(--s3) - 2px);
   }
 
   .c-key {
