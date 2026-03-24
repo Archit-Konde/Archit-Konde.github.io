@@ -55,7 +55,7 @@
    changes. The activate event deletes any caches with old names,
    forcing users to re-download the latest assets.
 ──────────────────────────────────────────────────────────────── */
-const CACHE_NAME = 'archit-portfolio-v38';
+const CACHE_NAME = 'archit-portfolio-v39';
 const OFFLINE_PAGE = '/404.html';   // shown if navigation fails offline
 
 /* ── Assets to pre-cache on install ─────────────────────────────
@@ -73,6 +73,8 @@ const PRECACHE_ASSETS = [
   '/assets/icons/icon-512.svg',
   '/pages/blog/rag-from-scratch.html',
   '/pages/blog/supportops-ai-monitor.html',
+  '/pages/blog/triagegeist-solution.html',
+  '/pages/blog/insurance-reshopping-predictor.html',
   '/docs/resume.pdf'
 ];
 
@@ -86,14 +88,10 @@ const PRECACHE_ASSETS = [
 ──────────────────────────────────────────────────────────────── */
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(PRECACHE_ASSETS);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(PRECACHE_ASSETS))
+      .then(() => self.skipWaiting())
   );
-
-  /* skipWaiting() makes the new SW take over immediately
-     instead of waiting for the old one to be dismissed.    */
-  self.skipWaiting();
 });
 
 

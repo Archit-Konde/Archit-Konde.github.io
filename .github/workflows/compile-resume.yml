@@ -1,0 +1,29 @@
+name: Compile Resume
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/resume.tex'
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: docs/resume.tex
+
+      - name: Copy PDF to docs
+        run: cp resume.pdf docs/resume.pdf
+
+      - name: Commit compiled PDF
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "auto: recompile resume.pdf [skip ci]"
+          file_pattern: docs/resume.pdf

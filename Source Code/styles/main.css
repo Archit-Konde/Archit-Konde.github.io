@@ -152,25 +152,6 @@ ul {
   color: var(--muted);
 }
 
-/* Prevent accidental text selection on interactive UI elements.
-   Applied to navigation, buttons, tags, and clickable rows —
-   NOT to body text or inline content links, which stay selectable.
-   -webkit- prefix covers iOS Safari and older Chrome/Edge.        */
-.nav-brand,
-.nav-links a,
-.resume-btn,
-.hamburger,
-.mobile-menu a,
-.mobile-menu-close,
-.scroll-hint,
-.tag,
-.contact-row,
-.exp-link,
-.term-dots {
-  -webkit-user-select: none;
-  user-select: none;
-}
-
 /* .container: centers content and adds horizontal padding */
 .container {
   max-width: var(--max-w);
@@ -962,7 +943,8 @@ ul {
 
 /* Ensure inner interactive elements stay above the overlay */
 .project-card .inline-link,
-.project-card .card-tech {
+.project-card .card-tech,
+.project-card .card-links {
   position: relative;
   z-index: 1;
 }
@@ -1011,34 +993,19 @@ ul {
   gap: var(--s1);
 }
 
-.projects-note {
-  font-size: 0.80rem;
-  color: var(--muted);
-  padding-top: var(--s1);
+/* Links row below card tech tags */
+.card-links {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
 }
 
-.projects-note a {
-  color: var(--accent);
+/* Blog section overrides for card-num (date style) */
+.blog-scroll .card-num {
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
 }
 
-.projects-note a:hover {
-  text-decoration: underline;
-}
-
-
-/* ── 12. Blog Placeholder ─────────────────────────────────────
-──────────────────────────────────────────────────────────────── */
-.wip-block {
-  font-size: 0.85rem;
-  color: var(--muted);
-  padding: var(--s3);
-  border: 1px dashed var(--border);
-  font-style: italic;
-  line-height: 1.6;
-}
-
-
-/* ── 12a. GitHub Activity Section ─────────────────────────────── */
+/* ── 12. GitHub Activity Section ──────────────────────────────── */
 .gh-chart-wrap {
   padding: var(--s2) 0;
 }

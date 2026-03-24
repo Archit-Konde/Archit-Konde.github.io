@@ -142,6 +142,8 @@ window.addEventListener('scroll', () => {
 
 const allSections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');
+const activeDirEl = document.getElementById('active-dir');
+const floatingPrompt = document.getElementById('floating-prompt');
 
 const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -150,8 +152,6 @@ const sectionObserver = new IntersectionObserver((entries) => {
       const matchingLink = document.querySelector(`.nav-links a[href="#${id}"]`);
 
       // Update Navigation Sync HUD
-      const activeDirEl = document.getElementById('active-dir');
-      const floatingPrompt = document.getElementById('floating-prompt');
       if (activeDirEl && id) {
         activeDirEl.innerHTML = `&nbsp;cd ./${id}`;
         // Show prompt only if we are not in the 'home' section
@@ -186,6 +186,7 @@ const mobileClose = document.getElementById('mobileClose');
 const mobileLinks = document.querySelectorAll('.mob-link');
 
 function openMenu() {
+  if (!mobileMenu || !hamburger) return;
   mobileMenu.classList.add('open');
   hamburger.classList.add('open');
   hamburger.setAttribute('aria-expanded', 'true');
@@ -194,6 +195,7 @@ function openMenu() {
 }
 
 function closeMenu() {
+  if (!mobileMenu || !hamburger) return;
   mobileMenu.classList.remove('open');
   hamburger.classList.remove('open');
   hamburger.setAttribute('aria-expanded', 'false');
@@ -364,6 +366,9 @@ if (ghostEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
   const blogCommands = [
     { icon: '>', label: 'Read: SupportOps AI Monitor', hint: '[B] Post', action() { window.location.href = isBlog ? 'supportops-ai-monitor.html' : '/pages/blog/supportops-ai-monitor.html'; } },
+    { icon: '>', label: 'Read: RAG From Scratch', hint: '[B] Post', action() { window.location.href = isBlog ? 'rag-from-scratch.html' : '/pages/blog/rag-from-scratch.html'; } },
+    { icon: '>', label: 'Read: Triagegeist Solution', hint: '[B] Post', action() { window.location.href = isBlog ? 'triagegeist-solution.html' : '/pages/blog/triagegeist-solution.html'; } },
+    { icon: '>', label: 'Read: Insurance Re-Shopping Predictor', hint: '[B] Post', action() { window.location.href = isBlog ? 'insurance-reshopping-predictor.html' : '/pages/blog/insurance-reshopping-predictor.html'; } },
     { icon: '←', label: 'Back to Blog List', hint: 'Home #blog', action() { window.location.href = '/index.html#blog'; } },
   ];
 
@@ -689,21 +694,6 @@ document.querySelectorAll('.project-card').forEach(card => {
       e.stopImmediatePropagation();
     }
   }, true);
-
-  // Anti-Debugging: Pauses execution if DevTools are open
-  // This is a common deterrent
-  const antiDebug = () => {
-    const start = new Date();
-    debugger;
-    const end = new Date();
-    if (end - start > 100) {
-      // If it took longer than 100ms, a debugger (DevTools) is likely active
-      window.location.reload();
-    }
-  };
-
-  // Run anti-debug periodically
-  setInterval(antiDebug, 2000);
 })();
 
 /* ── 11. TERMINAL WINDOW CONTROLLER (Traffic Light Buttons) ───── */
