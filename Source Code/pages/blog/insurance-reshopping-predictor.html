@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description"
+    content="Building the Insurance Re-Shopping Predictor — data quality first, LightGBM classification, SHAP explainability, and why I treated data validation as the primary engineering concern." />
+  <meta name="author" content="Archit Konde" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#1e1e1e" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://archit-konde.github.io/pages/blog/insurance-reshopping-predictor.html" />
+  <meta property="og:title" content="Building the Insurance Re-Shopping Predictor — Data Quality First" />
+  <meta property="og:description"
+    content="Why data quality matters more than model accuracy in insurance ML. LightGBM, SHAP, and lessons from 381K real insurance profiles." />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:image" content="https://archit-konde.github.io/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://archit-konde.github.io/assets/og-image.png" />
+  <meta name="twitter:creator" content="@architkonde" />
+  <meta name="twitter:title" content="Building the Insurance Re-Shopping Predictor — Data Quality First" />
+  <meta name="twitter:description"
+    content="Why data quality matters more than model accuracy in insurance ML." />
+
+  <link rel="canonical" href="https://archit-konde.github.io/pages/blog/insurance-reshopping-predictor.html" />
+
+  <title>Insurance Re-Shopping Predictor — Archit Konde</title>
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%231e1e1e'/><text x='5' y='25' font-family='monospace' font-size='22' font-weight='bold' fill='%23C9A84C'>%3E</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../styles/main.min.css" />
+
+  <style>
+    /* ── Blog post layout ──────────────────────────────────────── */
+    .blog-post {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + var(--s3)) var(--s4) var(--s5);
+    }
+
+    @media (max-width: 600px) {
+      .blog-post {
+        padding: calc(var(--nav-h) + var(--s3)) var(--s3) var(--s4);
+      }
+    }
+
+    .post-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: var(--s4);
+      letter-spacing: 0.04em;
+    }
+
+    .post-meta .accent {
+      margin-right: 0.4rem;
+    }
+
+    .post-title {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: var(--s3);
+    }
+
+    .post-body h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: var(--s4) 0 var(--s2);
+      letter-spacing: -0.01em;
+      scroll-margin-top: calc(var(--nav-h) + 1.6rem);
+    }
+
+    .post-body h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: var(--s4) 0 var(--s1);
+    }
+
+    .post-body p {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: var(--s3);
+    }
+
+    .post-body a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+      transition: border-color 0.2s;
+    }
+
+    .post-body a:hover {
+      border-color: var(--accent);
+    }
+
+    .post-body code {
+      font-family: var(--font);
+      font-size: 0.80rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1em 0.35em;
+      color: var(--text);
+    }
+
+    .post-body pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .post-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .arch-diagram {
+      font-family: var(--font);
+      font-size: 0.72rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s3);
+      overflow-x: auto;
+      color: var(--muted);
+      white-space: pre;
+      margin: var(--s3) 0 var(--s4);
+      line-height: 1.5;
+    }
+
+    .arch-diagram .hl {
+      color: var(--accent);
+    }
+
+    .arch-diagram .dim {
+      color: var(--border);
+    }
+
+    .post-body table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .post-body th {
+      text-align: left;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding: 0.4rem 0.6rem;
+      font-weight: 600;
+    }
+
+    .post-body td {
+      color: var(--muted);
+      border-bottom: 1px solid rgba(62, 62, 66, 0.5);
+      padding: 0.4rem 0.6rem;
+      vertical-align: top;
+    }
+
+    .post-body tr:last-child td {
+      border-bottom: none;
+    }
+
+    .post-body td code {
+      font-size: 0.75rem;
+    }
+
+    .callout {
+      background: var(--surface);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .post-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: var(--s3) 0;
+    }
+
+    .post-toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: var(--s2) var(--s3);
+      margin: var(--s3) 0 var(--s4);
+    }
+
+    .toc-label {
+      font-size: 0.72rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: var(--s1);
+    }
+
+    .post-toc ul {
+      padding-left: var(--s3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s1);
+    }
+
+    .post-toc a {
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-bottom: none;
+      transition: color 0.2s;
+    }
+
+    .post-toc a:hover {
+      color: var(--accent);
+    }
+
+    .post-toc .accent {
+      margin-right: 0.3rem;
+    }
+
+    .post-back {
+      display: inline-block;
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      margin-bottom: var(--s4);
+      transition: border-color 0.2s;
+    }
+
+    .post-back:hover {
+      border-color: var(--accent);
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Building the Insurance Re-Shopping Predictor — Data Quality First",
+    "author": {
+      "@type": "Person",
+      "name": "Archit Konde",
+      "url": "https://archit-konde.github.io/"
+    },
+    "datePublished": "2026-03-24",
+    "url": "https://archit-konde.github.io/pages/blog/insurance-reshopping-predictor.html",
+    "description": "Why data quality matters more than model accuracy in insurance ML. LightGBM, SHAP, and lessons from 381K real insurance profiles.",
+    "publisher": {
+      "@type": "Person",
+      "name": "Archit Konde"
+    }
+  }
+  </script>
+</head>
+
+<body oncontextmenu="return false;">
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <a href="../../index.html" class="nav-brand">
+      archit<span class="accent">@</span>portfolio<span class="accent">:~$</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#about"><span class="nav-slash">./</span>about</a></li>
+      <li><a href="../../index.html#experience"><span class="nav-slash">./</span>experience</a></li>
+      <li><a href="../../index.html#skills"><span class="nav-slash">./</span>skills</a></li>
+      <li><a href="../../index.html#projects"><span class="nav-slash">./</span>projects</a></li>
+      <li><a href="../../index.html#github"><span class="nav-slash">./</span>github</a></li>
+      <li><a href="../../index.html#blog"><span class="nav-slash">./</span>blog</a></li>
+      <li><a href="../../index.html#contact"><span class="nav-slash">./</span>contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="blog-post">
+
+    <a href="../../index.html#blog" class="post-back">&larr; back to blog</a>
+
+    <div class="post-meta">
+      <span class="accent">$</span> cat ./blog/insurance-reshopping-predictor.md
+      &nbsp;&middot;&nbsp; MAR 2026 &nbsp;&middot;&nbsp; ~8 min read
+    </div>
+
+    <h1 class="post-title">Building the Insurance Re-Shopping<br>Predictor &mdash; Data Quality First</h1>
+
+    <hr class="post-divider" />
+
+    <div class="post-body">
+
+      <nav class="post-toc" aria-label="Table of contents">
+        <p class="toc-label">$ jump to:</p>
+        <ul>
+          <li><a href="#why"><span class="accent">&rarr;</span> Why this project</a></li>
+          <li><a href="#data-quality"><span class="accent">&rarr;</span> Data quality as the primary concern</a></li>
+          <li><a href="#architecture"><span class="accent">&rarr;</span> Architecture decisions</a></li>
+          <li><a href="#eda"><span class="accent">&rarr;</span> What the data told me</a></li>
+          <li><a href="#preprocessing"><span class="accent">&rarr;</span> Preprocessing decisions</a></li>
+          <li><a href="#model"><span class="accent">&rarr;</span> Model selection and results</a></li>
+          <li><a href="#explainability"><span class="accent">&rarr;</span> Making predictions explainable</a></li>
+          <li><a href="#limitations"><span class="accent">&rarr;</span> Honest limitations</a></li>
+        </ul>
+      </nav>
+
+      <h2 id="why">// why this project</h2>
+
+      <p>Jerry.ai&rsquo;s PriceProtect product predicts when customers should re-shop their car insurance. I wanted to build something that demonstrates the same capability end-to-end &mdash; not just a model, but the full pipeline from raw data validation through explainable predictions.</p>
+
+      <p>The job description emphasized data quality above all else. So I made that the foundation of the entire project.</p>
+
+      <h2 id="data-quality">// data quality as the primary concern</h2>
+
+      <p>Most portfolio projects jump straight to modeling. This one starts with a <code>DataQualityReport</code> class that runs 8 categories of validation checks before any preprocessing begins.</p>
+
+      <table>
+        <tr><th>Check</th><th>Status</th><th>Details</th></tr>
+        <tr><td>Schema Validation</td><td>PASS</td><td>12 cols, 381,109 rows</td></tr>
+        <tr><td>Missing Values</td><td>PASS</td><td>0 missing across all columns</td></tr>
+        <tr><td>Class Balance</td><td>WARN</td><td>12.26% positive rate</td></tr>
+        <tr><td>Duplicate IDs</td><td>PASS</td><td>0 duplicates</td></tr>
+        <tr><td>Range Violations</td><td>PASS</td><td>0 out-of-range values</td></tr>
+        <tr><td>Suspicious Patterns</td><td>WARN</td><td>Premium outliers, sparse channels</td></tr>
+        <tr><td><strong>Quality Score</strong></td><td><strong>100/100</strong></td><td>Weighted composite</td></tr>
+      </table>
+
+      <p>Every check includes equivalent SQL validation queries as docstrings. In production insurance ML, you&rsquo;d run these against the data warehouse before any model training. I documented them because thinking in SQL is a signal that you understand how data actually flows in production systems.</p>
+
+      <pre><code>-- Flag sparse policy sales channels
+SELECT Policy_Sales_Channel, COUNT(*) AS n
+FROM policies
+GROUP BY Policy_Sales_Channel
+HAVING COUNT(*) < 100;</code></pre>
+
+      <p>The quality score is a weighted composite: schema validation (25%), missing values (20%), duplicates (15%), range violations (15%), suspicious patterns (15%), and class balance (10%). The weights reflect how much each issue would actually break a production pipeline.</p>
+
+      <h2 id="architecture">// architecture decisions</h2>
+
+      <div class="arch-diagram"><span class="hl">raw CSV</span> <span class="dim">──&gt;</span> <span class="hl">DataQualityReport</span> <span class="dim">──&gt;</span> <span class="hl">preprocessing</span> <span class="dim">──&gt;</span> <span class="hl">LightGBM</span> <span class="dim">──&gt;</span> <span class="hl">SHAP</span> <span class="dim">──&gt;</span> <span class="hl">Streamlit</span>
+                         <span class="dim">│</span>                       <span class="dim">│</span>
+                    8 checks               encode + scale
+                    SQL queries            SMOTE (train only)
+                    quality score          log transform</div>
+
+      <p>The pipeline is intentionally linear. Each stage is a separate module with clear inputs and outputs. No circular dependencies, no shared mutable state. The preprocessing pipeline is saved as a pickle so the Streamlit app can transform new inputs identically to training data.</p>
+
+      <h2 id="eda">// what the data told me</h2>
+
+      <h3>Class imbalance is severe but expected</h3>
+      <p>Only 12.26% of customers expressed interest in vehicle insurance (the re-shopping proxy). This 88/12 split means accuracy is a useless metric &mdash; you could get 88% accuracy by predicting &ldquo;not interested&rdquo; for everyone. ROC-AUC is the right primary metric here.</p>
+
+      <h3>Vehicle damage is the strongest signal</h3>
+      <p>Customers with prior vehicle damage are roughly 3.5x more likely to be interested in re-shopping. This makes intuitive sense &mdash; if your car&rsquo;s been damaged, you&rsquo;ve already experienced the claims process and have direct motivation to compare prices.</p>
+
+      <h3>Previously_Insured is suspiciously predictive</h3>
+
+      <div class="callout">
+        99.8% of previously insured customers show zero interest in re-shopping. This is almost too clean &mdash; it could indicate label leakage rather than genuine signal. In a production setting, I&rsquo;d investigate whether this feature was constructed from the target variable.
+      </div>
+
+      <h3>Age 40&ndash;50 is the peak re-shopping window</h3>
+      <p>Interest in re-shopping peaks in the 40&ndash;50 age range, then drops sharply. Younger customers may not have enough policy history to motivate switching, while older customers may have loyalty discounts that reduce incentive.</p>
+
+      <h2 id="preprocessing">// preprocessing decisions</h2>
+
+      <p>Every encoding choice has a documented reason:</p>
+
+      <table>
+        <tr><th>Step</th><th>What</th><th>Why</th></tr>
+        <tr><td>1</td><td>Drop <code>id</code></td><td>Row identifier, would cause memorization</td></tr>
+        <tr><td>2</td><td>Gender &rarr; 0/1</td><td>Binary feature, OHE adds redundant column</td></tr>
+        <tr><td>3</td><td>Vehicle_Age &rarr; 0/1/2</td><td>Ordinal: natural age ordering for tree splits</td></tr>
+        <tr><td>4</td><td>Vehicle_Damage &rarr; 0/1</td><td>Binary, same rationale as Gender</td></tr>
+        <tr><td>5</td><td><code>log1p(Annual_Premium)</code></td><td>Heavily right-skewed (max ~540K, median ~31K)</td></tr>
+        <tr><td>6</td><td>StandardScaler</td><td>Consistent SHAP interpretation scale</td></tr>
+        <tr><td>7</td><td>SMOTE (train only)</td><td>Address 88/12 split without losing majority class data</td></tr>
+      </table>
+
+      <p>The SMOTE step is the one that matters most to get right. Applying SMOTE to validation or test sets would leak information about the minority class distribution and produce unrealistically optimistic metrics. The code enforces this: <code>apply_smote()</code> is called only on the training split, never on val/test.</p>
+
+      <h2 id="model">// model selection and results</h2>
+
+      <p>LightGBM was the obvious choice for tabular insurance data. It handles class imbalance natively via <code>class_weight='balanced'</code>, trains fast on 380K+ rows, and is fully compatible with SHAP&rsquo;s TreeExplainer for exact Shapley value computation.</p>
+
+      <p>GridSearchCV tuned over <code>n_estimators</code>, <code>max_depth</code>, <code>learning_rate</code>, <code>min_child_samples</code>, and <code>class_weight</code>. The best configuration used 500 estimators with unlimited depth and balanced class weights.</p>
+
+      <table>
+        <tr><th>Metric</th><th>Train</th><th>Val</th><th>Test</th></tr>
+        <tr><td>ROC-AUC</td><td>0.9705</td><td>0.8478</td><td>0.8468</td></tr>
+        <tr><td>F1 (positive)</td><td>0.8912</td><td>0.3727</td><td>0.3776</td></tr>
+        <tr><td>Precision</td><td>0.9022</td><td>0.3562</td><td>0.3568</td></tr>
+        <tr><td>Recall</td><td>0.8805</td><td>0.3909</td><td>0.4010</td></tr>
+      </table>
+
+      <p>The train-test gap is expected &mdash; SMOTE inflates training metrics by creating synthetic minority samples. The test metrics are the honest numbers. Val and test AUC being nearly identical suggests the model generalizes well and isn&rsquo;t overfit to the validation set.</p>
+
+      <h2 id="explainability">// making predictions explainable</h2>
+
+      <p>A probability score alone isn&rsquo;t useful to a customer. The app provides three layers of explanation:</p>
+
+      <p><strong>SHAP waterfall chart</strong> &mdash; shows exactly which features pushed the score up or down for this specific customer, using SHAP&rsquo;s TreeExplainer for exact (not approximate) Shapley values.</p>
+
+      <p><strong>Plain-English factor descriptions</strong> &mdash; each top factor is translated into a sentence like &ldquo;Your vehicle damage history increases your re-shopping likelihood by 34%.&rdquo; No one should need to understand SHAP values to use this tool.</p>
+
+      <p><strong>Counterfactual suggestions</strong> &mdash; the app identifies the single most actionable change that would move the customer&rsquo;s score. This is the feature with the largest SHAP magnitude among features the customer could realistically influence.</p>
+
+      <h2 id="limitations">// honest limitations</h2>
+
+      <p>This model is trained on Indian market insurance data. Premium ranges, region codes, and sales channels are India-specific. Applying it directly to North American customers would require recalibration at minimum.</p>
+
+      <p>We predict re-shopping <em>propensity</em>, not actual savings. A customer flagged as &ldquo;likely to save&rdquo; may or may not find a better price when they actually compare quotes.</p>
+
+      <p>The <code>Previously_Insured</code> feature&rsquo;s near-perfect predictive power warrants serious investigation before production deployment. If it&rsquo;s genuinely this predictive, the model barely needs other features. If it&rsquo;s leakage, the model&rsquo;s real performance is worse than reported.</p>
+
+      <p>SMOTE generates synthetic data points by interpolating between existing minority samples. These are plausible but not real customers. The synthetic distribution should be validated against domain expertise before any production use.</p>
+
+      <hr class="post-divider" />
+
+      <p style="font-size: 0.75rem;">
+        <a href="https://github.com/Archit-Konde/insurance-reshopping-predictor" target="_blank"
+          rel="noopener noreferrer">Repository &nearr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://huggingface.co/spaces/architechs/insurance-reshopping-predictor" target="_blank"
+          rel="noopener noreferrer">Live Demo &nearr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="../../index.html#blog">&larr; more writing</a>
+      </p>
+
+    </div><!-- /.post-body -->
+
+  </main>
+
+  <!-- Command Palette -->
+  <div id="cmd-palette" class="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="cmd-backdrop"></div>
+    <div class="cmd-modal">
+      <div class="cmd-input-row">
+        <span class="cmd-icon">&gt;</span>
+        <input id="cmd-input" class="cmd-search" type="text" placeholder="Type a command..." autocomplete="off"
+          spellcheck="false" />
+        <kbd class="cmd-kbd">ESC</kbd>
+      </div>
+      <ul id="cmd-list" class="cmd-list" role="listbox"></ul>
+      <div class="cmd-footer">
+        <span><kbd>&#8593;&#8595;</kbd> navigate</span>
+        <span><kbd>&#8629;</kbd> select</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <button id="cmd-pal-btn" class="cmd-pal-btn" aria-label="Open command palette">
+    <span class="accent">></span>&nbsp;Ctrl+K
+  </button>
+
+  <script src="../../scripts/app.min.js"></script>
+</body>
+
+</html>
