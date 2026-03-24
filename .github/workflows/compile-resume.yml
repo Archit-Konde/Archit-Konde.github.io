@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Compile LaTeX
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@e2f99d4b3685b0da93f97e1b86ad8fab81105098  # v3
         with:
           root_file: docs/resume.tex
 
@@ -23,7 +23,7 @@ jobs:
         run: cp resume.pdf docs/resume.pdf
 
       - name: Commit compiled PDF
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403  # v5
         with:
           commit_message: "auto: recompile resume.pdf [skip ci]"
           file_pattern: docs/resume.pdf

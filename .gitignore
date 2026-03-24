@@ -6,6 +6,7 @@
 *.clause
 *.codex
 .claude/settings.local.json
+.gstack/
 
 # Operating System Files
 .DS_Store
